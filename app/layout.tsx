@@ -2,7 +2,7 @@ import './globals.css'
 import Provider from '../components/Provider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-
+import { ReviewFormProvider } from '@/components/ReviewFormProvider'
 
 export const metadata = {
   title: 'TrackRate',
@@ -18,9 +18,11 @@ export default function RootLayout({
     <html lang="en">
       <body className='bg-gray-950 text-white'>
         <Provider>
-          <Navbar/>
-          {children}
-          <Footer/>
+          <ReviewFormProvider>
+            <Navbar/>
+            {children}
+            <Footer/>
+          </ReviewFormProvider>
         </Provider>
       </body>
     </html>

@@ -6,13 +6,15 @@ import { TbLayoutSidebarRightCollapse, TbPlus, TbX } from "react-icons/tb"
 import Image from "next/image"
 import { useState } from "react"
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import NewReviewModal from "./NewReviewModal"
+import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
+import { useContext } from "react"
+import ReviewForm from "./ReviewForm"
 
 const Navbar = () => {
   const { data: session } = useSession()
 
   const [mobileMenu, setMobileMenu] = useState<boolean>(false)
-  const [newReviewModal, setNewReviewModal] = useState<boolean>(false)
+  const {reviewForm, setReviewForm}= useContext(ReviewFormContext) as ReviewFormProviderType
 
   const MobileMenu = () => {
     const menuRef = useDetectClickOutside({ onTriggered(e) {
@@ -106,7 +108,7 @@ const Navbar = () => {
           <Link className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300" href="/music">Music</Link>
           {/* Todo */}
           <button 
-            onClick={() => setNewReviewModal(true)}
+            onClick={() => setReviewForm(true)}
             className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300 flex items-center space-x-1"
           >
             <p>New Review</p>
@@ -129,7 +131,7 @@ const Navbar = () => {
         </div>
       </nav>
       {mobileMenu && <MobileMenu/>}
-      {newReviewModal && <NewReviewModal setNewReviewModal={setNewReviewModal}/>}
+      {reviewForm && <ReviewForm/>}
     </>
   )
 }

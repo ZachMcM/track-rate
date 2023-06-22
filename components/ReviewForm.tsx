@@ -2,17 +2,18 @@
 
 import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
-import { Dispatch, SetStateAction, useState } from "react"
+import { useContext, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getAccessToken, getAlbum, getAlbumList, getTrackList } from "@/app/apiMethods"
 import { TbCheck, TbChevronDown, TbSearch, TbX } from "react-icons/tb"
-import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/apiTypes"
+import { SimplifiedAlbum, Track } from "@/app/apiTypes"
 import Image from "next/image"
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import AlbumReviewModal from "./AlbumReviewModal"
-import TrackReviewModal from "./TrackReviewModal"
+import AlbumReviewForm from "./AlbumReviewForm"
+import TrackReviewForm from "./TrackReviewForm"
+import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
 
-export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModal: Dispatch<SetStateAction<boolean>>}) {
+export default function ReviewForm() {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -23,27 +24,21 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
   // getting our access token
   const tokenQuery = useQuery({ queryKey: ['access-token'], queryFn: getAccessToken })
 
-  // form variables
-  const [title, setTitle] = useState<string>("")
-  const [reviewContent, setReviewContent] = useState<string>("")
-  const [favTrack, setFavTrack] = useState<SimplifiedTrack>()
-  const [rating, setRating] = useState<number>(0)
-  const [type, setType] = useState<string>('')
-
-  // variables for searching
-  const [trackResults, setTrackResults] = useState<Track[]>([])
-  const [albumResults, setAlbumResults] = useState<SimplifiedAlbum[]>([])
-
-  // when the user chooses the item they want to review
-  const [albumTarget, setAlbumTarget] = useState<Album>()
-  const [trackTarget, setTrackTarget] = useState<Track>()
+  const {
+    setType,
+    type,
+    setAlbumResults,
+    albumResults,
+    trackResults,
+    setTrackResults,
+    setAlbumTarget,
+    albumTarget,
+    trackTarget,
+    setTrackTarget,
+    setReviewForm
+  } = useContext(ReviewFormContext) as ReviewFormProviderType
 
   const [dropdown, setDropdown] = useState<boolean>(false)
-
-  // error state
-  const [titleError, setTitleError] = useState<boolean>(false)
-  const [favTrackError, setFavTrackError] = useState<boolean>(false)
-  const [contentError, setContentError] = useState<boolean>(false)
 
   const getResults = async (query: string) => {
     if (type && query) {
@@ -64,92 +59,16 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
 
   const modalRef = useDetectClickOutside({ onTriggered(e) {
       e.preventDefault()
-      setNewReviewModal(false)
+      setReviewForm(false)
   }})
-
-  const saveReview = async () => {
-    if (!title) {
-      setTitleError(true)
-    }  
-    if (!reviewContent) {
-      setContentError(true)
-    } 
-    if (type == "album" && !favTrack) {
-      setFavTrackError(true)
-    }  
-    if (title && reviewContent && (type != "album" || (type == "album" && favTrack))) {
-      let reqBody
-      if (trackTarget) {
-        reqBody = { 
-          title: title,
-          itemId: trackTarget.id, 
-          rating: rating, 
-          type: type, 
-          content: reviewContent 
-        }
-      } else if (albumTarget) {
-        reqBody = { 
-          title: title,
-          itemId: albumTarget.id, 
-          rating: rating, 
-          type: type, 
-          content: reviewContent 
-        }
-      } else {
-        return
-      }
-      const res = await fetch("/api/review", {
-        method: "POST",
-        body: JSON.stringify(reqBody)
-      })
-      const data = await res.json()
-      console.log(data)
-    }
-  }
 
   if (albumTarget) {
     return (
-      <AlbumReviewModal
-        album={albumTarget}
-        title={title}
-        setTitle={setTitle}
-        reviewContent={reviewContent}
-        setReviewContent={setReviewContent}
-        rating={rating}
-        setRating={setRating}
-        saveReview={saveReview}
-        setNewReviewModal={setNewReviewModal}
-        setType={setType}
-        setAlbumTarget={setAlbumTarget}
-        setFavTrack={setFavTrack}
-        favTrack={favTrack}
-        titleError={titleError}
-        setTitleError={setTitleError}
-        setFavTrackError={setFavTrackError}
-        favTrackError={favTrackError}
-        contentError={contentError}
-        setContentError={setContentError}
-      />
+      <AlbumReviewForm/>
     )
   } else if (trackTarget) {
     return (
-      <TrackReviewModal
-        track={trackTarget}
-        title={title}
-        setTitle={setTitle}
-        reviewContent={reviewContent}
-        setReviewContent={setReviewContent}
-        rating={rating}
-        setRating={setRating}
-        saveReview={saveReview}
-        setNewReviewModal={setNewReviewModal}
-        setType={setType}
-        setTrackTarget={setTrackTarget}
-        titleError={titleError}
-        setTitleError={setTitleError}
-        setContentError={setContentError}
-        contentError={contentError}
-      />
+      <TrackReviewForm/>
     )
   } else {
     return (
@@ -159,7 +78,7 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
             <h3 className="font-bold text-lg md:text-xl">Create a new review...</h3>
             <button 
               className="p-1 rounded-md border border-gray-700"
-              onClick={() => setNewReviewModal(false)}
+              onClick={() => setReviewForm(false)}
             >
               <TbX className="text-white"/>
             </button>
