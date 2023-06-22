@@ -4,11 +4,10 @@ import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { Dispatch, SetStateAction, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getAccessToken, getAlbumList, getTrackList } from "@/app/apiMethods"
-import { TbArrowLeft, TbCheck, TbChevronDown, TbSearch, TbX } from "react-icons/tb"
-import { Album, Artist, Track } from "@/app/apiTypes"
+import { getAccessToken, getAlbum, getAlbumList, getTrackList } from "@/app/apiMethods"
+import { TbCheck, TbChevronDown, TbSearch, TbX } from "react-icons/tb"
+import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/apiTypes"
 import Image from "next/image"
-import Stars from "./Stars"
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import AlbumReviewModal from "./AlbumReviewModal"
 import TrackReviewModal from "./TrackReviewModal"
@@ -21,16 +20,30 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
     }
   })
 
-  const [title, setTitle] = useState<string>("")
-  const [dropdown, setDropdown] = useState<boolean>(false)
-  const [type, setType] = useState<string>('')
+  // getting our access token
   const tokenQuery = useQuery({ queryKey: ['access-token'], queryFn: getAccessToken })
+
+  // form variables
+  const [title, setTitle] = useState<string>("")
+  const [reviewContent, setReviewContent] = useState<string>("")
+  const [favTrack, setFavTrack] = useState<SimplifiedTrack>()
+  const [rating, setRating] = useState<number>(0)
+  const [type, setType] = useState<string>('')
+
+  // variables for searching
   const [trackResults, setTrackResults] = useState<Track[]>([])
-  const [albumResults, setAlbumResults] = useState<Album[]>([])
+  const [albumResults, setAlbumResults] = useState<SimplifiedAlbum[]>([])
+
+  // when the user chooses the item they want to review
   const [albumTarget, setAlbumTarget] = useState<Album>()
   const [trackTarget, setTrackTarget] = useState<Track>()
-  const [reviewContent, setReviewContent] = useState<string>("")
-  const [rating, setRating] = useState<number>(0)
+
+  const [dropdown, setDropdown] = useState<boolean>(false)
+
+  // error state
+  const [titleError, setTitleError] = useState<boolean>(false)
+  const [favTrackError, setFavTrackError] = useState<boolean>(false)
+  const [contentError, setContentError] = useState<boolean>(false)
 
   const getResults = async (query: string) => {
     if (type && query) {
@@ -44,38 +57,54 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
     }
   }
 
+  const getFullAlbum = async (id: string) => {
+    const album = await getAlbum(tokenQuery.data, id)
+    setAlbumTarget(album)
+  }
+
   const modalRef = useDetectClickOutside({ onTriggered(e) {
       e.preventDefault()
       setNewReviewModal(false)
   }})
 
   const saveReview = async () => {
-    let reqBody
-    if (trackTarget) {
-      reqBody = { 
-        title: title,
-        itemId: trackTarget.id, 
-        rating: rating, 
-        type: type, 
-        content: reviewContent 
+    if (!title) {
+      setTitleError(true)
+    }  
+    if (!reviewContent) {
+      setContentError(true)
+    } 
+    if (type == "album" && !favTrack) {
+      setFavTrackError(true)
+    }  
+    if (title && reviewContent && (type != "album" || (type == "album" && favTrack))) {
+      let reqBody
+      if (trackTarget) {
+        reqBody = { 
+          title: title,
+          itemId: trackTarget.id, 
+          rating: rating, 
+          type: type, 
+          content: reviewContent 
+        }
+      } else if (albumTarget) {
+        reqBody = { 
+          title: title,
+          itemId: albumTarget.id, 
+          rating: rating, 
+          type: type, 
+          content: reviewContent 
+        }
+      } else {
+        return
       }
-    } else if (albumTarget) {
-      reqBody = { 
-        title: title,
-        itemId: albumTarget.id, 
-        rating: rating, 
-        type: type, 
-        content: reviewContent 
-      }
-    } else {
-      return
+      const res = await fetch("/api/review", {
+        method: "POST",
+        body: JSON.stringify(reqBody)
+      })
+      const data = await res.json()
+      console.log(data)
     }
-    const res = await fetch("/api/review", {
-      method: "POST",
-      body: JSON.stringify(reqBody)
-    })
-    const data = await res.json()
-    console.log(data)
   }
 
   if (albumTarget) {
@@ -92,6 +121,14 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
         setNewReviewModal={setNewReviewModal}
         setType={setType}
         setAlbumTarget={setAlbumTarget}
+        setFavTrack={setFavTrack}
+        favTrack={favTrack}
+        titleError={titleError}
+        setTitleError={setTitleError}
+        setFavTrackError={setFavTrackError}
+        favTrackError={favTrackError}
+        contentError={contentError}
+        setContentError={setContentError}
       />
     )
   } else if (trackTarget) {
@@ -108,11 +145,15 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
         setNewReviewModal={setNewReviewModal}
         setType={setType}
         setTrackTarget={setTrackTarget}
+        titleError={titleError}
+        setTitleError={setTitleError}
+        setContentError={setContentError}
+        contentError={contentError}
       />
     )
   } else {
     return (
-      <div className="z-50 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+      <div className="z-40 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
         <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full m-10 md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-lg md:text-xl">Create a new review...</h3>
@@ -205,12 +246,12 @@ export default function NewReviewModal({ setNewReviewModal }: { setNewReviewModa
                 albumResults.length != 0 &&
                 <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-gray-950 absolute top-14 border border-gray-700">
                   {
-                    albumResults.map((result: Album) => {
+                    albumResults.map((result: SimplifiedAlbum) => {
                       return (
                         <button 
                           onClick={() => {
                             setAlbumResults([])
-                            setAlbumTarget(result)
+                            getFullAlbum(result.id)
                           }}
                           key={result.id} 
                           className="flex space-x-4 items-center rounded-md text-start text-gray-400 hover:text-white p-2 m-2 hover:bg-gray-700 duration-300"

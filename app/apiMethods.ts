@@ -1,4 +1,4 @@
-import { Album, Artist, Track } from "./apiTypes";
+import { Album, Artist, SimplifiedAlbum, SimplifiedTrack, Track } from "./apiTypes";
 
 export const getAccessToken = async () => {
   const res = await fetch("/api/access-token", {
@@ -36,7 +36,7 @@ export const getArtistList = async (query: string, accessToken: string): Promise
   return data.artists.items
 }
 
-export const getAlbumList = async (query: string, accessToken: string): Promise<Album[]> => {
+export const getAlbumList = async (query: string, accessToken: string): Promise<SimplifiedAlbum[]> => {
   const res = await fetch(`https://api.spotify.com/v1/search?q=album:${query}&type=album`, {
     cache: "force-cache",
     method: "GET",

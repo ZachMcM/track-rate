@@ -19,6 +19,10 @@ type FnParams = {
   setNewReviewModal: Dispatch<SetStateAction<boolean>>;
   setType: Dispatch<SetStateAction<string>>
   setTrackTarget: Dispatch<SetStateAction<Track | undefined>>
+  titleError: boolean
+  setTitleError: Dispatch<SetStateAction<boolean>>
+  contentError: boolean
+  setContentError: Dispatch<SetStateAction<boolean>>
 };
 
 export default function TrackReviewModal({
@@ -32,7 +36,11 @@ export default function TrackReviewModal({
   saveReview,
   setNewReviewModal,
   setType,
-  setTrackTarget
+  setTrackTarget,
+  titleError,
+  setTitleError,
+  contentError,
+  setContentError
 }: FnParams) {
   const modalRef = useDetectClickOutside({
     onTriggered(e) {
@@ -42,7 +50,7 @@ export default function TrackReviewModal({
   });
 
   return (
-    <div className="z-50 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+    <div className="z-40 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
       <div
         ref={modalRef}
         className="flex flex-col space-y-8 p-10 w-full m-10 md:w-3/5 rounded-md border border-gray-700 bg-gray-950"
@@ -55,7 +63,10 @@ export default function TrackReviewModal({
                 setTrackTarget(undefined);
                 setType("");
                 setReviewContent("");
+                setTitle("")
                 setRating(0);
+                setTitleError(false)
+                setContentError(false)
               }}
             >
               <TbArrowLeft />
@@ -81,18 +92,30 @@ export default function TrackReviewModal({
                 })}
               </p>
             </div>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Review title"
-              className="placeholder:text-gray-400 text-sm bg-transparent border border-gray-700 rounded-md px-4 py-3 outline-none focus:ring-2 ring-gray-700 ring-offset-2 ring-offset-gray-950"
-            />
-            <textarea
-              value={reviewContent}
-              onChange={(e) => setReviewContent(e.target.value)}
-              className="min-h-max overflow-y-auto placeholder:text-gray-400 text-sm bg-transparent border border-gray-700 rounded-md p-4 outline-none focus:ring-2 ring-gray-700 ring-offset-2 ring-offset-gray-950"
-              placeholder="Review content"
-            />
+            <div className="flex flex-col space-y-2">
+              <input
+                value={title}
+                onChange={(e) => {
+                  setTitleError(false)
+                  setTitle(e.target.value)
+                }}
+                placeholder="Review title"
+                className={`placeholder:text-gray-400 text-sm bg-transparent border border-gray-700 rounded-md px-4 py-3 outline-none ring-gray-700 ring-offset-2 ring-offset-gray-950 ${titleError ? "border-red-500 focus:ring-0" : "border-gray-700 focus:ring-2"}`}
+              />
+              { titleError && <p className="text-xs text-red-500">Title is required</p>}
+            </div>
+            <div className="flex flex-col space-y-2">
+              <textarea
+                value={reviewContent}
+                onChange={(e) => {
+                  setContentError(false)
+                  setReviewContent(e.target.value)
+                }}
+                className={`min-h-max overflow-y-auto placeholder:text-gray-400 text-sm bg-transparent border rounded-md p-4 outline-none ring-gray-700 ring-offset-2 ring-offset-gray-950 ${contentError ? "border-red-500 focring-0" : "border-gray-700 focus:ring-2"}`}
+                placeholder="Review content"
+              />
+              { contentError && <p className="text-xs text-red-500">Review content is required</p>}
+            </div>
             <Stars rating={rating} setRating={setRating} />
             <button
               className="w-fit flex space-x-2 items-center text-sm self-end bg-sky-500 hover:bg-sky-400 duration-300 px-4 py-2 font-semibold rounded-md"
