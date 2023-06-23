@@ -1,4 +1,9 @@
-import { Album, Artist, SimplifiedAlbum, SimplifiedTrack, Track } from "./apiTypes";
+import { Prisma, User } from "@prisma/client";
+import { Album, Artist, SimplifiedAlbum, Track } from "./apiTypes";
+
+type UserWithReview = Prisma.UserGetPayload<{
+  include: { reviews: true, reviewComments: true, likes: true }
+}>
 
 export const getAccessToken = async () => {
   const res = await fetch("/api/access-token", {
@@ -6,6 +11,20 @@ export const getAccessToken = async () => {
   })
   const data = await res.json()
   return data.access_token
+}
+
+// method for getting full user Data
+
+export const getUserData = async (id?: string): Promise<UserWithReview> => {
+  if (id) {
+    const res = await fetch(`/api/user?id=${id}`)
+    const data = await res.json()
+    return data
+  } else {
+    const res = await fetch(`/api/user`)
+    const data = await res.json()
+    return data
+  }
 }
 
 // methods for getting data by querying the api

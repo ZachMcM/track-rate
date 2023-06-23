@@ -32,3 +32,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
   }
 }
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get("id")
+  if (id) {
+    const review = await prisma.review.findUnique(({
+      where: {
+        id: id
+      }
+    }))
+    return NextResponse.json(review)
+  } else {
+    return NextResponse.json({error: "Invalid request, no id"}, {status: 400})
+  }
+}

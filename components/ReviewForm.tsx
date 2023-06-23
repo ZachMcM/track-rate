@@ -72,19 +72,19 @@ export default function ReviewForm() {
     )
   } else {
     return (
-      <div className="z-40 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
-        <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full m-10 md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
+      <div className="z-50 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+        <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-lg md:text-xl">Create a new review...</h3>
+            <h3 className="font-bold md:text-xl">Create a new review...</h3>
             <button 
               className="p-1 rounded-md border border-gray-700"
               onClick={() => setReviewForm(false)}
             >
-              <TbX className="text-white"/>
+              <TbX className="text-white text-xs md:text-md"/>
             </button>
           </div>
           <div className="flex flex-col space-y-5">
-            <div className="relative w-full text-sm">
+            <div className="relative w-full text-xs md:text-sm">
               <button 
                 className="w-full border border-gray-700 rounded-md flex items-center justify-between px-4 py-3"
                 onClick={() => setDropdown(true)}
@@ -96,7 +96,7 @@ export default function ReviewForm() {
                 dropdown && 
                 <div className="z-50 flex flex-col absolute top-14 border rounded-md bg-gray-950 border-gray-700 w-full">
                   <button
-                    className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "track" && "bg-gray-700 text-white"}`}
+                    className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize md:px-2 px-1 py-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "track" && "bg-gray-700 text-white"}`}
                     onClick={() => {
                       setType("track")
                       setDropdown(false)
@@ -104,11 +104,11 @@ export default function ReviewForm() {
                       setTrackResults([])
                     }}
                   >
-                    <TbCheck className={`${type == "track" ? "visible" : "invisible"} text-xl`}/>
+                    <TbCheck className={`${type == "track" ? "visible" : "invisible"} text-lg md:ext-xl`}/>
                     <p>track</p>
                   </button>
                   <button
-                    className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "album" && "bg-gray-700 text-white"}`}
+                    className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize md:px-2 px-1 py-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "album" && "bg-gray-700 text-white"}`}
                     onClick={() => {
                       setType("album")
                       setDropdown(false)
@@ -116,13 +116,13 @@ export default function ReviewForm() {
                       setTrackResults([])
                     }}
                   >
-                    <TbCheck className={`${type == "album" ? "visible" : "invisible" } text-xl`}/>
+                    <TbCheck className={`${type == "album" ? "visible" : "invisible" } text-lg md:text-xl`}/>
                     <p>album</p>
                   </button>
                 </div>
               }
             </div>
-            <div className="w-full relative text-sm">
+            <div className="w-full relative text-xs md:text-sm">
               <div className="flex space-x-2 items-center text-gray-300 border-gray-700 border rounded-md px-4 py-3 focus-within:ring-2 ring-offset-2 ring-gray-700 ring-offset-gray-950">
                 <TbSearch className="text-xl"/>
                 <input

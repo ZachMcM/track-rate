@@ -6,15 +6,30 @@ import { getServerSession } from "next-auth/next"
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions)
   const { searchParams } = new URL(request.url)
-  const email = searchParams.get('email')
+  const id = searchParams.get('id')
 
   if (session && session.user?.email) {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: email || session.user?.email
-      }
-    })
-    return NextResponse.json(user)
+    if (id) {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: id
+        },
+        include: {
+          reviews: true
+        }
+      })
+      return NextResponse.json(user)
+    } else {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: session.user.email
+        },
+        include: {
+          reviews: true
+        }
+      })
+      return NextResponse.json(user)
+    }
   } else {
     return NextResponse.json({error: "Unauthorized request"})
   }

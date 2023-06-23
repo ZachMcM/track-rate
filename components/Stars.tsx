@@ -6,8 +6,8 @@ import { TbStar, TbStarFilled, TbStarHalf, TbStarHalfFilled } from "react-icons/
 export default function Stars({ rating, setRating }: { rating: number, setRating: Dispatch<SetStateAction<number>> }) {
   return (
     <div className="flex flex-col space-y-2">
-    <p className="font-medium text-sm">Rating</p>
-    <div className="flex items-center space-x-2 text-xl text-gray-400">
+    <p className="font-medium text-xs md:text-sm">Rating</p>
+    <div className="flex items-center space-x-2 text-lg md:text-xl text-gray-400">
       <button 
         onClick={() => {
           if (rating == 1) {
