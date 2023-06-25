@@ -38,7 +38,7 @@ export type ReviewFormProviderType = {
   setSuccessfulSave: Dispatch<SetStateAction<boolean>>
   loadingSave: boolean,
   setLoadingSave: Dispatch<SetStateAction<boolean>>
-  userDataQuery: any
+  newId: string
 };
 
 export const ReviewFormContext = createContext<ReviewFormProviderType | null>(
@@ -74,6 +74,7 @@ export const ReviewFormProvider = ({
 
   const [successfulSave, setSuccessfulSave] = useState<boolean>(false)
   const [loadingSave, setLoadingSave] = useState<boolean>(false)
+  const [newId, setNewId] = useState<string>('')
 
   const userDataQuery = useQuery({ queryKey: ["user"], queryFn: () => getUserData()})
 
@@ -99,7 +100,7 @@ export const ReviewFormProvider = ({
       if (trackTarget) {
         reqBody = {
           title: title,
-          itemId: trackTarget.id,
+          item: [trackTarget.name, trackTarget.id],
           rating: rating,
           type: type,
           content: reviewContent,
@@ -107,10 +108,11 @@ export const ReviewFormProvider = ({
       } else if (albumTarget) {
         reqBody = {
           title: title,
-          itemId: albumTarget.id,
+          item: [albumTarget.name, albumTarget.id],
           rating: rating,
           type: type,
           content: reviewContent,
+          favTrack: [favTrack?.name, favTrack?.id]
         };
       } else {
         return;
@@ -121,7 +123,8 @@ export const ReviewFormProvider = ({
       });
       const data = await res.json();
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['user', userDataQuery.data?.id]})
+      setNewId(data.id)
+      queryClient.invalidateQueries({ queryKey: ['reviews', userDataQuery.data?.id]})
       setLoadingSave(false)
       setSuccessfulSave(true)
     }
@@ -161,7 +164,7 @@ export const ReviewFormProvider = ({
         setSuccessfulSave,
         loadingSave,
         setLoadingSave,
-        userDataQuery
+        newId
       }}
     >
       {children}

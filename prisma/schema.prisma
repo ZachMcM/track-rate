@@ -52,16 +52,8 @@ model User {
   likes Like[]
   followers User[] @relation(name: "Followers")
   follows User[] @relation(name: "Followers")
-  activities Activity[]
-}
-
-model Activity {
-  id String @id @default(cuid())
-  value String
-  user User @relation(fields: [userId], references: [id])
-  userId String
-  acitivityType String
-  itemId String
+  acivities Activity[] @relation(name: "Activities")
+  otherUserActivities Activity[] @relation(name: "Other User Activities")
 }
 
 model VerificationToken {
@@ -82,9 +74,9 @@ model Review {
   title String @default("My Review")
   content String
   rating Int
-  type String
-  itemId String
-  favoriteTrack String?
+  type String 
+  item String[]
+  favoriteTrack String[]
 }
 
 model ReviewComment {
@@ -100,7 +92,19 @@ model ReviewComment {
 model Like {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  id String @id @default(cuid())
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String
+
+  @@id([userId, reviewId])
+}
+
+model Activity {
+  id  String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, name: "Activities")
+  otherUser User? @relation(fields: [otherUserId], references: [id], onDelete: Cascade, name: "Other User Activities")
+  otherUserId String?
+  itemId String
+  itemType String
+  activityType String
 }

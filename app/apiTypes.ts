@@ -1,3 +1,17 @@
+import { Prisma } from "@prisma/client"
+
+export type UserWithReview = Prisma.UserGetPayload<{
+  include: { reviews: true, reviewComments: true, likes: true }
+}>
+
+export type FullReview = Prisma.ReviewGetPayload<{
+  include: { user: true, likes: true, comments: true }
+}>
+
+export type FullComment = Prisma.ReviewCommentGetPayload<{
+  include: { user: true }
+}>
+
 export type Track = {
   album: Album,
   artists: Artist[],

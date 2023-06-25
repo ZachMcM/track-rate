@@ -1,9 +1,53 @@
-import { Prisma, User } from "@prisma/client";
-import { Album, Artist, SimplifiedAlbum, Track } from "./apiTypes";
+import { Like, ReviewComment } from "@prisma/client";
+import { Album, Artist, FullComment, FullReview, SimplifiedAlbum, Track } from "./apiTypes";
 
-type UserWithReview = Prisma.UserGetPayload<{
-  include: { reviews: true, reviewComments: true, likes: true }
-}>
+// gets the likes of a review
+
+export const getLikes = async (reviewId: string): Promise<Like[]> => {
+  const res = await fetch(`/api/likes?reviewId=${reviewId}`)
+  const data = await res.json()
+  return data
+}
+
+// either deletes or creates a new like for a user 
+
+export const updateLike = async (reviewId: string): Promise<Like> => {
+  const res = await fetch(`/api/likes?reviewId=${reviewId}`, {
+    method: "PATCH"
+  })
+  const data = await res.json()
+  return data
+}
+
+// adds a new comment
+
+export const addComment = async (reviewId: string, content: string): Promise<ReviewComment> => {
+  const res = await fetch (`/api/comments?reviewId=${reviewId}&content=${content}`, {
+    method: "POST"
+  })
+  const data = await res.json()
+  return data
+} 
+
+// deletes a comment
+
+export const deleteComment = async (id: string): Promise<ReviewComment> => {
+  const res = await fetch (`/api/comments?id=${id}`, {
+    method: "DELETE"
+  })
+  const data = await res.json()
+  return data
+}
+
+// gets all comments associated with a post 
+
+export const getComments = async (reviewId: string): Promise<FullComment[]> => {
+  const res = await fetch(`/api/comments?reviewId=${reviewId}`)
+  const data = await res.json()
+  return data
+}
+
+// gets the access token to use the spotify api
 
 export const getAccessToken = async () => {
   const res = await fetch("/api/access-token", {
@@ -15,7 +59,7 @@ export const getAccessToken = async () => {
 
 // method for getting full user Data
 
-export const getUserData = async (id?: string): Promise<UserWithReview> => {
+export const getUserData = async (id?: string): Promise<FullReview> => {
   if (id) {
     const res = await fetch(`/api/user?id=${id}`)
     const data = await res.json()
@@ -80,7 +124,7 @@ export const getAlbum = async (accessToken: string, id: string): Promise<Album> 
     }
   })
   const data = await res.json()
-  return data as Album
+  return data
 }
 
 export const getArtist = async (accessToken: string, id: string): Promise<Artist> => {
@@ -93,7 +137,7 @@ export const getArtist = async (accessToken: string, id: string): Promise<Artist
     }
   })
   const data = await res.json()
-  return data as Artist
+  return data 
 }
 
 export const getTrack = async (accessToken: string, id: string): Promise<Track> => {
@@ -106,5 +150,5 @@ export const getTrack = async (accessToken: string, id: string): Promise<Track> 
     }
   })
   const data = await res.json()
-  return data as Track
+  return data
 }

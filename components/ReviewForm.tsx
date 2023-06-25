@@ -14,13 +14,6 @@ import TrackReviewForm from "./TrackReviewForm"
 import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
 
 export default function ReviewForm() {
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("signin?callbackUrl=/")
-    }
-  })
-
   // getting our access token
   const tokenQuery = useQuery({ queryKey: ['access-token'], queryFn: getAccessToken })
 
@@ -72,7 +65,7 @@ export default function ReviewForm() {
     )
   } else {
     return (
-      <div className="z-50 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+      <div className="z-40 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
         <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
           <div className="flex items-center justify-between">
             <h3 className="font-bold md:text-xl">Create a new review...</h3>
@@ -94,7 +87,7 @@ export default function ReviewForm() {
               </button>
               {
                 dropdown && 
-                <div className="z-50 flex flex-col absolute top-14 border rounded-md bg-gray-950 border-gray-700 w-full">
+                <div className="z-50 absolute flex flex-col top-14 border rounded-md bg-gray-950 border-gray-700 w-full">
                   <button
                     className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize md:px-2 px-1 py-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "track" && "bg-gray-700 text-white"}`}
                     onClick={() => {

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
   const body = await request.json()
-  const { itemId, rating, type, content, title } = body
+  const { item, rating, type, content, title, favTrack } = body
   if (session && session.user && session.user.email) {
     const user = await prisma.user.findUnique({
       where: {
@@ -20,8 +20,17 @@ export async function POST(request: NextRequest) {
           content: content,
           rating: rating,
           type: type,
-          itemId: itemId,
-          title: title
+          item: item,
+          title: title,
+          favoriteTrack: favTrack
+        }
+      })
+      await prisma.activity.create({
+        data: {
+          userId: user.id,
+          itemId: newReview.id,
+          itemType: "review",
+          activityType: "created review"
         }
       })
       return NextResponse.json(newReview)
@@ -40,6 +49,11 @@ export async function GET(request: NextRequest) {
     const review = await prisma.review.findUnique(({
       where: {
         id: id
+      },
+      include: {
+        user: true,
+        likes: true,
+        comments: true
       }
     }))
     return NextResponse.json(review)

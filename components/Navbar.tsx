@@ -2,24 +2,19 @@
 
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
-import { TbChartBubbleFilled, TbLayoutSidebarRightCollapse, TbMusic, TbPlaylist, TbPlaylistAdd, TbPlus, TbX } from "react-icons/tb"
+import { TbLayoutSidebarRightCollapse, TbPlaylist, TbPlaylistAdd, TbX } from "react-icons/tb"
 import Image from "next/image"
 import { useState } from "react"
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
 import { useContext } from "react"
 import ReviewForm from "./ReviewForm"
-import { getUserData } from "@/app/apiMethods"
-import { useQuery } from "@tanstack/react-query"
-import { HiOutlineMusicNote } from "react-icons/hi"
 
 const Navbar = () => {
   const { data: session } = useSession()
 
   const [mobileMenu, setMobileMenu] = useState<boolean>(false)
   const {reviewForm, setReviewForm}= useContext(ReviewFormContext) as ReviewFormProviderType
-
-  const userDataQuery = useQuery({ queryKey: ["user"], queryFn: () => getUserData()})
 
   const MobileMenu = () => {
     const menuRef = useDetectClickOutside({ onTriggered(e) {
@@ -44,29 +39,29 @@ const Navbar = () => {
               </button>
             </div>
             {
-              session && userDataQuery.data?.image &&
+              session && session.user.image &&
               <div className="flex items-center space-x-3 border-b border-gray-700 pb-3">
                 <Image
-                  src={userDataQuery.data.image}
+                  src={session.user.image}
                   height={30}
                   width={30}
                   alt="avatar"
                   className="rounded-full"
                 />
-                <p className="font-bold">{userDataQuery.data.email?.substring(0, userDataQuery.data.email.indexOf("@"))}</p>
+                <p className="font-bold">{session.user.email?.substring(0, session.user.email.indexOf("@"))}</p>
               </div>
             }
             <div className="px-5 flex flex-col space-y-3 font-medium">
               <Link 
                 onClick={() => setMobileMenu(false)} 
-                href={`/profile/${userDataQuery.data?.id}`}
+                href={`/profile/${session?.user.id}`}
                 className="hover:opacity-80"
               >
                   Profile
               </Link>
               <Link 
                 onClick={() => setMobileMenu(false)} 
-                href={`/profile/${userDataQuery.data?.id}/reviews`}
+                href={`/profile/${session?.user.id}/reviews`}
                 className="hover:opacity-80"
               >
                 Reviews
@@ -108,20 +103,20 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex items-center text-gray-400 font-medium text-xs lg:text-sm">
           {
-            session && userDataQuery.data?.image ?
+            session && session.user.image ?
             <Link 
-              href={`/profile/${userDataQuery.data?.id}`}
+              href={`/profile/${session.user?.id}`}
               className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300"
             >
               <div className="flex items-center space-x-3">
                 <Image
-                  src={userDataQuery.data.image}
+                  src={session.user.image}
                   height={30}
                   width={30}
                   alt="avatar"
                   className="rounded-full"
                 />
-                <p className="hidden lg:block">{userDataQuery.data.name}</p>
+                <p className="hidden lg:block">{session.user.name}</p>
               </div>
             </Link> :
             <button className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300" onClick={() => signIn()}>Sign In</button>
@@ -157,7 +152,5 @@ const Navbar = () => {
     </>
   )
 }
-
-
 
 export default Navbar
