@@ -1,6 +1,6 @@
 "use client";
 
-import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/apiTypes";
+import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/types";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { getUserData } from "@/app/apiMethods";

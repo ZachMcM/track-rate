@@ -3,38 +3,29 @@
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { TbHeart, TbHeartFilled } from "react-icons/tb"
-import { FullReview } from "@/app/apiTypes"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { getLikes, updateLike } from "@/app/apiMethods"
+import { FullReview } from "@/app/types"
+import { updateLike } from "@/app/apiMethods"
+import ErrorModal from "./ErrorModal"
 
-export default function ReviewLikes({ review }: { review: FullReview }) {
+export default function ReviewLikes({ review, initialLike }: { review: FullReview, initialLike: boolean }) {
   const { data: session } = useSession()
-  const queryClient = useQueryClient()
 
-  const likes = useQuery({ 
-    queryKey: ['likes', review.id] ,
-    queryFn: () => getLikes(review.id),
-    initialData: review.likes
-  })
+  const [liked, setLiked] = useState<boolean>(initialLike)
+  const [likeCount, setLikeCount] = useState<number>(review.likes.length)
 
-  const didUserLike = (): boolean => {
-    if (session) {
-      for (const like of likes.data) {
-        if (like.userId == session.user.id) {
-          return true
-        } 
-      }     
-      return false 
-    } else {
-      return false
-    }
-  }
+  const [error, setError] = useState<boolean>(false)
 
   const toggleLike = async () => {
     if (session) {
+      if (liked) {
+        setLiked(false)
+        setLikeCount(likeCount - 1)
+      } else {
+        setLiked(true)
+        setLikeCount(likeCount + 1)
+      }
       const like = await updateLike(review.id)
-      queryClient.invalidateQueries({ queryKey: ['likes', review.id]})
-      return like
+      console.log(like)
     }
   }
 
@@ -45,12 +36,20 @@ export default function ReviewLikes({ review }: { review: FullReview }) {
         onClick={toggleLike}
       >
         {
-          didUserLike() ?
+          liked ?
           <TbHeartFilled/> :
           <TbHeart/>
         }
       </button>
-      <p>{likes.data.length} Like{likes.data.length != 1 && "s"}</p>
+      <p>{likeCount} Like{likeCount != 1 && "s"}</p>
+      { error && 
+        <ErrorModal 
+          setModal={setError} 
+          message="You can't like posts, you aren't logged in"
+          redirectLink={`/signin?callbackUrl=review/${review.id}`}
+          redirectMessage="Sign in"
+        />
+      }
     </div>
   )
 }

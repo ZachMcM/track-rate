@@ -2,6 +2,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -45,6 +46,8 @@ export async function POST(request: NextRequest) {
         }
       ]
     })
+    revalidateTag(`user${review?.userId}`)
+    revalidateTag(`user${session.user.id}`)
     return NextResponse.json(newComment)
   } else {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })

@@ -58,6 +58,8 @@ export async function PATCH(request: NextRequest) {
             }
           ]
         })
+        revalidateTag(`user${review.userId}`)
+        revalidateTag(`user${data.userId}`)
         revalidateTag(`review${data.reviewId}`)
         return NextResponse.json(newLike)
       }

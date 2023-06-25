@@ -1,34 +1,7 @@
 import Image from "next/image"
-import { Album, Artist } from "@/app/apiTypes"
+import { Artist } from "@/app/types"
 import { BsSpotify } from "react-icons/bs"
-
-const getAccessToken = async () => {
-  const authParams = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `grant_type=client_credentials&client_id=${process.env.SPOTIFY_CLIENT_ID}&client_secret=${process.env.SPOTIFY_CLIENT_SECRET}`
-  }
-
-  const res = await fetch("https://accounts.spotify.com/api/token", authParams)
-  const data = await res.json()
-  return data.access_token
-}
-
-const getAlbum = async (id: string): Promise<Album> => {
-  const accessToken = await getAccessToken()
-  const res = await fetch(`https://api.spotify.com/v1/albums/${id}`, { 
-    cache: 'force-cache', 
-    method: "GET", 
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${accessToken}`
-    }
-  })
-  const data = await res.json()
-  return data
-}
+import { getAlbum } from "@/app/serverMethods"
 
 export default async function AlbumData({ id }: { id: string }) {
   const album = await getAlbum(id)
@@ -37,13 +10,13 @@ export default async function AlbumData({ id }: { id: string }) {
     <div className="flex items-center flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-10">
       <Image
         src={album.images[0].url}
-        width={250}
-        height={250}
+        width={240}
+        height={240}
         alt={album.name}
         className="rounded-md"
       />
-      <div className="flex flex-col space-y-3">
-        <h2 className="font-bold text-xl md:text-2xl">{album.name}</h2>
+      <div className="flex flex-col space-y-3 items-center md:items-start">
+      <h2 className="font-bold text-xl md:text-2xl text-center md:text-start">{album.name}</h2>
         <p className="text-sky-400">
           {
             album.artists.map((artist: Artist) => {

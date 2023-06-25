@@ -6,15 +6,14 @@ import { TbLayoutSidebarRightCollapse, TbPlaylist, TbPlaylistAdd, TbX } from "re
 import Image from "next/image"
 import { useState } from "react"
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
 import { useContext } from "react"
-import ReviewForm from "./ReviewForm"
+import { ReviewModalContext, ReviewModalProviderType } from "./ReviewModalProvider"
 
 const Navbar = () => {
   const { data: session } = useSession()
 
   const [mobileMenu, setMobileMenu] = useState<boolean>(false)
-  const {reviewForm, setReviewForm}= useContext(ReviewFormContext) as ReviewFormProviderType
+  const { setReviewModal } = useContext(ReviewModalContext) as ReviewModalProviderType
 
   const MobileMenu = () => {
     const menuRef = useDetectClickOutside({ onTriggered(e) {
@@ -125,7 +124,7 @@ const Navbar = () => {
           <Link className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300" href="/albums">Albums</Link>
           {/* Todo */}
           <button 
-            onClick={() => setReviewForm(true)}
+            onClick={() => setReviewModal(true)}
             className="py-2 px-3 rounded-md hover:bg-gray-900 duration-300 flex items-center space-x-1"
           >
             <p>Add</p>
@@ -140,7 +139,7 @@ const Navbar = () => {
         </div>
         <div className="md:hidden flex text-gray-400">
           <button 
-            onClick={() => setReviewForm(true)}
+            onClick={() => setReviewModal(true)}
             className="p-2 rounded-md hover:bg-gray-900 duration-300 flex items-center space-x-1"
           >
             <TbPlaylistAdd className="text-2xl"/>
@@ -148,7 +147,6 @@ const Navbar = () => {
         </div>
       </nav>
       {mobileMenu && <MobileMenu/>}
-      {reviewForm && <ReviewForm/>}
     </>
   )
 }

@@ -107,4 +107,6 @@ model Activity {
   itemId String
   itemType String
   activityType String
+
+  createdAt DateTime @default(now())
 }
