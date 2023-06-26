@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 
 const getUser = async (id: string) => {
   const res = await fetch(`${process.env.URL}/api/user?id=${id}`)
@@ -5,10 +6,23 @@ const getUser = async (id: string) => {
   return data
 }
 
-export default async function Profile({ params }: { params: { id: string }}) {
-  const user = await getUser(params.id)
+export default function Profile({ params }: { params: { id: string }}) {
 
   return (
-    <div></div>
+    <div>
+      <Suspense>
+        <PageContent id={params.id}/>
+      </Suspense>
+    </div>
+  )
+}
+
+async function PageContent({ id }: { id: string }) {
+  const user = await getUser(id)
+
+  return (
+    <div>
+
+    </div>
   )
 }

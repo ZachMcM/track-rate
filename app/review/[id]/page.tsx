@@ -20,9 +20,12 @@ export async function generateMetadata({ params }: { params: { id: string }, par
 
 export default function ReviewPage({ params }: { params: { id: string }}) {
   return (
-    <Suspense fallback={<DataSkeleton/>}>
-      <ReviewContent id={params.id}/>
-    </Suspense>
+    <div>
+      <Suspense fallback={<DataSkeleton/>}>
+        <ReviewContent id={params.id}/>
+      </Suspense>
+    </div>
+
   )
 }
 
@@ -57,7 +60,7 @@ async function ReviewContent({ id }: { id: string }) {
             <RatingDisplay rating={review.rating}/>
           </div>
           {
-            review.favoriteTrack &&
+            review.type == "album" &&
             <p className="text-sky-400">Favorite Track: <Link className="font-bold hover:opacity-80 duration-300" href={`/track/${review.favoriteTrack[1]}`}>{review.favoriteTrack[0]}</Link></p>
           }
           <p className="font-medium text-gray-400">{review.content}</p>

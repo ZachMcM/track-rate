@@ -10,7 +10,7 @@ export default async function ProfileDashboard({ id }: { id: string }) {
   const session = await getServerSession(authOptions)
 
   return (
-    <div className="mt-10 flex flex-col space-y-5">
+    <div className="my-10 flex flex-col space-y-5">
       <div className="flex space-x-5 items-center">
         <div className="relative w-16 h-16 md:w-20 md:h-20">
           <Image 
