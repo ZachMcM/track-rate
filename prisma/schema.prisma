@@ -75,8 +75,10 @@ model Review {
   content String
   rating Int
   type String 
-  item String[]
-  favoriteTrack String[]
+  itemId String
+  itemName String
+  favoriteTrackName String?
+  favoriteTrackId String?
 }
 
 model ReviewComment {
@@ -104,8 +106,8 @@ model Activity {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, name: "Activities")
   otherUser User? @relation(fields: [otherUserId], references: [id], onDelete: Cascade, name: "Other User Activities")
   otherUserId String?
-  itemId String
-  itemType String
+  itemId String?
+  itemType String?
   activityType String
 
   createdAt DateTime @default(now())

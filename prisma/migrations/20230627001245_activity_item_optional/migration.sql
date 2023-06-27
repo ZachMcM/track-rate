@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Activity" ALTER COLUMN "itemId" DROP NOT NULL,
+ALTER COLUMN "itemType" DROP NOT NULL;

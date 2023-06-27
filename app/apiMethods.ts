@@ -1,5 +1,5 @@
 import { Like, ReviewComment } from "@prisma/client";
-import { Artist, FullComment, NewReviewParams, SimplifiedAlbum, Track } from "./types";
+import { Album, Artist, FullComment, NewReviewParams, SimplifiedAlbum, Track } from "./types";
 
 export const addReview = async (newReviewParams: NewReviewParams) => {
   const res = await fetch(`/api/review`, {
@@ -50,7 +50,6 @@ export const getAccessToken = async () => {
 
 export const getTrackList = async (query: string, accessToken: string): Promise<Track[]> => {
   const res = await fetch(`https://api.spotify.com/v1/search?q=track:${query}&type=track`, {
-    cache: "force-cache",
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +62,6 @@ export const getTrackList = async (query: string, accessToken: string): Promise<
 
 export const getArtistList = async (query: string, accessToken: string): Promise<Artist[]> => {
   const res = await fetch(`https://api.spotify.com/v1/search?q=artist:${query}&type=artist`, {
-    cache: "force-cache",
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +74,6 @@ export const getArtistList = async (query: string, accessToken: string): Promise
 
 export const getAlbumList = async (query: string, accessToken: string): Promise<SimplifiedAlbum[]> => {
   const res = await fetch(`https://api.spotify.com/v1/search?q=album:${query}&type=album`, {
-    cache: "force-cache",
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -85,4 +82,28 @@ export const getAlbumList = async (query: string, accessToken: string): Promise<
   })
   const data = await res.json()
   return data.albums.items
+}
+
+export const getAlbum = async (id: string, accessToken: string): Promise<Album> => {
+  const res = await fetch(`https://api.spotify.com/v1/albums/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
+  const data = await res.json()
+  return data
+}
+
+export const getTrack = async (id: string, accessToken: string): Promise<Track> => {
+  const res = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
+  const data = await res.json()
+  return data
 }

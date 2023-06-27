@@ -14,7 +14,7 @@ import DataSkeleton from "@/components/DataSkeleton"
 export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
   const review = await getReview(params.id)
   return {
-    title: review.item[0] + " Review - " + review.user.name
+    title: `${review.itemName} review`
   }
 }
 
@@ -49,8 +49,8 @@ async function ReviewContent({ id }: { id: string }) {
     <div className="flex flex-col space-y-10">
       {
         review.type == "album" ?
-        <AlbumData id={review.item[1]}/> :
-        <TrackData id={review.item[1]}/>
+        <AlbumData id={review.itemId}/> :
+        <TrackData id={review.itemId}/>
       }
       <div className="w-full flex flex-col space-y-14">
         <div className="flex flex-col space-y-5 w-full">
@@ -61,7 +61,7 @@ async function ReviewContent({ id }: { id: string }) {
           </div>
           {
             review.type == "album" &&
-            <p className="text-sky-400">Favorite Track: <Link className="font-bold hover:opacity-80 duration-300" href={`/track/${review.favoriteTrack[1]}`}>{review.favoriteTrack[0]}</Link></p>
+            <p className="text-sky-400">Favorite Track: <Link className="font-bold hover:opacity-80 duration-300" href={`/track/${review.favoriteTrackId}`}>{review.favoriteTrackName}</Link></p>
           }
           <p className="font-medium text-gray-400">{review.content}</p>
           <ReviewLikes review={review} initialLike={initialLike()}/>

@@ -16,39 +16,41 @@ export async function POST(request: NextRequest) {
         id: reviewId
       }
     })
-
-    const newComment = await prisma.reviewComment.create({
-      data: {
-        userId: session.user.id,
-        content: content,
-        reviewId: reviewId
-      }
-    })
-
-    await prisma.activity.createMany({
-      data: [
-        // activity for the person that liked
-        {
+    if (review) {
+      const newComment = await prisma.reviewComment.create({
+        data: {
           userId: session.user.id,
-          itemId: reviewId,
-          itemType: "review",
-          activityType: "gave comment",
-          otherUserId: review?.userId,
-        },
-        // activity for the person whose review was liked
-        {
-          // @ts-expect-error
-          userId: review?.userId,
-          itemId: reviewId,
-          itemType: "review",
-          activityType: "recieved comment",
-          otherUserId: session.user.id
+          content: content,
+          reviewId: reviewId
         }
-      ]
-    })
-    revalidateTag(`user${review?.userId}`)
-    revalidateTag(`user${session.user.id}`)
-    return NextResponse.json(newComment)
+      })
+  
+      await prisma.activity.createMany({
+        data: [
+          // activity for the person that liked
+          {
+            userId: session.user.id,
+            itemId: reviewId,
+            itemType: "review",
+            activityType: "gave comment",
+            otherUserId: review?.userId,
+          },
+          // activity for the person whose review was liked
+          {
+            userId: review.userId,
+            itemId: reviewId,
+            itemType: "review",
+            activityType: "recieved comment",
+            otherUserId: session.user.id
+          }
+        ]
+      })
+      revalidateTag(review?.userId)
+      revalidateTag(session.user.id)
+      return NextResponse.json(newComment)
+    } else {
+      return NextResponse.json({error: "Invalid Request" }, { status: 400 })
+    }
   } else {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
   }

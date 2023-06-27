@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 
 export type FullUser = Prisma.UserGetPayload<{
-  include: { reviews: true, acivities: true, likes: true }
+  include: { reviews: true, acivities: true, likes: true, followers: true, follows: true }
 }>
 
 export type FullReview = Prisma.ReviewGetPayload<{
@@ -14,11 +14,13 @@ export type FullComment = Prisma.ReviewCommentGetPayload<{
 
 export type NewReviewParams = {
   title: string,
-  item: string[],
+  itemId: string,
+  itemName: string
   rating: number,
   type: string,
   content: string,
-  favTrack?: string[]
+  favTrackName?: string
+  favTrackId?: string
 }
 
 export type Track = {

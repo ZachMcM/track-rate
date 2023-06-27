@@ -29,7 +29,9 @@ export async function PATCH(request: NextRequest) {
             userId_reviewId: data
           }
         })
-        revalidateTag(`review${data.reviewId}`)
+        revalidateTag(review.userId)
+        revalidateTag(data.userId)
+        revalidateTag(data.reviewId)
         return NextResponse.json(deletedLike)
       } else {
         const newLike = await prisma.like.create({
@@ -58,9 +60,9 @@ export async function PATCH(request: NextRequest) {
             }
           ]
         })
-        revalidateTag(`user${review.userId}`)
-        revalidateTag(`user${data.userId}`)
-        revalidateTag(`review${data.reviewId}`)
+        revalidateTag(review.userId)
+        revalidateTag(data.userId)
+        revalidateTag(data.reviewId)
         return NextResponse.json(newLike)
       }
     } else {

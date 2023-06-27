@@ -1,15 +1,9 @@
-import { FullUser } from "@/app/types"
+import { getUser } from "@/app/serverMethods"
 import ActivityCard from "@/components/ActivityCard"
 import { Activity } from "@prisma/client"
 import { Suspense } from "react"
 
-const getUser = async (id: string): Promise<FullUser> => {
-  const res = await fetch(`${process.env.URL}/api/user?id=${id}`)
-  const data = await res.json()
-  return data
-}
-
-export default function Activity({ params }: { params: { id: string }}) {
+export default function UserActivity({ params }: { params: { id: string }}) {
 
   return (
     <div>
@@ -29,8 +23,12 @@ async function PageContent({ id }: { id: string }) {
         user.acivities.map((activity: Activity) => {
           if (activity.otherUserId != activity.userId) {
             return (
-              <p className="p-8 rounded-md border border-gray-700 text-xs md:text-sm text-gray-400"><ActivityCard activity={activity} key={activity.id}/></p>
-              
+              <div className="flex flex-col space-y-5 p-8 rounded-md border border-gray-700 text-xs md:text-sm text-gray-400">
+                <p>
+                  <ActivityCard activity={activity} key={activity.id}/>
+                </p>
+                <p className="text-gray-400 text-xs">{(new Date(activity.createdAt).toDateString())}</p>
+              </div>
             )
           }
         })

@@ -2,8 +2,8 @@ import './globals.css'
 import Provider from '../components/Provider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { ReviewModalProvider } from '@/components/ReviewModalProvider'
-import ReviewModal from '@/components/ReviewModal'
+import { ReviewFormProvider } from '@/components/ReviewFormProvider'
+import ReviewForm from '@/components/ReviewForm'
 
 export const metadata = {
   title: 'TrackRate',
@@ -19,14 +19,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className='bg-gray-950 text-white'>
         <Provider>
-          <ReviewModalProvider>
+          <ReviewFormProvider>
             <Navbar/>
-            <main className='p-8 md:py-16 md:px-24 lg:px-48'>
+            <main className='p-8 md:py-16 md:px-16 lg:px-48'>
               {children}
             </main>
             <Footer/>
-            <ReviewModal/>
-          </ReviewModalProvider>
+            <ReviewForm/>
+          </ReviewFormProvider>
         </Provider>
       </body>
     </html>

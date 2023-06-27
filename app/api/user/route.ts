@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
       include: {
         reviews: true,
         likes: true,
-        acivities: true
+        acivities: true,
+        followers: true,
+        follows: true
       }
     })
     return NextResponse.json(user)

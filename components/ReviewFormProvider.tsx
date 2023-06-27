@@ -1,10 +1,10 @@
 "use client";
 
+import { addReview } from "@/app/apiMethods";
 import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/types";
+import { UseMutationResult, useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { getUserData } from "@/app/apiMethods";
-import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 export type ReviewFormProviderType = {
   title: string;
@@ -27,18 +27,14 @@ export type ReviewFormProviderType = {
   setFavTrackError: Dispatch<SetStateAction<boolean>>;
   contentError: boolean;
   setContentError: Dispatch<SetStateAction<boolean>>;
-  saveReview: Function;
   type: string;
   setType: Dispatch<SetStateAction<string>>;
   trackResults: Track[];
   setTrackResults: Dispatch<SetStateAction<Track[]>>;
   albumResults: SimplifiedAlbum[];
   setAlbumResults: Dispatch<SetStateAction<SimplifiedAlbum[]>>;
-  successfulSave: boolean,
-  setSuccessfulSave: Dispatch<SetStateAction<boolean>>
-  loadingSave: boolean,
-  setLoadingSave: Dispatch<SetStateAction<boolean>>
-  newId: string
+  addReviewMutation: UseMutationResult<any, unknown, void, unknown>,
+  submitReview: () => Promise<void>
 };
 
 export const ReviewFormContext = createContext<ReviewFormProviderType | null>(
@@ -72,61 +68,40 @@ export const ReviewFormProvider = ({
   const [favTrackError, setFavTrackError] = useState<boolean>(false);
   const [contentError, setContentError] = useState<boolean>(false);
 
-  const [successfulSave, setSuccessfulSave] = useState<boolean>(false)
-  const [loadingSave, setLoadingSave] = useState<boolean>(false)
-  const [newId, setNewId] = useState<string>('')
+  const router = useRouter()
 
-  const userDataQuery = useQuery({ queryKey: ["user"], queryFn: () => getUserData()})
-
-  const queryClient = useQueryClient()
-
-  const saveReview = async () => {
-    if (!title) {
-      setTitleError(true);
-    }
-    if (!reviewContent) {
-      setContentError(true);
-    }
-    if (type == "album" && !favTrack) {
-      setFavTrackError(true);
-    }
-    if (
-      title &&
-      reviewContent &&
-      (type != "album" || (type == "album" && favTrack))
-    ) {
-      setLoadingSave(true)
-      let reqBody;
-      if (trackTarget) {
-        reqBody = {
-          title: title,
-          item: [trackTarget.name, trackTarget.id],
-          rating: rating,
-          type: type,
-          content: reviewContent,
-        };
-      } else if (albumTarget) {
-        reqBody = {
-          title: title,
-          item: [albumTarget.name, albumTarget.id],
-          rating: rating,
-          type: type,
-          content: reviewContent,
-          favTrack: [favTrack?.name, favTrack?.id]
-        };
-      } else {
-        return;
+  const addReviewMutation = useMutation({
+    mutationFn: () =>
+      addReview({
+        title: title,
+        content: reviewContent,
+        type: type,
+        rating: rating,
+        itemId: albumTarget ? albumTarget.id : trackTarget?.id || "",
+        itemName: albumTarget ? albumTarget.name : trackTarget?.name || "",
+        favTrackName: favTrack?.name,
+        favTrackId: favTrack?.id
+      }),
+      onSuccess: (data) => {
+        console.log(data)
+        setReviewForm(false)
+        router.push(`/review/${data.id}`)
       }
-      const res = await fetch("/api/review", {
-        method: "POST",
-        body: JSON.stringify(reqBody),
-      });
-      const data = await res.json();
-      console.log(data)
-      setNewId(data.id)
-      queryClient.invalidateQueries({ queryKey: ['reviews', userDataQuery.data?.id]})
-      setLoadingSave(false)
-      setSuccessfulSave(true)
+  });
+
+  const submitReview = async () => {
+    if (title && reviewContent && (type == "album" && favTrack || type == "track")) {
+      addReviewMutation.mutate()
+    } else {
+      if (!title) {
+        setTitleError(true);
+      }
+      if (!reviewContent) {
+        setContentError(true);
+      }
+      if (type == "album" && !favTrack) {
+        setFavTrackError(true);
+      }
     }
   };
 
@@ -159,12 +134,8 @@ export const ReviewFormProvider = ({
         setFavTrackError,
         contentError,
         setContentError,
-        saveReview,
-        successfulSave,
-        setSuccessfulSave,
-        loadingSave,
-        setLoadingSave,
-        newId
+        addReviewMutation,
+        submitReview
       }}
     >
       {children}

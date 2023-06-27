@@ -17,7 +17,7 @@ export default async function TrackData({ id }: { id: string }) {
       />
       <div className="flex flex-col space-y-3 items-center md:items-start">
         <h2 className="font-bold text-xl md:text-2xl text-center md:text-start">{track.name}</h2>
-        <h3 className="text-lg font-medium text-center md:text-start">{track.album.name}</h3>
+        <h3 className="text-lg font-medium text-center md:text-start text-gray-400">{track.album.name}</h3>
         <p className="text-sky-400 text-center md:text-start">
           {
             track.artists.map((artist: Artist) => {
