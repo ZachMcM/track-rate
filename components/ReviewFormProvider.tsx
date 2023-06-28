@@ -5,6 +5,8 @@ import { Album, SimplifiedAlbum, SimplifiedTrack, Track } from "@/app/types";
 import { UseMutationResult, useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react"
 
 export type ReviewFormProviderType = {
   title: string;
@@ -69,6 +71,9 @@ export const ReviewFormProvider = ({
   const [contentError, setContentError] = useState<boolean>(false);
 
   const router = useRouter()
+  const { data: session } = useSession()
+
+  const queryClient = useQueryClient()
 
   const addReviewMutation = useMutation({
     mutationFn: () =>
@@ -85,6 +90,7 @@ export const ReviewFormProvider = ({
       onSuccess: (data) => {
         console.log(data)
         setReviewForm(false)
+        queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
         router.push(`/review/${data.id}`)
       }
   });

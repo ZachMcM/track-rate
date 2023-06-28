@@ -38,7 +38,7 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   bio           String?
-  favTrack       String?
+  favTrack      String?
   favAlbum      String?
   favArtist     String?
   email         String?   @unique
@@ -52,8 +52,7 @@ model User {
   likes Like[]
   followers User[] @relation(name: "Followers")
   follows User[] @relation(name: "Followers")
-  acivities Activity[] @relation(name: "Activities")
-  otherUserActivities Activity[] @relation(name: "Other User Activities")
+  spotifyUsername String?
 }
 
 model VerificationToken {
@@ -96,19 +95,6 @@ model Like {
   userId String
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String
-
-  @@id([userId, reviewId])
-}
-
-model Activity {
-  id  String @id @default(cuid())
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, name: "Activities")
-  otherUser User? @relation(fields: [otherUserId], references: [id], onDelete: Cascade, name: "Other User Activities")
-  otherUserId String?
-  itemId String?
-  itemType String?
-  activityType String
-
   createdAt DateTime @default(now())
+  @@id([userId, reviewId])
 }

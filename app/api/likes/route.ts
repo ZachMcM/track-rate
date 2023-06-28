@@ -40,26 +40,6 @@ export async function PATCH(request: NextRequest) {
             reviewId: data.reviewId
           }
         })
-        await prisma.activity.createMany({
-          data: [
-            // activity for the person that liked
-            {
-              userId: data.userId,
-              itemId: reviewId,
-              itemType: "review",
-              activityType: "gave like",
-              otherUserId: review?.userId,
-            },
-            // activity for the person whose review was liked
-            {
-              userId: review.userId,
-              itemId: reviewId,
-              itemType: "review",
-              activityType: "recieved like",
-              otherUserId: data.userId
-            }
-          ]
-        })
         revalidateTag(review.userId)
         revalidateTag(data.userId)
         revalidateTag(data.reviewId)

@@ -34,7 +34,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
   }
 
   return (
-    <div className="flex space-x-2 items-center text-gray-400 text-sm">
+    <div className="flex space-x-2 items-center text-zinc-400 text-sm">
       <button 
         className={`text-xl duration-300 ${session && "hover:opacity-80 "}`}
         onClick={toggleLike}

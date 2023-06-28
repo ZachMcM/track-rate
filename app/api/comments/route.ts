@@ -24,29 +24,6 @@ export async function POST(request: NextRequest) {
           reviewId: reviewId
         }
       })
-  
-      await prisma.activity.createMany({
-        data: [
-          // activity for the person that liked
-          {
-            userId: session.user.id,
-            itemId: reviewId,
-            itemType: "review",
-            activityType: "gave comment",
-            otherUserId: review?.userId,
-          },
-          // activity for the person whose review was liked
-          {
-            userId: review.userId,
-            itemId: reviewId,
-            itemType: "review",
-            activityType: "recieved comment",
-            otherUserId: session.user.id
-          }
-        ]
-      })
-      revalidateTag(review?.userId)
-      revalidateTag(session.user.id)
       return NextResponse.json(newComment)
     } else {
       return NextResponse.json({error: "Invalid Request" }, { status: 400 })

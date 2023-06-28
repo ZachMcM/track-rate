@@ -17,7 +17,7 @@ export default async function AlbumData({ id }: { id: string }) {
       />
       <div className="flex flex-col space-y-3 items-center md:items-start">
       <h2 className="font-bold text-xl md:text-2xl text-center md:text-start">{album.name}</h2>
-        <p className="text-sky-400">
+        <p className="text-zinc-400">
           {
             album.artists.map((artist: Artist) => {
               return <span key={artist.id}> {artist.name} </span>

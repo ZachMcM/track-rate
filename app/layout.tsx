@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className='bg-gray-950 text-white'>
+      <body className='bg-zinc-950 text-white'>
         <Provider>
           <ReviewFormProvider>
             <Navbar/>

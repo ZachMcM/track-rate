@@ -7,7 +7,7 @@ export default function Stars({ rating, setRating }: { rating: number, setRating
   return (
     <div className="flex flex-col space-y-2">
     <p className="font-medium">Rating</p>
-    <div className="flex items-center space-x-2 text-lg md:text-xl text-gray-400">
+    <div className="flex items-center space-x-2 text-lg md:text-xl text-zinc-400">
       <button 
         onClick={() => {
           if (rating == 1) {

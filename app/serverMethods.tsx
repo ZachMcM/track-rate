@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { Album, FullReview, FullUser, Track } from "./types"
 
 export const getReview = async (id: string): Promise<FullReview> => {
@@ -7,7 +8,7 @@ export const getReview = async (id: string): Promise<FullReview> => {
 }
 
 export const getUser = async (id: string): Promise<FullUser> => {
-  const res = await fetch(`${process.env.URL}/api/user?id=${id}`, { next: { tags: [id] }})
+  const res = await fetch(`${process.env.URL}/api/user?id=${id}`, { cache: "no-store"} )
   const data = await res.json()
   return data
 }

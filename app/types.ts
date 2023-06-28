@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 
 export type FullUser = Prisma.UserGetPayload<{
-  include: { reviews: true, acivities: true, likes: true, followers: true, follows: true }
+  include: { reviews: true, likes: true, followers: true, follows: true }
 }>
 
 export type FullReview = Prisma.ReviewGetPayload<{

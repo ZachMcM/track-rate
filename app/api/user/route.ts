@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
       include: {
         reviews: true,
         likes: true,
-        acivities: true,
         followers: true,
         follows: true
       }
@@ -30,7 +29,7 @@ export async function PUT(request: NextRequest) {
   const session = await getServerSession(authOptions)
   if (session && session.user && session.user.email) {
     const body = await request.json()
-    const { bio, favoriteAlbum, favoriteArtist, favoriteTrack, name } = body
+    const { bio, favoriteAlbum, favoriteArtist, favoriteTrack, name, spotifyUsername } = body
     const updateUser = await prisma.user.update({
       where: {
         email: session.user.email
@@ -40,7 +39,8 @@ export async function PUT(request: NextRequest) {
         name: name,
         favAlbum: favoriteAlbum,
         favArtist: favoriteArtist,
-        favTrack: favoriteTrack
+        favTrack: favoriteTrack,
+        spotifyUsername: spotifyUsername
       }
     })
     return NextResponse.json(updateUser)

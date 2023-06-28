@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
   const { itemId, itemName, rating, type, content, title, favTrackName, favTrackId } = body
   if (session && session.user) {
     if (session.user) {
-      revalidateTag(session.user.id)
       const newReview = await prisma.review.create({
         data: {
           userId: session.user.id,
@@ -22,14 +21,6 @@ export async function POST(request: NextRequest) {
           title: title,
           favoriteTrackName: favTrackName,
           favoriteTrackId: favTrackId
-        }
-      })
-      await prisma.activity.create({
-        data: {
-          userId: session.user.id,
-          itemId: newReview.id,
-          itemType: "review",
-          activityType: "created review"
         }
       })
       return NextResponse.json(newReview)

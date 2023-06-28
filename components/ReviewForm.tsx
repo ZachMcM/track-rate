@@ -67,11 +67,11 @@ export default function ReviewForm() {
     } else {
       return (
         <div className="z-40 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
-          <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full m-10 md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
+          <div ref={modalRef} className="flex flex-col space-y-8 p-10 w-full m-10 md:w-3/5 lg:w-2/5 rounded-md border border-zinc-700 bg-zinc-950">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-lg md:text-xl">Create a new review...</h3>
+              <h3 className="font-medium text-lg md:text-xl">Create a new review...</h3>
               <button 
-                className="p-1 rounded-md border border-gray-700"
+                className="p-1 rounded-md border border-zinc-700"
                 onClick={() => setReviewForm(false)}
               >
                 <TbX className="text-white"/>
@@ -80,7 +80,7 @@ export default function ReviewForm() {
             <div className="flex flex-col space-y-5">
               <div className="relative w-full text-sm">
                 <button 
-                  className="w-full border border-gray-700 rounded-md flex items-center justify-between px-4 py-3"
+                  className="w-full border border-zinc-700 rounded-md flex items-center justify-between px-4 py-3"
                   onClick={() => setDropdown(true)}
                 >
                   <p className={`${type && "capitalize"}`}>{type || "Select music type"}</p>
@@ -88,9 +88,9 @@ export default function ReviewForm() {
                 </button>
                 {
                   dropdown &&
-                  <div className="z-50 flex flex-col absolute top-14 border rounded-md bg-gray-950 border-gray-700 w-full">
+                  <div className="z-50 flex flex-col absolute top-14 border rounded-md bg-zinc-950 border-zinc-700 w-full">
                     <button
-                      className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "track" && "bg-gray-700 text-white"}`}
+                      className={`text-zinc-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-zinc-700 duration-300 m-2 rounded-md text-start ${type == "track" && "bg-zinc-700 text-white"}`}
                       onClick={() => {
                         setType("track")
                         setDropdown(false)
@@ -102,7 +102,7 @@ export default function ReviewForm() {
                       <p>track</p>
                     </button>
                     <button
-                      className={`text-gray-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-gray-700 duration-300 m-2 rounded-md text-start ${type == "album" && "bg-gray-700 text-white"}`}
+                      className={`text-zinc-400 hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-zinc-700 duration-300 m-2 rounded-md text-start ${type == "album" && "bg-zinc-700 text-white"}`}
                       onClick={() => {
                         setType("album")
                         setDropdown(false)
@@ -117,19 +117,19 @@ export default function ReviewForm() {
                 }
               </div>
               <div className="w-full relative text-sm">
-                <div className="flex space-x-2 items-center text-gray-300 border-gray-700 border rounded-md px-4 py-3 focus-within:ring-2 ring-offset-2 ring-gray-700 ring-offset-gray-950">
+                <div className="flex space-x-2 items-center text-zinc-300 border-zinc-700 border rounded-md px-4 py-3 focus-within:ring-2 ring-offset-2 ring-zinc-700 ring-offset-zinc-950">
                   <TbSearch className="text-xl"/>
                   <input
                     onChange={(e) => {
                       getResults(e.target.value)
                     }}
-                    className="bg-gray-950 border-none outline-none placeholder:text-gray-400 w-full"
+                    className="bg-zinc-950 border-none outline-none placeholder:text-zinc-400 w-full"
                     placeholder="Name of album or track..."
                   />
                 </div>
                 {
                   trackResults.length != 0 &&
-                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-gray-950 absolute top-14 border border-gray-700">
+                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-700">
                     {
                       trackResults.map((result: Track) => {
                         return (
@@ -139,7 +139,7 @@ export default function ReviewForm() {
                               setTrackTarget(result)
                             }}
                             key={result.id} 
-                            className="flex space-x-4 items-center rounded-md text-start text-gray-400 hover:text-white p-2 m-2 hover:bg-gray-700 duration-300"
+                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-700 duration-300"
                           >
                             <Image
                               src={result.album.images[0].url}
@@ -157,7 +157,7 @@ export default function ReviewForm() {
                 }
                 {
                   albumResults.length != 0 &&
-                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-gray-950 absolute top-14 border border-gray-700">
+                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-700">
                     {
                       albumResults.map((result: SimplifiedAlbum) => {
                         return (
@@ -168,7 +168,7 @@ export default function ReviewForm() {
                               getFullAlbum(result.id)
                             }}
                             key={result.id} 
-                            className="flex space-x-4 items-center rounded-md text-start text-gray-400 hover:text-white p-2 m-2 hover:bg-gray-700 duration-300"
+                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-700 duration-300"
                           >
                             <Image
                               src={result.images[0].url}

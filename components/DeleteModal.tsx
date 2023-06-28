@@ -16,7 +16,7 @@ export default function DeleteModal({ params }: { params: FnParams}) {
 
   return (
     <div className="z-40 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
-      <div ref={modalRef} className="flex flex-col text-center space-y-5 p-10 w-full md:w-3/5 lg:w-2/5 rounded-md border border-gray-700 bg-gray-950">
+      <div ref={modalRef} className="flex flex-col text-center space-y-5 p-10 w-full md:w-3/5 lg:w-2/5 rounded-md border border-zinc-700 bg-zinc-950">
         <div className="flex flex-col items-center space-y-2">
           <TbInfoCircle className="text-5xl"/>
           <h3 className="text-lg md:text-2xl text-white font-semibold">{params.message}</h3>
@@ -32,7 +32,7 @@ export default function DeleteModal({ params }: { params: FnParams}) {
             <p>Yes I'm sure</p>
           </button>
           <button
-            className="px-4 py-2 rounded-md border border-gray-700 hover:opacity-80 duration-300"
+            className="px-4 py-2 rounded-md border border-zinc-700 hover:opacity-80 duration-300"
             onClick={() => params.setModal(false)}
           >
             <p>No, cancel</p>

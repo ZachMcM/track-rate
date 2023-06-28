@@ -54,16 +54,16 @@ async function ReviewContent({ id }: { id: string }) {
       }
       <div className="w-full flex flex-col space-y-14">
         <div className="flex flex-col space-y-5 w-full">
-          <p className="text-gray-400 text-sm">Review by: <Link className="font-bold hover:opacity-80 duration-300" href={`/profile/${review.userId}`}>{review.user.name}</Link></p>
+          <p className="text-zinc-400 text-sm">Review by: <Link className="font-bold hover:opacity-80 duration-300" href={`/profile/${review.userId}`}>{review.user.name}</Link></p>
           <div className="flex space-x-3">
             <h3 className="font-semibold text-xl">{review.title}</h3>
             <RatingDisplay rating={review.rating}/>
           </div>
           {
             review.type == "album" &&
-            <p className="text-sky-400">Favorite Track: <Link className="font-bold hover:opacity-80 duration-300" href={`/track/${review.favoriteTrackId}`}>{review.favoriteTrackName}</Link></p>
+            <p className="text-zinc-400">Favorite Track: <Link className="font-bold hover:opacity-80 duration-300" href={`/track/${review.favoriteTrackId}`}>{review.favoriteTrackName}</Link></p>
           }
-          <p className="font-medium text-gray-400">{review.content}</p>
+          <p className="font-medium text-zinc-400">{review.content}</p>
           <ReviewLikes review={review} initialLike={initialLike()}/>
         </div>
         <ReviewComments review={review}/>

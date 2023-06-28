@@ -64,17 +64,17 @@ export default function ReviewComments({ review }: { review: FullReview }) {
   }
 
   return (
-    <div className="flex flex-col space-y-10 text-gray-400">
+    <div className="flex flex-col space-y-10 text-zinc-400">
       <div className="flex flex-col space-y-8">
         { comments.data &&
-          <p className="font-medium text-xs md:text-sm border-b border-gray-700 pb-3">{comments.data.length} Comment{comments.data.length != 1 && "s"}</p>
+          <p className="font-medium text-xs md:text-sm border-b border-zinc-700 pb-3">{comments.data.length} Comment{comments.data.length != 1 && "s"}</p>
         }
         <div className="flex flex-col space-y-8">
           {
             comments.data &&
             comments.data.map((comment: FullComment) => {
               return (
-                <div key={comment.id} className="pb-8 flex flex-col space-y-5 border-b border-gray-700">
+                <div key={comment.id} className="pb-8 flex flex-col space-y-5 border-b border-zinc-700">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <Link className="hover:opacity-80 duration-300" href={`/profile/${comment.user.id}`}>
@@ -101,7 +101,7 @@ export default function ReviewComments({ review }: { review: FullReview }) {
                     comment.userId == session?.user.id &&
                     <>
                       <button 
-                        className="text-gray-400 flex items-center space-x-1 text-sm hover:opacity-80 duration-300"
+                        className="text-zinc-400 flex items-center space-x-1 text-sm hover:opacity-80 duration-300"
                         onClick={() => setDeleteModal(true)}
                       >
                         <p>Delete</p>
@@ -131,10 +131,10 @@ export default function ReviewComments({ review }: { review: FullReview }) {
           <div className="flex flex-col space-y-5 w-3/4 md:w-1/2 self-end">
             <div className="flex flex-col space-y-1">
               <textarea
-                  className={`h-28 overflow-y-auto placeholder:text-gray-400 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-gray-700 ring-offset-2 ring-offset-gray-950 ${
+                  className={`h-28 overflow-y-auto placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-zinc-700 ring-offset-2 ring-offset-zinc-950 ${
                     error
                       ? "border-red-500 focus:ring-0"
-                      : "border-gray-700 focus:ring-2"
+                      : "border-zinc-700 focus:ring-2"
                   }`}              
                   placeholder="Your comment"
                   value={content}

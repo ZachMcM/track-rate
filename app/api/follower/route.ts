@@ -26,24 +26,7 @@ export async function PATCH(request: NextRequest) {
           followers: { connect: { id: session.user.id } } 
         }
       })
-      await prisma.activity.createMany({
-        data: [
-          // activity for the person that followed
-          {
-            userId: session.user.id,
-            activityType: "gave follow",
-            otherUserId: userId,
-          },
-          // activity for the person whose review was liked
-          {
-            userId: userId,
-            activityType: "recieved follow",
-            otherUserId: session.user.id
-          }
-        ]
-      })
-      revalidateTag(`user${userId}`)
-      revalidateTag(`user${session.user.id}`)
+      return NextResponse.json(newFollower)
     } else {
       const unFollower = await prisma.user.update({
         where: {
@@ -53,6 +36,7 @@ export async function PATCH(request: NextRequest) {
           followers: { disconnect: { id: session.user.id } }
         }
       }) 
+      return NextResponse.json(unFollower)
     }
   } else {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
