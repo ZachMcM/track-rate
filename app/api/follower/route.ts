@@ -2,7 +2,6 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
-import { revalidateTag } from "next/cache";
 
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession(authOptions)

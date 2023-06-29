@@ -4,6 +4,8 @@ import { Dispatch, SetStateAction } from "react";
 import { TbStar, TbStarFilled, TbStarHalf, TbStarHalfFilled } from "react-icons/tb";
 
 export default function Stars({ rating, setRating }: { rating: number, setRating: Dispatch<SetStateAction<number>> }) {
+  console.log(rating)
+
   return (
     <div className="flex flex-col space-y-2">
     <p className="font-medium">Rating</p>

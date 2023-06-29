@@ -91,6 +91,7 @@ export const ReviewFormProvider = ({
         console.log(data)
         setReviewForm(false)
         queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
+        queryClient.invalidateQueries({ queryKey: ['score', albumTarget ? albumTarget.id : trackTarget?.id || ""]})
         router.push(`/review/${data.id}`)
       }
   });

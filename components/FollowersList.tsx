@@ -4,33 +4,39 @@ import { getUser } from "@/app/apiMethods"
 import { User } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import UserListItem from "./UserListItem"
-import Link from "next/link"
-import { TbArrowLeft } from "react-icons/tb"
-import Oops from "./Oops"
+import Alert from "./Alert"
+import { useSession } from "next-auth/react"
+import LoadingSpinner from "./LoadingSpinner"
 
 export default function FollowersList({ id }: { id: string }) {
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
 
-  if (user) {
+  const { data: session } = useSession()
+
+  if (user && !isLoading) {
     return (
       <div className="flex flex-col space-y-3">
-        <p className="font-medium text-lg">{user.name}'s Followers</p>
+        <p className="font-medium">{user.name}'s Followers</p>
         {
           user.followers.length != 0 ?       
           <div className="flex flex-col space-y-8">
             {
               user.followers
               .map((follower: User) => {
-                return <UserListItem userId={follower.id}/>
+                return <UserListItem key={follower.id} userId={follower.id}/>
               })
             }
           </div> :
-          <Oops message="no followers" backUrl={`/profile/${user.id}`}/>
+          <Alert message={`${user.id == session?.user.id ? "You" : user.name} is has no followers.`}/>
         }
       </div>
+    )
+  } else {
+    return (
+      <LoadingSpinner/>
     )
   }
 }

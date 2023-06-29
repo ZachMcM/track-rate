@@ -32,7 +32,7 @@ export default function FollowButton({ user }: { user: FullUser }) {
 
   return (
     <button
-      className="flex w-fit space-x-2 items-center text-xs md:text-sm px-4 py-2 rounded-md font-medium border border-zinc-700 hover:opacity-80 duration-300"
+      className="flex w-fit space-x-2 items-center text-xs md:text-sm px-4 py-2 rounded-md font-medium border border-zinc-800 hover:bg-zinc-800 duration-300"
       onClick={() => {
         followMutation.mutate()
         setFollowing(!following)

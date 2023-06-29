@@ -2,7 +2,6 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
-import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -61,17 +60,17 @@ export async function DELETE(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const reviewId = searchParams.get("reviewId")
-  if (reviewId) {
-    const comments = await prisma.reviewComment.findMany({
+  const id = searchParams.get("id")
+  if (id) {
+    const comment = await prisma.reviewComment.findUnique({
       where: {
-        reviewId: reviewId
+        id: id
       },
       include: {
         user: true
       }
     })
-    return NextResponse.json(comments)
+    return NextResponse.json(comment)
   } else {
     return NextResponse.json({error: "Invalid request, no id"}, {status: 400})
   }

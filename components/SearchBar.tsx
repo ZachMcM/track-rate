@@ -7,7 +7,7 @@ export default function SearchBar() {
   const [search, setSearch] = useState<string>('')
 
   return (
-    <div className="border border-zinc-700 rounded-md py-2 px-4 flex items-center space-x-2 focus-within:ring-2 ring-offset-2 ring-zinc-700 ring-offset-zinc-950">
+    <div className="border border-zinc-800 rounded-md py-2 px-4 flex items-center space-x-2 focus-within:ring-1 ring-zinc-800">
       <TbSearch className="text-lg"/>
       <input
         value={search}

@@ -27,7 +27,7 @@ export default function ReviewButton() {
   return (
     <>
       <button 
-        className="flex space-x-2 items-center hover:opacity-80"
+        className="flex space-x-2 items-center hover:text-white"
         onClick={handleModalClick}
       >
         <p className="hidden md:block">New</p>

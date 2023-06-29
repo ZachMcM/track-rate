@@ -6,7 +6,7 @@ import { ReviewFormProvider } from '@/components/ReviewFormProvider'
 import ReviewForm from '@/components/ReviewForm'
 
 export const metadata = {
-  title: 'TrackRate',
+  title: 'track/rate',
   description: 'Rate the latest music and share your music opinions with others!',
 }
 
@@ -21,7 +21,7 @@ export default function RootLayout({
         <Provider>
           <ReviewFormProvider>
             <Navbar/>
-            <main className='p-8 md:py-16 md:px-16 lg:px-48'>
+            <main className='p-5 md:py-16 md:px-12'>
               {children}
             </main>
             <Footer/>

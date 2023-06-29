@@ -27,7 +27,7 @@ export default function ProfileDashboard({ id }: { id: string }) {
                   height={100}
                   width={100}
                   alt="avatar"
-                  className="rounded-full border border-zinc-700 p-0.5"
+                  className="rounded-full border border-zinc-800 p-0.5"
                 />
               </div>  
               <div className="flex flex-col space-y-2">
@@ -41,20 +41,16 @@ export default function ProfileDashboard({ id }: { id: string }) {
           </div>
           <div className="flex space-x-4 md:space-x-8">
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold text-lg md:text-xl">{user.reviews.length}</p>
+              <p className="font-bold md:text-lg">{user.reviews.length}</p>
               <Link href={`/profile/${user.id}`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Review{user.reviews.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold text-lg md:text-xl">{user.followers ? user.followers.length : 0}</p>
+              <p className="font-bold md:text-lg">{user.followers ? user.followers.length : 0}</p>
               <Link href={`/profile/${user.id}/followers`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold text-lg md:text-xl">{user.follows ? user.follows.length : 0}</p>
+              <p className="font-bold md:text-lg">{user.follows ? user.follows.length : 0}</p>
               <Link href={`/profile/${user.id}/following`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Following</Link>
-            </div>
-            <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold text-lg md:text-xl">{user.likes ? user.likes.length : 0}</p>
-              <Link href={`/profile/${user.id}/likes`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Like{user.likes.length != 1 && "s"}</Link>
             </div>
           </div>
         </div>
@@ -76,7 +72,7 @@ export default function ProfileDashboard({ id }: { id: string }) {
           </button>
           <Link 
             href="/settings"
-            className="py-2 px-8 rounded-md bg-white text-zinc-950 hover:opacity-80 duration-300"
+            className="py-2 px-8 rounded-md border border-zinc-800 hover:bg-zinc-800 duration-300"
           >
             <p>Settings</p>
           </Link>
@@ -91,11 +87,11 @@ export default function ProfileDashboard({ id }: { id: string }) {
       <div className="flex flex-col space-y-8 md:space-y-5">
         <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:justify-between md:items-start">
           <div className="flex space-x-5 items-center">
-            <div className="w-16 h-16 md:w-20 md:h-20 aspect-square bg-zinc-700 animate-pulse rounded-full"></div>  
+            <div className="w-16 h-16 md:w-20 md:h-20 aspect-square bg-zinc-800 animate-pulse rounded-full"></div>  
             <div className="flex flex-col space-y-3">
-              <div className="bg-zinc-700 h-2 rounded-full w-48 md:w-64 animate-pulse"></div>
-              <div className="bg-zinc-700 h-2 rounded-full w-32 md:w-48 animate-pulse"></div>
-              <div className="bg-zinc-700 h-2 rounded-full w-16 md:w-32 animate-pulse"></div>
+              <div className="bg-zinc-800 h-2 rounded-full w-48 md:w-64 animate-pulse"></div>
+              <div className="bg-zinc-800 h-2 rounded-full w-32 md:w-48 animate-pulse"></div>
+              <div className="bg-zinc-800 h-2 rounded-full w-16 md:w-32 animate-pulse"></div>
             </div>
           </div>
         </div>

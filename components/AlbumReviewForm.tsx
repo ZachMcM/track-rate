@@ -36,44 +36,35 @@ export default function AlbumReviewForm() {
     submitReview
   } = useContext(ReviewFormContext) as ReviewFormProviderType;
 
-  const modalRef = useDetectClickOutside({
-    onTriggered(e) {
-      e.preventDefault();
-      setReviewForm(false);
-      setAlbumTarget(undefined);
-      setType("");
-      setReviewContent("");
-      setTitle("");
-      setRating(0);
-      setFavTrack(undefined);
-      setTitleError(false);
-      setContentError(false);
-      setFavTrackError(false);
-    },
-  });
+  const reset = () => {
+    setReviewForm(false);
+    setAlbumTarget(undefined);
+    setType("");
+    setReviewContent("");
+    setTitle("");
+    setRating(0);
+    setFavTrack(undefined);
+    setTitleError(false);
+    setContentError(false);
+    setFavTrackError(false);
+  }
+
+  const modalRef = useDetectClickOutside({onTriggered: reset });
 
   const [dropdown, setDropdown] = useState<boolean>(false);
+  const dropdownRef = useDetectClickOutside({ onTriggered: () => setDropdown(false) })
+
   if (albumTarget) {
     return (
-      <div className="z-40 fixed w-full p-5 h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+      <div className="z-40 fixed w-full p-5 m h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
         <div
           ref={modalRef}
-          className="flex flex-col space-y-5 z-30 lg:space-y-0 lg:flex-row lg:space-x-10 p-10 w-full md:w-5/6 lg:w-2/3 rounded-md border border-zinc-700 bg-zinc-950 max-h-full overflow-y-auto"
+          className="flex flex-col space-y-5 z-30 lg:space-y-0 lg:flex-row lg:space-x-10 p-10 w-full md:w-5/6 lg:w-2/3 rounded-md border border-zinc-800 bg-zinc-950 max-h-full overflow-y-auto"
         >
           <div className="flex flex-col space-y-5">
             <button
-              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-700 rounded-md hover:opacity-80 duration-300"
-              onClick={() => {
-                setAlbumTarget(undefined);
-                setType("");
-                setReviewContent("");
-                setTitle("");
-                setRating(0);
-                setFavTrack(undefined);
-                setTitleError(false);
-                setContentError(false);
-                setFavTrackError(false);
-              }}
+              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-800 rounded-md hover:opacity-80 duration-300"
+              onClick={reset}
             >
               <TbArrowLeft />
               <p className="text-xs">Back</p>
@@ -91,16 +82,16 @@ export default function AlbumReviewForm() {
             <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 items-center">
               <Image
                 src={albumTarget.images[0].url}
-                height={100}
-                width={100}
+                height={150}
+                width={150}
                 alt={albumTarget.name}
                 className="rounded-md lg:hidden md:mr-5"
               />
-              <div className="flex flex-col space-y-1">
-                <h1 className="font-bold md:text-xl text-center md:text-start">
+              <div className="flex flex-col space-y-1 text-center md:text-start">
+                <h1 className="font-bold md:text-xl ">
                   {albumTarget.name}
                 </h1>
-                <p className="text-zinc-400 text-xs md:text-sm text-center md:text-start">
+                <p className="text-zinc-400 text-xs md:text-sm ">
                   {albumTarget.artists.map((artist: Artist) => {
                     return <span key={artist.id}> {artist.name} </span>;
                   })}
@@ -115,10 +106,10 @@ export default function AlbumReviewForm() {
                   setTitle(e.target.value);
                 }}
                 placeholder="Review title"
-                className={`placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border border-zinc-700 rounded-md px-4 py-3 outline-none ring-zinc-700 ring-offset-2 ring-offset-zinc-950 ${
+                className={`placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border border-zinc-800 rounded-md px-4 py-3 outline-none ring-zinc-800 ${
                   titleError
                     ? "border-red-500 focus:ring-0"
-                    : "border-zinc-700 focus:ring-2"
+                    : "border-zinc-800 focus:ring-1"
                 }`}
               />
               {titleError && (
@@ -132,10 +123,10 @@ export default function AlbumReviewForm() {
                   setContentError(false);
                   setReviewContent(e.target.value);
                 }}
-                className={`h-40 overflow-y-auto placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-zinc-700 ring-offset-2 ring-offset-zinc-950 ${
+                className={`h-40 overflow-y-auto placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-zinc-800 ${
                   contentError
                     ? "border-red-500 focus:ring-0"
-                    : "border-zinc-700 focus:ring-2"
+                    : "border-zinc-800 focus:ring-2"
                 }`}
                 placeholder="Review content"
               />
@@ -149,7 +140,7 @@ export default function AlbumReviewForm() {
               <div className="flex flex-col space-y-2">
                 <button
                   className={`w-full border rounded-md flex items-center justify-between px-4 py-3 ${
-                    favTrackError ? "border-red-500" : "border-zinc-700"
+                    favTrackError ? "border-red-500" : "border-zinc-800"
                   }`}
                   onClick={() => {
                     setFavTrackError(false);
@@ -168,13 +159,13 @@ export default function AlbumReviewForm() {
                 )}
               </div>
               {dropdown && (
-                <div className="max-h-40 z-50 overflow-y-auto absolute w-full top-14 border border-zinc-700 rounded-md flex flex-col bg-zinc-950">
+                <div ref={dropdownRef} className="max-h-32 !z-50 overflow-y-auto absolute w-full top-14 border border-zinc-800 rounded-md flex flex-col bg-zinc-950">
                   {albumTarget.tracks.items.map((track: SimplifiedTrack) => {
                     return (
                       <button
                         key={track.id}
-                        className={`text-zinc-400 hover:text-white flex items-center capitalize space-x-3 p-2 hover:bg-zinc-700 duration-300 m-2 rounded-md justify-start text-start ${
-                          favTrack?.id == track.id && "bg-zinc-700 text-white"
+                        className={`text-zinc-400 hover:text-white flex items-center capitalize space-x-3 p-2 hover:bg-zinc-800 duration-300 m-2 rounded-md justify-start text-start ${
+                          favTrack?.id == track.id && "bg-zinc-800 text-white"
                         }`}
                         onClick={() => {
                           setFavTrack(track);
@@ -195,7 +186,7 @@ export default function AlbumReviewForm() {
             </div>
             <Stars rating={rating} setRating={setRating} />
             <button
-              className="flex space-x-2 items-center text-xs md:text-sm w-fit self-end px-4 py-3 rounded-md font-medium bg-white text-zinc-950 hover:opacity-80 duration-300"
+              className="flex space-x-2 items-center text-xs md:text-sm w-fit self-end px-4 py-2 rounded-md font-medium bg-white text-zinc-950 hover:opacity-80 duration-300"
               onClick={submitReview}
             >
               <p>Save Review</p>

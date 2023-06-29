@@ -10,26 +10,46 @@ import {
   Track,
 } from "./types";
 
+export const getScore = async (itemId: string): Promise<number> => {
+  const res = await fetch(`/api/score?itemId=${itemId}`) 
+  const data = await res.json()
+  return data
+}
+
 export const getUser = async (id: string): Promise<FullUser> => {
   const res = await fetch(`/api/user?id=${id}`);
   const data = await res.json();
   return data;
 };
 
-export const updateUser = async (
+export const updateProfile = async (
   body: {
     bio: string;
     name: string;
-    favoriteArtist: string;
-    favoriteAlbum: string;
-    favoriteTrack: string;
     spotifyUsername: string
   }
 ) => {
-  const res = await fetch(`/api/user?id`, {
+  const res = await fetch(`/api/user/profile`, {
     method: "PUT",
     body: JSON.stringify(body)
   })
+  const data = await res.json()
+  return data
+};
+
+export const updateFavorites = async (
+  body: {
+    favAlbum: string;
+    favArtist: string;
+    favTrack: string
+  }
+) => {
+  const res = await fetch(`/api/user/favorites`, {
+    method: "PUT",
+    body: JSON.stringify(body)
+  })
+  const data = await res.json()
+  return data
 };
 
 export const getReview = async (id: string): Promise<FullReview> => {
@@ -68,7 +88,7 @@ export const addComment = async (
   content: string
 ): Promise<ReviewComment> => {
   const res = await fetch(
-    `/api/comments?reviewId=${reviewId}&content=${content}`,
+    `/api/comment?reviewId=${reviewId}&content=${content}`,
     {
       method: "POST",
     }
@@ -78,18 +98,18 @@ export const addComment = async (
 };
 
 export const deleteComment = async (id: string): Promise<ReviewComment> => {
-  const res = await fetch(`/api/comments?id=${id}`, {
+  const res = await fetch(`/api/comment?id=${id}`, {
     method: "DELETE",
   });
   const data = await res.json();
   return data;
 };
 
-export const getComments = async (reviewId: string): Promise<FullComment[]> => {
-  const res = await fetch(`/api/comments?reviewId=${reviewId}`);
-  const data = await res.json();
-  return data;
-};
+export const getComment = async (commentId: string): Promise<FullComment> => {
+  const res = await fetch(`/api/comment?id=${commentId}`)
+  const data = await res.json()
+  return data
+}
 
 export const getAccessToken = async () => {
   const res = await fetch("/api/access-token", {

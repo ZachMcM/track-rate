@@ -1,23 +1,26 @@
 'use client'
 
 import { getUser } from "@/app/serverMethods";
-import { Like, Review, User } from "@prisma/client";
+import { Like } from "@prisma/client";
 import ReviewCard from "@/components/ReviewCard";
 import { useQuery } from "@tanstack/react-query";
 import { getReview } from "@/app/apiMethods";
-import { FullUser } from "@/app/types";
-import Oops from "./Oops";
+import { useSession } from "next-auth/react"
+import Alert from "./Alert";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function UserLikesContent({ id }: { id: string }) {
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
 
-  if (user) {
+  const { data: session } = useSession()
+
+  if (user && !isLoading) {
     return (
       <div className="flex flex-col space-y-3">
-        <p className="font-medium text-lg">All Likes</p>  
+        <p className="font-medium">All Review Likes</p>  
         {
           user.likes.length != 0 ?
           <div className="flex flex-col space-y-8">
@@ -33,9 +36,13 @@ export default function UserLikesContent({ id }: { id: string }) {
               })
             }
           </div> : 
-          <Oops message="no likes" backUrl={`/profile/${user.id}`}/>
+          <Alert message={`${user.id == session?.user.id ? "You" : user.name} has no likes.`}/>
         }  
       </div>
+    )
+  } else {
+    return (
+      <LoadingSpinner/>
     )
   }
 }

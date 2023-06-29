@@ -7,17 +7,27 @@ import { FullReview } from "@/app/types"
 import { updateLike } from "@/app/apiMethods"
 import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export default function ReviewLikes({ review, initialLike }: { review: FullReview, initialLike: boolean }) {
   const { data: session } = useSession()
 
   const router = useRouter()
   const pathname = usePathname()
+  const queryClient = useQueryClient()
 
   const [liked, setLiked] = useState<boolean>(initialLike)
   const [likeCount, setLikeCount] = useState<number>(review.likes.length)
 
-  const toggleLike = async () => {
+  const likeMutation = useMutation({
+    mutationFn: () => updateLike(review.id),
+    onSuccess: (data) => {
+      console.log(data)
+      queryClient.invalidateQueries({ queryKey: ['review', review.id]})
+    }
+  })
+
+  const toggleLike = () => {
     if (session) {
       if (liked) {
         setLiked(false)
@@ -26,8 +36,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
         setLiked(true)
         setLikeCount(likeCount + 1)
       }
-      const like = await updateLike(review.id)
-      console.log(like)
+      likeMutation.mutate()
     } else {
       router.push(`/signin?callbackUrl=${pathname}`)
     }

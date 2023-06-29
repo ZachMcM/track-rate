@@ -6,7 +6,7 @@ export default function RatingDisplay({ rating }: { rating: number }) {
     <div className="flex items-center space-x-1 text-lg md:text-xl text-zinc-400">
       {
         Array(5).fill("").map((s: string, i: number) => {
-          if (rating >= i) {
+          if (rating >= i + 1) {
             return <TbStarFilled key={uid()}/>
           } else {
             return <TbStar key={uid()}/>

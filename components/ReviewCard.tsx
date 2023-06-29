@@ -24,25 +24,26 @@ function AlbumReviewCard({ review }: { review: Review }) {
 
   const accessToken = accessTokenQuery.data
 
-  const { data: album } = useQuery({ 
+  const { data: album, isLoading } = useQuery({ 
     queryKey: ['album', review.itemId],
     queryFn: () => getAlbum(review.itemId, accessToken),
     enabled: !!accessToken
   })
 
-  if (album) {
+  if (album && !isLoading) {
     return (
-      <Link href={`/review/${review.id}`} className="shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-700 hover:opacity-50 duration-300">
-        <Image
-          src={album.images[0].url}
-          width={150}
-          height={150}
-          alt={album.name}
-          className="rounded-md"
-        />
+      <Link href={`/review/${review.id}`} className=" shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300">
+        <div className="relative h-32 w-32">
+          <Image
+            src={album.images[0].url}
+            fill
+            alt={album.name}
+            className="rounded-md"
+          />
+        </div>
         <div className="flex flex-col space-y-5 items-center md:items-start">
           <div className="flex flex-col space-y-1 items-center md:items-start">
-            <p className="text-center md:text-start font-bold">{album.name}</p>
+            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{album.name.length > 20 ? album.name.substring(0, 20) + "..." : album.name}</p>
             <p className="text-center md:text-start font-medium text-zinc-400 text-sm">
               {
                 album.artists.map((artist: Artist) => {
@@ -56,6 +57,10 @@ function AlbumReviewCard({ review }: { review: Review }) {
         </div>
       </Link>
     )
+  } else {
+    return (
+      <Skeleton/>
+    )
   }
 }
 
@@ -67,25 +72,26 @@ function TrackReviewCard({ review }: { review: Review, }) {
 
   const accessToken = accessTokenQuery.data
 
-  const { data: track } = useQuery({ 
+  const { data: track, isLoading } = useQuery({ 
     queryKey: ['track', review.itemId],
     queryFn: () => getTrack(review.itemId, accessToken),
     enabled: !!accessToken
   })
 
-  if (track) {
+  if (track && !isLoading) {
     return (
-      <Link href={`/review/${review.id}`} className="shadow-2xl flex space-x-8 items-center p-8 rounded-md border border-zinc-700 hover:opacity-50 duration-300 bg-zinc-950">
-        <Image
-          src={track.album.images[0].url}
-          width={100}
-          height={100}
-          alt={track.name}
-          className="rounded-md"
-        />
-        <div className="flex flex-col space-y-5">
-          <div className="flex flex-col space-y-1">
-            <p className="font-bold">{track.name}</p>
+      <Link href={`/review/${review.id}`} className="shadow-2xl flex space-x-8 items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300 bg-zinc-950">
+        <div className="relative h-32 w-32">
+          <Image
+            src={track.album.images[0].url}
+            fill
+            alt={track.album.name}
+            className="rounded-md"
+          />
+        </div>
+        <div className="flex flex-col space-y-5 items-center md:items-start">
+          <div className="flex flex-col space-y-1 items-center md:items-start">
+            <p className="hover:opacity-80 duration-300 font-bold">{track.name.length > 20 ? track.name.substring(0, 20) + "..." : track.name}</p>
             <p className="text-zinc-400 text-sm">
               {
                 track.artists.map((artist: Artist) => {
@@ -99,5 +105,24 @@ function TrackReviewCard({ review }: { review: Review, }) {
         </div>
       </Link>
     )
+  } else {
+    return (
+      <Skeleton/>
+    )
   }
+}
+
+function Skeleton() {
+  return (
+    <div className="shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-800">
+      <div className="h-32 w-32 rounded-md bg-zinc-800 animate-pulse"></div>
+      <div className="flex flex-col space-y-2">
+        <div className="h-2 w-72 rounded-md bg-zinc-800 animate-pulse"></div>
+        <div className="h-2 w-64 rounded-md bg-zinc-800 animate-pulse"></div>
+        <div className="h-2 w-32 rounded-md bg-zinc-800 animate-pulse"></div>
+        <div className="h-2 w-72 rounded-md bg-zinc-800 animate-pulse"></div>
+        <div className="h-2 w-16 rounded-md bg-zinc-800 animate-pulse"></div>
+      </div>
+    </div>
+  )
 }
