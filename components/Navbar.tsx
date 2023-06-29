@@ -15,7 +15,10 @@ export default function Navbar() {
 
   return (
     <nav className="sticky bg-zinc-950 top-0 left-0 w-full z-30 border-b px-10 border-zinc-800 h-16 flex items-center justify-between">
-      <Link href="/" className="font-bold flex items-center"><TbPlayerTrackNextFilled className="text-xl mr-2"/>track/rate</Link>        
+      <Link href="/" className="font-bold flex items-center space-x-2 hover:opacity-80 duration-300">
+        <TbPlayerTrackNextFilled className="text-xl"/>
+        <p>trackrate</p>
+      </Link>        
       <div className="flex items-center space-x-4 lg:space-x-8 text-zinc-400 font-semibold text-sm">
         <div className="hidden md:flex">
           {

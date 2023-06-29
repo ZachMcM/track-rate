@@ -8,7 +8,6 @@ import ReviewCard from "@/components/ReviewCard"
 import { Review } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
-import { TbExclamationCircle, TbUserX } from "react-icons/tb"
 
 export default function Profile({ params }: { params: { id: string }}) {
   const { data: user, isLoading } = useQuery({

@@ -53,7 +53,7 @@ function AlbumReviewCard({ review }: { review: Review }) {
             </p>
           </div>
           <RatingDisplay rating={review.rating}/>
-          <p className="font-medium">{review.content}</p>
+          <p className="font-medium text-center md:text-start">{review.content}</p>
         </div>
       </Link>
     )
@@ -80,19 +80,19 @@ function TrackReviewCard({ review }: { review: Review, }) {
 
   if (track && !isLoading) {
     return (
-      <Link href={`/review/${review.id}`} className="shadow-2xl flex space-x-8 items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300 bg-zinc-950">
+      <Link href={`/review/${review.id}`} className=" shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300">
         <div className="relative h-32 w-32">
           <Image
             src={track.album.images[0].url}
             fill
-            alt={track.album.name}
+            alt={track.name}
             className="rounded-md"
           />
         </div>
         <div className="flex flex-col space-y-5 items-center md:items-start">
           <div className="flex flex-col space-y-1 items-center md:items-start">
-            <p className="hover:opacity-80 duration-300 font-bold">{track.name.length > 20 ? track.name.substring(0, 20) + "..." : track.name}</p>
-            <p className="text-zinc-400 text-sm">
+            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{track.name.length > 20 ? track.name.substring(0, 20) + "..." : track.name}</p>
+            <p className="text-center md:text-start font-medium text-zinc-400 text-sm">
               {
                 track.artists.map((artist: Artist) => {
                   return <span key={artist.id}> {artist.name} </span>
@@ -101,7 +101,7 @@ function TrackReviewCard({ review }: { review: Review, }) {
             </p>
           </div>
           <RatingDisplay rating={review.rating}/>
-          <p className="text-zinc-400 font-medium">{review.content}</p>
+          <p className="font-medium text-center md:text-start">{review.content}</p>
         </div>
       </Link>
     )

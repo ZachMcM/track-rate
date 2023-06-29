@@ -18,7 +18,14 @@ export default function Sidebar({ setSidebar, sideBar }: { setSidebar: Dispatch<
         >
           <TbX className="text-lg"/>
         </button>
-        <Link href="/" className="font-bold flex items-center text-white"><TbPlayerTrackNextFilled className="text-xl mr-2"/>track/rate</Link>        
+        <Link 
+          href="/" 
+          className="font-bold flex items-center space-x-2 text-white hover:opacity-80 duration-300"
+          onClick={() => setSidebar(false)}
+        >
+          <TbPlayerTrackNextFilled className="text-xl"/>
+          <p>trackrate</p>
+        </Link>
         <SearchBar/>
         {
           session && session.user && session.user.image ?        

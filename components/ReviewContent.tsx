@@ -52,7 +52,7 @@ export default function ReviewContent({ id }: { id: string }) {
               />
               <p>{review.user.name}</p>
             </Link>
-            <div className="flex space-x-3">
+            <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-3">
               <h3 className="font-semibold text-xl">{review.title}</h3>
               <RatingDisplay rating={review.rating}/>
             </div>

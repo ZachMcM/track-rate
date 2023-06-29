@@ -14,7 +14,7 @@ import {
 } from "@/app/apiMethods";
 import { useSession } from "next-auth/react";
 import { Album, Artist, FullUser, SimplifiedAlbum, Track } from "@/app/types";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { redirect } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import FavoriteCard from "@/components/FavoriteCard";
@@ -46,7 +46,7 @@ export default function Settings() {
           Your favorite track, album, and artist.
         </p>
       </div>
-      {user ? <Favorites user={user} /> : <LoadingSpinner />}
+      {user && !isLoading ? <Favorites user={user} /> : <LoadingSpinner />}
     </div>
   );
 }
