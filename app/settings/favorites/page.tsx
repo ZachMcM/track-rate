@@ -21,6 +21,7 @@ import FavoriteCard from "@/components/FavoriteCard";
 import { TbPlus, TbSearch, TbX } from "react-icons/tb";
 import Image from "next/image";
 import { useDetectClickOutside } from "react-detect-click-outside";
+import Toast from "@/components/Toast";
 
 export default function Settings() {
   const { data: session } = useSession({
@@ -39,7 +40,7 @@ export default function Settings() {
   });
 
   return (
-    <div className="flex flex-col space-y-5 md:w-3/5">
+    <div className="flex flex-col space-y-5 md:w-4/5 lg:w-3/5">
       <div className="flex flex-col border-b border-zinc-800 pb-5 w-full">
         <h3 className="font-medium text-lg">Favorites</h3>
         <p className="text-sm text-zinc-400">
@@ -126,8 +127,11 @@ function FavoritesForm({
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["user", userId] });
+      setToast(true)
     },
   });
+
+  const [toast, setToast] = useState<boolean>(false)
 
   return (
     <>
@@ -237,6 +241,7 @@ function FavoritesForm({
       { albumModal && <AlbumSearch setModal={setAlbumModal} setTarget={setFavAlbum}/> }
       { trackModal && <TrackSearch setModal={setTrackModal} setTarget={setFavTrack}/> }
       { artistModal && <ArtistSearch setModal={setArtistModal} setTarget={setFavArtist}/> }
+      <Toast setToast={setToast} toast={toast}/>
     </>
   );
 }

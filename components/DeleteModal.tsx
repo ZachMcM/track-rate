@@ -23,7 +23,7 @@ export default function DeleteModal({ setModal, deleteMutation }: FnParams) {
   const modalRef = useDetectClickOutside({ onTriggered: () => setModal(false)})
 
   return (
-    <div className="!mt-0 z-40 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+    <div className="!m-0 z-40 fixed w-full h-full left-0 p-5 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
       <div ref={modalRef} className="flex flex-col space-y-5 p-5 md:p-8 w-full md:w-3/5 lg:w-2/5 rounded-md border border-zinc-800 bg-zinc-950">
         <div className="flex flex-col space-y-1 items-center md:items-start">
           <h3 className="text-white font-medium text-lg md:text-start text-center">Are you absolutely sure?</h3>
@@ -37,12 +37,12 @@ export default function DeleteModal({ setModal, deleteMutation }: FnParams) {
             <p>Cancel</p>
           </button>
           <button
-            className="flex space-x-2 items-center w-full md:w-fit px-4 py-2 rounded-md bg-white text-zinc-950 hover:opacity-80 duration-300"
+            className="flex space-x-2 items-center justify-center w-full md:w-fit px-4 py-2 rounded-md bg-white text-zinc-950 hover:opacity-80 duration-300"
             onClick={() => {
               deleteMutation.mutate()
             }}
           >
-            <p>Continue</p>
+            <p className="text-center">Continue</p>
             { deleteMutation.isLoading &&                 
                 <svg aria-hidden="true" className="w-5 h-5 mr-2 text-zinc-300 animate-spin fill-zinc-950" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>

@@ -4,9 +4,10 @@ import { useSession, signOut } from 'next-auth/react'
 import Image from "next/image"
 import Link from "next/link"
 import { useQuery } from "@tanstack/react-query"
-import { getUser } from "@/app/apiMethods"
+import { formatCompactNumber, getUser } from "@/app/apiMethods"
 import FollowButton from "./FollowButton"
 import { BsSpotify } from 'react-icons/bs'
+import { format } from 'path'
 
 export default function ProfileDashboard({ id }: { id: string }) {
   const { data: user, isLoading } = useQuery({
@@ -19,40 +20,36 @@ export default function ProfileDashboard({ id }: { id: string }) {
     return (
       <div className="flex flex-col space-y-5">
         <div className='flex justify-between'>
-          <div className="flex flex-col space-y-5">
-            <div className="flex flex-col space-y-3 md:space-x-5 md:flex-row md:space-y-0 md:items-center">
-              <div className="w-16 h-16 md:w-20 md:h-20 aspect-square">
-                <Image 
-                  src={user.image || ""}
-                  height={100}
-                  width={100}
-                  alt="avatar"
-                  className="rounded-full border border-zinc-800 p-0.5"
-                />
-              </div>  
-              <div className="flex flex-col space-y-2">
-                <div className="flex flex-col">
-                  <h3 className="font-bold md:text-lg">{user.name}</h3>
-                  <p className="text-zinc-400 font-medium">{user.bio}</p>
-                </div>
-                <p className="text-xs text-zinc-400">Joined {(new Date(user.joined)).getFullYear()}</p>
-              </div>
-            </div>         
-          </div>
+          <div className="w-16 h-16 md:w-20 md:h-20 aspect-square">
+            <Image 
+              src={user.image || ""}
+              height={100}
+              width={100}
+              alt="avatar"
+              className="rounded-full border border-zinc-800 p-0.5"
+            />
+          </div>  
           <div className="flex space-x-4 md:space-x-8">
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold md:text-lg">{user.reviews.length}</p>
-              <Link href={`/profile/${user.id}`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Review{user.reviews.length != 1 && "s"}</Link>
+              <p className="font-bold md:text-lg">{formatCompactNumber(user.reviews.length)}</p>
+              <Link href={`/profile/${user.id}`} className="text-xs text-zinc-400 hover:text-white duration-300">Review{user.reviews.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold md:text-lg">{user.followers ? user.followers.length : 0}</p>
-              <Link href={`/profile/${user.id}/followers`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
+              <p className="font-bold md:text-lg">{formatCompactNumber(user.followers.length)}</p>
+              <Link href={`/profile/${user.id}/followers`} className="text-xs text-zinc-400 hover:text-white duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col space-y-1 text-center">
-              <p className="font-bold md:text-lg">{user.follows ? user.follows.length : 0}</p>
-              <Link href={`/profile/${user.id}/following`} className="text-xs text-zinc-400 hover:opacity-80 duration-300">Following</Link>
+              <p className="font-bold md:text-lg">{formatCompactNumber(user.follows.length)}</p>
+              <Link href={`/profile/${user.id}/following`} className="text-xs text-zinc-400 hover:text-white duration-300">Following</Link>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col space-y-3 items-start">
+          <div className="flex flex-col">
+            <h3 className="font-bold md:text-lg">{user.name}</h3>
+            <p className="text-zinc-400 font-medium text-sm whitespace-pre-wrap">{user.bio}</p>
+          </div>
+          <p className="text-xs text-zinc-400">Joined {(new Date(user.joined)).getFullYear()}</p>
         </div>
         {
           user.spotifyUsername &&
@@ -64,19 +61,19 @@ export default function ProfileDashboard({ id }: { id: string }) {
         {
           (session && session.user.id == user.id) ?
           <div className="flex space-x-5 items-center text-sm font-semibold">
-          <button 
-            className="py-2 px-8 rounded-md bg-white text-zinc-950 hover:opacity-80 duration-300"
-            onClick={() => signOut()}
-          >            
-            <p>Sign Out</p>
-          </button>
-          <Link 
-            href="/settings"
-            className="py-2 px-8 rounded-md border border-zinc-800 hover:bg-zinc-800 duration-300"
-          >
-            <p>Settings</p>
-          </Link>
-        </div> : 
+            <button 
+              className="py-2 px-8 rounded-md bg-white text-zinc-950 hover:opacity-80 duration-300"
+              onClick={() => signOut()}
+            >            
+              <p>Sign Out</p>
+            </button>
+            <Link 
+              href="/settings"
+              className="py-2 px-8 rounded-md border border-zinc-800 hover:bg-zinc-800 duration-300"
+            >
+              <p>Settings</p>
+            </Link>
+          </div> : 
           session && session.user && user &&
           <FollowButton user={user}/>
         }   

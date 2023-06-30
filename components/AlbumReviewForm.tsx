@@ -49,6 +49,18 @@ export default function AlbumReviewForm() {
     setFavTrackError(false);
   }
 
+  const back = () => {
+    setAlbumTarget(undefined);
+    setType("");
+    setReviewContent("");
+    setTitle("");
+    setRating(0);
+    setFavTrack(undefined);
+    setTitleError(false);
+    setContentError(false);
+    setFavTrackError(false);
+  }
+
   const modalRef = useDetectClickOutside({onTriggered: reset });
 
   const [dropdown, setDropdown] = useState<boolean>(false);
@@ -63,8 +75,8 @@ export default function AlbumReviewForm() {
         >
           <div className="flex flex-col space-y-5">
             <button
-              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-800 rounded-md hover:opacity-80 duration-300"
-              onClick={reset}
+              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-800 rounded-md hover:bg-zinc-800 duration-300"
+              onClick={back}
             >
               <TbArrowLeft />
               <p className="text-xs">Back</p>
@@ -78,7 +90,7 @@ export default function AlbumReviewForm() {
             />
           </div>
           <div className="flex flex-col space-y-5 w-full">
-            <h3 className="font-medium text-zinc-400">I listened to...</h3>
+            <h3 className="font-medium">I listened to...</h3>
             <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 items-center">
               <Image
                 src={albumTarget.images[0].url}
@@ -91,10 +103,12 @@ export default function AlbumReviewForm() {
                 <h1 className="font-bold md:text-xl ">
                   {albumTarget.name}
                 </h1>
-                <p className="text-zinc-400 text-xs md:text-sm ">
-                  {albumTarget.artists.map((artist: Artist) => {
-                    return <span key={artist.id}> {artist.name} </span>;
-                  })}
+                <p className="text-zinc-400 text-sm ">
+                  {
+                    albumTarget.artists.map((artist: Artist, i: number) => {
+                      return <span key={artist.id}> {artist.name}{i != albumTarget.artists.length - 1 && ","} </span>;
+                    })
+                  }
                 </p>
               </div>
             </div>

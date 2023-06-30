@@ -6,12 +6,35 @@ import {
   FullReview,
   FullUser,
   NewReviewParams,
+  Rating,
   SimplifiedAlbum,
   Track,
 } from "./types";
 
-export const getScore = async (itemId: string): Promise<number> => {
-  const res = await fetch(`/api/score?itemId=${itemId}`) 
+export const formatCompactNumber = (num: number) => {
+  if (num < 1000) {
+    return num;
+  } else if (num >= 1000 && num < 1_000_000) {
+    return (num / 1000).toFixed(1) + "K";
+  } else if (num >= 1_000_000 && num < 1_000_000_000) {
+    return (num / 1_000_000).toFixed(1) + "M";
+  } else if (num >= 1_000_000_000 && num < 1_000_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1) + "B";
+  } else if (num >= 1_000_000_000_000 && num < 1_000_000_000_000_000) {
+    return (num / 1_000_000_000_000).toFixed(1) + "T";
+  }
+}
+
+export const formatName = (name: string, max: number) => {
+  if (name.length > max) {
+    return `${name.substring(0, max)}...`
+  } else {
+    return name
+  }
+}
+
+export const getRating = async (itemId: string): Promise<Rating> => {
+  const res = await fetch(`/api/rating?itemId=${itemId}`) 
   const data = await res.json()
   return data
 }

@@ -33,19 +33,28 @@ export default function TrackReviewForm() {
     submitReview
   } = useContext(ReviewFormContext) as ReviewFormProviderType;
 
-  const modalRef = useDetectClickOutside({
-    onTriggered(e) {
-      e.preventDefault();
-      setReviewForm(false);
-      setTrackTarget(undefined);
-      setType("");
-      setReviewContent("");
-      setTitle("");
-      setRating(0);
-      setTitleError(false);
-      setContentError(false);
-    },
-  });
+  const reset = () => {
+    setReviewForm(false);
+    setTrackTarget(undefined);
+    setType("");
+    setReviewContent("");
+    setTitle("");
+    setRating(0);
+    setTitleError(false);
+    setContentError(false);
+  }
+
+  const back = () => {
+    setTrackTarget(undefined);
+    setType("");
+    setReviewContent("");
+    setTitle("");
+    setRating(0);
+    setTitleError(false);
+    setContentError(false);
+  }
+
+  const modalRef = useDetectClickOutside({onTriggered: reset});
 
   if (trackTarget) {
     return (
@@ -56,16 +65,8 @@ export default function TrackReviewForm() {
         >
           <div className="flex flex-col space-y-5">
             <button
-              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-800 rounded-md hover:opacity-80 duration-300"
-              onClick={() => {
-                setTrackTarget(undefined);
-                setType("");
-                setReviewContent("");
-                setTitle("");
-                setRating(0);
-                setTitleError(false);
-                setContentError(false);
-              }}
+              className="w-fit flex items-center space-x-1 px-4 py-2 border border-zinc-800 rounded-md hover:bg-zinc-800 duration-300"
+              onClick={back}
             >
               <TbArrowLeft />
               <p className="text-xs">Back</p>
@@ -79,7 +80,7 @@ export default function TrackReviewForm() {
             />
           </div>
           <div className="flex flex-col space-y-5 w-full">
-            <h3 className="font-medium text-zinc-400">I listened to...</h3>
+            <h3 className="font-medium">I listened to...</h3>
             <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 items-center">
               <Image
                 src={trackTarget.album.images[0].url}
@@ -92,11 +93,12 @@ export default function TrackReviewForm() {
                 <h1 className="font-bold md:text-xl ">
                   {trackTarget.name}
                 </h1>
-                <p className="text-sm text-zinc-300">{trackTarget.album.name}</p>
-                <p className="text-zinc-400 text-xs">
-                  {trackTarget.artists.map((artist: Artist) => {
-                    return <span key={artist.id}> {artist.name} </span>;
-                  })}
+                <p className="text-zinc-400 text-sm">
+                  {
+                    trackTarget.artists.map((artist: Artist, i: number) => {
+                      return <span key={artist.id}> {artist.name}{i != trackTarget.artists.length - 1 && ","} </span>;
+                    })
+                  }
                 </p>
               </div>
             </div>

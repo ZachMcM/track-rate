@@ -4,6 +4,7 @@ import { getUser } from "@/app/apiMethods"
 import Alert from "@/components/Alert"
 import FavoriteCard from "@/components/FavoriteCard"
 import LoadingSpinner from "@/components/LoadingSpinner"
+import ProfileReviewList from "@/components/ProfileReviewList"
 import ReviewCard from "@/components/ReviewCard"
 import { Review } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -22,9 +23,12 @@ export default function Profile({ params }: { params: { id: string }}) {
       return <Alert message="There is no content here"/>
     }
     return (
-      <div className="flex space-y-10 flex-col">
-        <div className="flex flex-col space-y-3">
-          <p className="font-medium">Favorites</p>
+      <div className="flex space-y-16 flex-col">
+        <div className="flex flex-col space-y-5">
+          <div className="flex flex-col">
+            <p className="font-medium text-lg">Favorites</p>
+            <p className="font-medium text-sm text-zinc-400">Favorite album, song and artist.</p>
+          </div>
           {
             user.favAlbum || user.favArtist || user.favTrack ?
             <div className="flex md:items-center flex-col space-y-4 md:space-y-0 grid-cols-3 gap-5 md:grid">
@@ -41,27 +45,10 @@ export default function Profile({ params }: { params: { id: string }}) {
                 <FavoriteCard id={user.favArtist} type="artist"/>
               }
             </div> :
-            <Alert message={`${user.id == session?.user.id ? "You" : user.name} has no favorites.`}/>
+            <Alert message={`${user.id == session?.user.id ? "You have" : user.name + " has"} no favorites.`}/>
           }
         </div>   
-        <div className="flex flex-col space-y-3">
-        <p className="font-medium">All Reviews</p>
-        {
-          user.reviews.length != 0 ?
-          <div className="flex flex-col space-y-8">
-            {
-              user.reviews
-              .sort((a: Review, b: Review) => {
-                return (new Date(b.createdAt)).getTime() - (new Date(a.createdAt)).getTime()
-              })
-              .map((review: Review) => {
-                return <ReviewCard name={false} key={review.id} review={review}/>
-              })
-            }
-          </div> :
-          <Alert message={`${user.id == session?.user.id ? "You" : user.name} has no reviews.`}/>
-        }
-        </div>
+        <ProfileReviewList user={user}/>
       </div>
     )
   } else {

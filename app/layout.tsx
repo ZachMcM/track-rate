@@ -3,6 +3,8 @@ import Provider from '../components/Provider'
 import Navbar from '@/components/Navbar'
 import { ReviewFormProvider } from '@/components/ReviewFormProvider'
 import ReviewForm from '@/components/ReviewForm'
+import TrackReviewForm from '@/components/TrackReviewForm'
+import AlbumReviewForm from '@/components/AlbumReviewForm'
 
 export const metadata = {
   title: 'trackrate',
@@ -24,6 +26,8 @@ export default function RootLayout({
               {children}
             </main>
             <ReviewForm/>
+            <TrackReviewForm/>
+            <AlbumReviewForm/>
           </ReviewFormProvider>
         </Provider>
       </body>

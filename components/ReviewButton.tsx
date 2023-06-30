@@ -25,14 +25,11 @@ export default function ReviewButton() {
   }
 
   return (
-    <>
-      <button 
-        className="flex space-x-2 items-center hover:text-white"
-        onClick={handleModalClick}
-      >
-        <p className="hidden md:block">New</p>
-        <TbPlaylistAdd className="text-2xl"/>
-      </button>
-    </>
+    <button 
+      className="flex space-x-2 items-center p-2 border-zinc-800 border hover:bg-zinc-800 duration-300 rounded-md text-white"
+      onClick={handleModalClick}
+    >
+      <TbPlaylistAdd className="text-xl"/>
+    </button>
   )
 }

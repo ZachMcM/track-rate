@@ -3,7 +3,7 @@
 import { FullReview } from "@/app/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
-import { addComment } from "@/app/apiMethods"
+import { addComment, formatCompactNumber } from "@/app/apiMethods"
 import { useState } from "react"
 import { ReviewComment } from "@prisma/client"
 import Comment from "./Comment"
@@ -35,7 +35,7 @@ export default function ReviewComments({ review }: { review: FullReview }) {
   return (
     <div className="flex flex-col space-y-16 text-zinc-400">
       <div className="flex flex-col space-y-5">
-        <p className="font-medium text-xs md:text-sm border-b border-zinc-800 pb-3">{review.comments.length} Comment{review.comments.length != 1 && "s"}</p>
+        <p className="font-medium text-xs md:text-sm border-b border-zinc-800 pb-3">{formatCompactNumber(review.comments.length)} Comment{review.comments.length != 1 && "s"}</p>
         <div className="flex flex-col space-y-8">
           {
             review.comments.map((comment: ReviewComment) => {

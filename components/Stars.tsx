@@ -8,64 +8,64 @@ export default function Stars({ rating, setRating }: { rating: number, setRating
 
   return (
     <div className="flex flex-col space-y-2">
-    <p className="font-medium">Rating</p>
-    <div className="flex items-center space-x-2 text-lg md:text-xl text-zinc-400">
-      <button 
-        onClick={() => {
-          if (rating == 1) {
-            setRating(0)
-          } else {
-            setRating(1)
-          }
-        }}
-      >
-        { rating >= 1 ? <TbStarFilled/> : <TbStar/>}
-      </button>
-      <button 
-        onClick={() => {
-          if (rating == 2) {
-            setRating(1)
-          } else {
-            setRating(2)
-          }
-        }}
-      >
-        { rating >= 2 ? <TbStarFilled/> : <TbStar/>}
-      </button>
-      <button 
-        onClick={() => {
-          if (rating == 3) {
-            setRating(2)
-          } else {
-            setRating(3)
-          }
-        }}
-      >
-        { rating >= 3 ? <TbStarFilled/> : <TbStar/>}
-      </button>
-      <button 
-        onClick={() => {
-          if (rating == 4) {
-            setRating(3)
-          } else {
-            setRating(4)
-          }
-        }}
-      >
-        { rating >= 4 ? <TbStarFilled/> : <TbStar/>}
-      </button>
-      <button 
-        onClick={() => {
-          if (rating == 5) {
-            setRating(4)
-          } else {
-            setRating(5)
-          }
-        }}
-      >
-        { rating >= 5 ? <TbStarFilled/> : <TbStar/>}
-      </button>
+      <p className="font-medium">Rating</p>
+      <div className="flex items-center space-x-2 text-lg md:text-xl text-zinc-400">
+        <button 
+          onClick={() => {
+            if (rating == 1) {
+              setRating(0)
+            } else {
+              setRating(1)
+            }
+          }}
+        >
+          { rating >= 1 ? <TbStarFilled/> : <TbStar/>}
+        </button>
+        <button 
+          onClick={() => {
+            if (rating == 2) {
+              setRating(1)
+            } else {
+              setRating(2)
+            }
+          }}
+        >
+          { rating >= 2 ? <TbStarFilled/> : <TbStar/>}
+        </button>
+        <button 
+          onClick={() => {
+            if (rating == 3) {
+              setRating(2)
+            } else {
+              setRating(3)
+            }
+          }}
+        >
+          { rating >= 3 ? <TbStarFilled/> : <TbStar/>}
+        </button>
+        <button 
+          onClick={() => {
+            if (rating == 4) {
+              setRating(3)
+            } else {
+              setRating(4)
+            }
+          }}
+        >
+          { rating >= 4 ? <TbStarFilled/> : <TbStar/>}
+        </button>
+        <button 
+          onClick={() => {
+            if (rating == 5) {
+              setRating(4)
+            } else {
+              setRating(5)
+            }
+          }}
+        >
+          { rating >= 5 ? <TbStarFilled/> : <TbStar/>}
+        </button>
+      </div>
     </div>
-  </div>
   )
 }

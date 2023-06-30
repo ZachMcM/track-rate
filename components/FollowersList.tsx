@@ -30,7 +30,7 @@ export default function FollowersList({ id }: { id: string }) {
               })
             }
           </div> :
-          <Alert message={`${user.id == session?.user.id ? "You" : user.name} is has no followers.`}/>
+          <Alert message={`${user.id == session?.user.id ? "You have" : user.name + " has"} no followers.`}/>
         }
       </div>
     )

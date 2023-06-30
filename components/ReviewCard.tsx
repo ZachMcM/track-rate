@@ -5,7 +5,7 @@ import { Review } from "@prisma/client";
 import Image from "next/image";
 import RatingDisplay from "./RatingDisplay";
 import { useQuery } from "@tanstack/react-query";
-import { getAccessToken, getAlbum, getTrack, getUser } from "@/app/apiMethods";
+import { formatName, getAccessToken, getAlbum, getTrack, getUser } from "@/app/apiMethods";
 import Link from "next/link";
 
 export default function ReviewCard({ review, name }: { review: Review, name: boolean }) {
@@ -32,7 +32,7 @@ function AlbumReviewCard({ review }: { review: Review }) {
 
   if (album && !isLoading) {
     return (
-      <Link href={`/review/${review.id}`} className=" shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300">
+      <Link href={`/review/${review.id}`} className="shadow-2xl flex flex-col space-y-5 md:space-x-8 md:space-y-0 md:flex-row items-center p-8 rounded-md border border-zinc-800 hover:opacity-50 duration-300">
         <div className="relative h-32 w-32">
           <Image
             src={album.images[0].url}
@@ -43,11 +43,11 @@ function AlbumReviewCard({ review }: { review: Review }) {
         </div>
         <div className="flex flex-col space-y-5 items-center md:items-start">
           <div className="flex flex-col space-y-1 items-center md:items-start">
-            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{album.name.length > 20 ? album.name.substring(0, 20) + "..." : album.name}</p>
+            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{formatName(album.name, 20)}</p>
             <p className="text-center md:text-start font-medium text-zinc-400 text-sm">
               {
-                album.artists.map((artist: Artist) => {
-                  return <span key={artist.id}> {artist.name} </span>
+                album.artists.map((artist: Artist, i: number) => {
+                  return <span key={artist.id}> {artist.name}{i != album.artists.length - 1 && ","} </span>;
                 })
               }
             </p>
@@ -91,11 +91,11 @@ function TrackReviewCard({ review }: { review: Review, }) {
         </div>
         <div className="flex flex-col space-y-5 items-center md:items-start">
           <div className="flex flex-col space-y-1 items-center md:items-start">
-            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{track.name.length > 20 ? track.name.substring(0, 20) + "..." : track.name}</p>
+            <p className="text-center md:text-start font-bold hover:opacity-80 duration-300">{formatName(track.name, 20)}</p>
             <p className="text-center md:text-start font-medium text-zinc-400 text-sm">
               {
-                track.artists.map((artist: Artist) => {
-                  return <span key={artist.id}> {artist.name} </span>
+                track.artists.map((artist: Artist, i: number) => {
+                  return <span key={artist.id}> {artist.name}{i != track.artists.length - 1 && ","} </span>;
                 })
               }
             </p>

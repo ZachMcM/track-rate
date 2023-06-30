@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function SettingsLayout({ children }: { children: React.ReactNode}) {  
   return (
-    <div className="flex flex-col space-y-5 p-10 rounded-md border border-zinc-800">
+    <div className="flex flex-col space-y-5 px-5 md:px-10">
       <div className="flex flex-col space-y-2 border-b border-zinc-800 pb-5 w-full">
         <h1 className="text-2xl font-bold w-full">Settings</h1>
         <p className="text-zinc-400">

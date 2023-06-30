@@ -10,23 +10,20 @@ export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions)
 
   if (session && itemId) {
-    const numPositive = await prisma.review.count({
-      where: {
-        itemId: itemId,
-        rating: {
-          gt: 2
-        }
-      }
-    })
-
-    const total = await prisma.review.count({
+    const aggregations = await prisma.review.aggregate({
+      _avg: {
+        rating: true
+      },
+      _count: true,
       where: {
         itemId: itemId
       }
     })
 
-    return NextResponse.json(Math.round(numPositive / total) * 100)
-
+    return NextResponse.json({ 
+      avg: aggregations._avg.rating,
+      total: aggregations._count
+    })
   } else {
     return NextResponse.json({ error: "Unauthorized request" }, { status: 400 })
 

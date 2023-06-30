@@ -12,6 +12,11 @@ export type FullComment = Prisma.ReviewCommentGetPayload<{
   include: { user: true }
 }>
 
+export type Rating = {
+  avg: number,
+  total: number
+}
+
 export type NewReviewParams = {
   title: string,
   itemId: string,

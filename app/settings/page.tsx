@@ -11,6 +11,7 @@ import { useState } from "react";
 import { redirect } from "next/navigation";
 import { BsSpotify } from "react-icons/bs";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Toast from "@/components/Toast";
 
 export default function Settings() {
   const { data: session } = useSession({
@@ -29,7 +30,7 @@ export default function Settings() {
   });
 
   return (
-    <div className="flex flex-col space-y-5 md:w-3/5">
+    <div className="flex flex-col space-y-5 md:w-4/5 lg:w-3/5">
       <div className="flex flex-col border-b border-zinc-800 pb-5 w-full">
         <h3 className="font-medium text-lg">Profile</h3>
         <p className="text-sm text-zinc-400">This is how others will see you on the site.</p>
@@ -64,6 +65,7 @@ const queryClient = useQueryClient()
     onSuccess: (data) => {
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ['user', user.id]})
+      setToast(true)
     }
   })
 
@@ -74,6 +76,8 @@ const queryClient = useQueryClient()
     }
     updateMutation.mutate()
   }
+
+  const [toast, setToast] = useState<boolean>(false)
 
   return (
     <div className="flex space-y-10 flex-col w-full">
@@ -111,7 +115,7 @@ const queryClient = useQueryClient()
           <p className="text-zinc-400 text-xs">This is your public bio. </p>
         </div>
         <div className="flex flex-col space-y-2">
-          <p className="flex items-center font-medium">Spotify Username <BsSpotify className="text-green-400 text-xl ml-2"/></p>
+          <p className="flex items-center font-medium"><BsSpotify className="text-xl mr-2 text-green-400"/>Spotify Username</p>
           <input
             value={spotify}
             onChange={(e) => setSpotify(e.target.value)}
@@ -133,7 +137,7 @@ const queryClient = useQueryClient()
           </svg> 
         }
       </button>
+      <Toast setToast={setToast} toast={toast}/>
     </div>
-
   );
 }

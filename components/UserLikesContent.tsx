@@ -36,7 +36,7 @@ export default function UserLikesContent({ id }: { id: string }) {
               })
             }
           </div> : 
-          <Alert message={`${user.id == session?.user.id ? "You" : user.name} has no likes.`}/>
+          <Alert message={`${user.id == session?.user.id ? "You have" : user.name + " has"}  no likes.`}/>
         }  
       </div>
     )

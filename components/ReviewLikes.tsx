@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { TbHeart, TbHeartFilled } from "react-icons/tb"
 import { FullReview } from "@/app/types"
-import { updateLike } from "@/app/apiMethods"
+import { formatCompactNumber, updateLike } from "@/app/apiMethods"
 import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -54,7 +54,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
           <TbHeart/>
         }
       </button>
-      <p>{likeCount} Like{likeCount != 1 && "s"}</p>
+      <p>{formatCompactNumber(likeCount)} Like{likeCount != 1 && "s"}</p>
     </div>
   )
 }

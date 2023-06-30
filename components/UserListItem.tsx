@@ -43,7 +43,7 @@ export default function UserListItem({ userId }: { userId: string }) {
               <Link href={`/profile/${user.id}`} className="hover:opacity-80 duration-300 text-sm text-zinc-400">Review{user.reviews.length != 1 && "s"}</Link>
             </div>
             {
-              session &&
+              session && session.user.id != user.id &&
               <div className="hidden md:block"><FollowButton user={user}/></div>
             }
           </div>

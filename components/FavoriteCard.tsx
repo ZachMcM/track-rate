@@ -1,10 +1,11 @@
 'use client'
 
-import { getAccessToken, getAlbum, getArtist, getTrack } from "@/app/apiMethods"
+import { formatName, getAccessToken, getAlbum, getArtist, getTrack } from "@/app/apiMethods"
 import { Artist } from "@/app/types"
 import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
 import Link from "next/link"
+import { uid } from "uid"
 
 export default function FavoriteCard({ id, type }: { id: string, type: string }) {
   if (type == "album") {
@@ -43,11 +44,13 @@ function FavoriteAlbumCard({ id }: { id: string }) {
           </div>
         }
         <div className="flex flex-col space-y-1">
-          <Link href={`/album/${favAlbum.id}`} className="font-medium hover:opacity-80 duration-300">{favAlbum.name.length > 15 ? favAlbum.name.substring(0, 15) + "..." : favAlbum.name}</Link>
+          <Link href={`/album/${favAlbum.id}`} className="font-medium hover:opacity-80 duration-300">{formatName(favAlbum.name, 15)}</Link>
           <p className="text-xs text-zinc-400 font-medium">
-            {favAlbum.artists.map((artist: Artist) => {
-              return <span key={artist.id}> {artist.name} </span>;
-            })}
+            {
+              favAlbum.artists.map((artist: Artist, i: number) => {
+                return <span key={artist.id}> {artist.name}{i != favAlbum.artists.length - 1 && ","} </span>;
+              })
+            }
           </p>
         </div>
       </div> :
@@ -83,7 +86,14 @@ function FavoriteArtistCard({ id }: { id: string }) {
             />
           </div>
         }
-        <p className="font-medium">{favArtist.name.length > 15 ? favArtist.name.substring(0, 15) + "..." : favArtist.name}</p>
+        <div className="flex flex-col space-y-1">
+          <p className="font-medium">{formatName(favArtist.name, 15)}</p>
+          <p className="text-xs text-zinc-400 font-medium">
+            {favArtist.genres.map((genre: string, i: number) => {
+                return <span className="capitalize" key={uid()}> {genre}{i != favArtist.genres.length - 1 && ","} </span>;
+            })}
+          </p>
+        </div>
       </div> :
       <Skeleton/>
     }
@@ -118,11 +128,13 @@ function FavoriteTrackCard({ id }: { id: string }) {
           </div>
         }
         <div className="flex flex-col space-y-1">
-          <Link href={`/track/${favTrack.id}`} className="hover:opacity-80 duration-300 font-medium">{favTrack.name.length > 15 ? favTrack.name.substring(0, 15) + "..." : favTrack.name}</Link>
+          <Link href={`/track/${favTrack.id}`} className="hover:opacity-80 duration-300 font-medium">{formatName(favTrack.name, 15)}</Link>
           <p className="text-xs text-zinc-400 font-medium">
-            {favTrack.artists.map((artist: Artist) => {
-              return <span key={artist.id}> {artist.name} </span>;
-            })}
+            {
+              favTrack.artists.map((artist: Artist, i: number) => {
+                return <span key={artist.id}> {artist.name}{i != favTrack.artists.length - 1 && ","} </span>;
+              })
+            }
           </p>
         </div>
       </div> :

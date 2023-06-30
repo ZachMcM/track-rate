@@ -30,7 +30,7 @@ export default function FollowingList({ id }: { id: string }) {
               })
             }
           </div> :
-          <Alert message={`${user.id == session?.user.id ? "You" : user.name} is not following anyone.`}/>
+          <Alert message={`${user.id == session?.user.id ? "You are" : user.name + " is"}  not following anyone.`}/>
         }
       </div>
     )

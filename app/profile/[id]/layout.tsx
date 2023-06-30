@@ -11,11 +11,9 @@ export async function generateMetadata({ params }: { params: { id: string }, par
 
 export default function ProfileLayout({ children, params }: {children: React.ReactNode, params: { id: string }}) {  
   return (
-    <div className="flex flex-col space-y-10 p-3 md:px-10">
-      <ProfileDashboard id={params.id}/>
-      <div className="p-5 border border-zinc-800 rounded-md">
-        {children}
-      </div>
+    <div className="flex flex-col space-y-16 px-5 md:px-10">
+      <ProfileDashboard id={params.id}/>        
+      {children}
     </div>
   )
 }
