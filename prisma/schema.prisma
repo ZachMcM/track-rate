@@ -70,7 +70,6 @@ model Review {
   createdAt DateTime @default(now())
   comments ReviewComment[]
   likes Like[]
-  title String @default("My Review")
   content String
   rating Int
   type String 

@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { id: string }, par
 
 export default function ReviewPage({ params }: { params: { id: string }}) {
   return (
-    <div className="md:p-5">
+    <div className="p-5">
       <ReviewContent id={params.id}/>
     </div>
   )

@@ -7,9 +7,8 @@ import { TbCheck, TbChevronDown, TbSearch, TbX } from "react-icons/tb"
 import { SimplifiedAlbum, Track } from "@/app/types"
 import Image from "next/image"
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import AlbumReviewForm from "./AlbumReviewForm"
-import TrackReviewForm from "./TrackReviewForm"
 import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
+import debounce from "lodash.debounce"
 
 export default function ReviewForm() {
   // getting our access token
@@ -23,8 +22,6 @@ export default function ReviewForm() {
     trackResults,
     setTrackResults,
     setAlbumTarget,
-    albumTarget,
-    trackTarget,
     setTrackTarget,
     setReviewForm,
     reviewForm
@@ -34,25 +31,29 @@ export default function ReviewForm() {
 
   const dropdownRef = useDetectClickOutside({ onTriggered: () => setDropdown(false)})
 
-  const getResults = async (query: string) => {
-    if (!query) {
+  const getResults = async () => {
+    if (!input) {
       setAlbumResults([])
       setTrackResults([])
     }
-    if (type && query) {
+    if (type && input) {
       if (type == "album") {
-        const arr = await getAlbumList(query, tokenQuery.data)
+        const arr = await getAlbumList(input, tokenQuery.data)
         setAlbumResults(arr)
       } else if (type == "track") {
-        const arr = await getTrackList(query, tokenQuery.data)
+        const arr = await getTrackList(input, tokenQuery.data)
         setTrackResults(arr)
       }
     }
   }
 
+  const [input, setInput] = useState<string>('')
+  const debounceResults = debounce(() => getResults(), 300)
+
   const getFullAlbum = async (id: string) => {
     const album = await getAlbum(id, tokenQuery.data)
     setAlbumTarget(album)
+    setReviewForm(false)
   }
 
   const modalRef = useDetectClickOutside({ onTriggered: () => closeForm()})
@@ -61,14 +62,12 @@ export default function ReviewForm() {
     setType("")
     setAlbumResults([])
     setTrackResults([])
-    setTrackTarget(undefined)
-    setAlbumTarget(undefined)
     setReviewForm(false)
   }
 
   if (reviewForm) {
     return (
-      <div className="z-40 !m-0 fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+      <div className="z-40 !m-0 shadow-black shadow-2xl  fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
         <div ref={modalRef} className="flex flex-col space-y-8 p-6 w-full m-6 md:w-3/5 lg:w-2/5 rounded-md border border-zinc-800 bg-zinc-950">
           <div className="relative flex items-center justify-between">
             <div className="flex flex-col space-y-1">
@@ -125,75 +124,81 @@ export default function ReviewForm() {
                 </div>
               }
             </div>
-            <div className="w-full relative text-sm">
-              <div className="flex space-x-2 items-center border-zinc-800 border rounded-md px-4 py-3 focus-within:ring-1 ring-zinc-800">
-                <TbSearch className="text-xl text-zinc-400"/>
-                <input
-                  onChange={(e) => {
-                    getResults(e.target.value)
-                  }}
-                  className="bg-zinc-950 border-none outline-none placeholder:text-zinc-400 w-full"
-                  placeholder="Name of album or track..."
-                />
+            {
+              type &&
+              <div className="w-full relative text-sm">
+                <div className="flex space-x-2 items-center border-zinc-800 border rounded-md px-4 py-3 focus-within:ring-1 ring-zinc-800">
+                  <TbSearch className="text-xl text-zinc-400"/>
+                  <input
+                    onChange={(e) => {
+                      setInput(e.target.value)
+                      debounceResults()
+                    }}
+                    className="bg-zinc-950 border-none outline-none placeholder:text-zinc-400 w-full"
+                    placeholder={`Search ${type}s...`}
+                  />
+                </div>
+                {
+                  trackResults.length != 0 &&
+                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
+                    {
+                      trackResults.map((result: Track) => {
+                        return (
+                          <button 
+                            onClick={() => {
+                              console.log(result)
+                              setTrackResults([])
+                              setTrackTarget(result)
+                              setReviewForm(false)
+                            }}
+                            key={result.id} 
+                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
+                          >
+                            <Image
+                              src={result.album.images[0].url}
+                              height={40}
+                              width={40}
+                              alt={result.name}
+                              className="rounded-md"
+                            />
+                            <p className="font-medium">{result.name}</p>
+                          </button>
+                        )
+                      })
+                    }
+                  </div>
+                }
+                {
+                  albumResults.length != 0 &&
+                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
+                    {
+                      albumResults.map((result: SimplifiedAlbum) => {
+                        return (
+                          <button 
+                            onClick={() => {
+                              console.log(result)
+                              setAlbumResults([])
+                              getFullAlbum(result.id)
+                            }}
+                            key={result.id} 
+                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
+                          >
+                            <Image
+                              src={result.images[0].url}
+                              height={40}
+                              width={40}
+                              alt={result.name}
+                              className="rounded-md"
+                            />
+                            <p className="font-medium">{result.name}</p>
+                          </button>
+                        )
+                      })
+                    }
+                  </div>
+                }
               </div>
-              {
-                trackResults.length != 0 &&
-                <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
-                  {
-                    trackResults.map((result: Track) => {
-                      return (
-                        <button 
-                          onClick={() => {
-                            setTrackResults([])
-                            setTrackTarget(result)
-                          }}
-                          key={result.id} 
-                          className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
-                        >
-                          <Image
-                            src={result.album.images[0].url}
-                            height={40}
-                            width={40}
-                            alt={result.name}
-                            className="rounded-md"
-                          />
-                          <p className="font-medium">{result.name}</p>
-                        </button>
-                      )
-                    })
-                  }
-                </div>
-              }
-              {
-                albumResults.length != 0 &&
-                <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
-                  {
-                    albumResults.map((result: SimplifiedAlbum) => {
-                      return (
-                        <button 
-                          onClick={() => {
-                            console.log(result)
-                            setAlbumResults([])
-                            getFullAlbum(result.id)
-                          }}
-                          key={result.id} 
-                          className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
-                        >
-                          <Image
-                            src={result.images[0].url}
-                            height={40}
-                            width={40}
-                            alt={result.name}
-                            className="rounded-md"
-                          />
-                          <p className="font-medium">{result.name}</p>
-                        </button>
-                      )
-                    })
-                  }
-                </div>
-              }
-            </div>
+            }
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
   const body = await request.json()
-  const { itemId, itemName, rating, type, content, title, favTrackName, favTrackId } = body
+  const { itemId, itemName, rating, type, content, favTrackName, favTrackId } = body
   if (session && session.user) {
     if (session.user) {
       const newReview = await prisma.review.create({
@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
           type: type,
           itemId: itemId,
           itemName: itemName,
-          title: title,
           favoriteTrackName: favTrackName,
           favoriteTrackId: favTrackId
         }

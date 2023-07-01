@@ -11,7 +11,16 @@ export async function GET(request: NextRequest) {
         id: id
       },
       include: {
-        reviews: true,
+        reviews: {
+          include: {
+            comments: true,
+            likes: true,
+            user: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
         likes: true,
         followers: true,
         follows: true

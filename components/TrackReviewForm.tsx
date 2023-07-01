@@ -20,13 +20,9 @@ export default function TrackReviewForm() {
     trackTarget,
     setType,
     setReviewContent,
-    setTitle,
     setRating,
-    setTitleError,
     setContentError,
-    titleError,
     contentError,
-    title,
     reviewContent,
     rating,
     addReviewMutation,
@@ -34,13 +30,10 @@ export default function TrackReviewForm() {
   } = useContext(ReviewFormContext) as ReviewFormProviderType;
 
   const reset = () => {
-    setReviewForm(false);
     setTrackTarget(undefined);
     setType("");
     setReviewContent("");
-    setTitle("");
     setRating(0);
-    setTitleError(false);
     setContentError(false);
   }
 
@@ -48,17 +41,16 @@ export default function TrackReviewForm() {
     setTrackTarget(undefined);
     setType("");
     setReviewContent("");
-    setTitle("");
     setRating(0);
-    setTitleError(false);
     setContentError(false);
+    setReviewForm(true)
   }
 
   const modalRef = useDetectClickOutside({onTriggered: reset});
-
+  
   if (trackTarget) {
     return (
-      <div className="z-40 fixed w-full p-5 h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
+      <div className="z-40 shadow-black shadow-2xl fixed w-full p-5 h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
         <div
           ref={modalRef}
           className="flex flex-col space-y-5 z-30 lg:space-y-0 lg:flex-row lg:space-x-10 p-10 w-full md:w-5/6 lg:w-2/3 rounded-md border border-zinc-800 bg-zinc-950 max-h-full overflow-y-auto"
@@ -90,10 +82,10 @@ export default function TrackReviewForm() {
                 className="rounded-md lg:hidden md:mr-5"
               />
               <div className="flex flex-col space-y-1 md:text-start text-center">
-                <h1 className="font-bold md:text-xl ">
+                <h1 className="font-bold text-lg md:text-xl ">
                   {trackTarget.name}
                 </h1>
-                <p className="text-zinc-400 text-sm">
+                <p className="text-zinc-400 text-sm md:text-md font-medium">
                   {
                     trackTarget.artists.map((artist: Artist, i: number) => {
                       return <span key={artist.id}> {artist.name}{i != trackTarget.artists.length - 1 && ","} </span>;
@@ -101,24 +93,6 @@ export default function TrackReviewForm() {
                   }
                 </p>
               </div>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <input
-                value={title}
-                onChange={(e) => {
-                  setTitleError(false);
-                  setTitle(e.target.value);
-                }}
-                placeholder="Review title"
-                className={`placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border border-zinc-800 rounded-md px-4 py-3 outline-none ring-zinc-800 ${
-                  titleError
-                    ? "border-red-500 focus:ring-0"
-                    : "border-zinc-800 focus:ring-1"
-                }`}
-              />
-              {titleError && (
-                <p className="text-xs text-red-500">Title is required</p>
-              )}
             </div>
             <div className="flex flex-col space-y-2">
               <textarea

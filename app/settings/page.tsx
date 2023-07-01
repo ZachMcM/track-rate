@@ -56,6 +56,8 @@ const queryClient = useQueryClient()
 
   const [usernameError, setUsernameError] = useState<boolean>(false)
 
+  const { update } = useSession()
+
   const updateMutation = useMutation({
     mutationFn: () => updateProfile({
       bio: bio,
@@ -65,6 +67,7 @@ const queryClient = useQueryClient()
     onSuccess: (data) => {
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ['user', user.id]})
+      update()
       setToast(true)
     }
   })

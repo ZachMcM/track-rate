@@ -146,6 +146,9 @@ export const getTrackList = async (
   query: string,
   accessToken: string
 ): Promise<Track[]> => {
+  if (!query) {
+    return []
+  }
   const res = await fetch(
     `https://api.spotify.com/v1/search?q=track:${query.replace(/[^\w\s]/gi, '')}&type=track`,
     {
@@ -164,6 +167,9 @@ export const getArtistList = async (
   query: string,
   accessToken: string
 ): Promise<Artist[]> => {
+  if (!query) {
+    return []
+  }
   const res = await fetch(
     `https://api.spotify.com/v1/search?q=artist:${query.replace(/[^\w\s]/gi, '')}&type=artist`,
     {
@@ -182,6 +188,9 @@ export const getAlbumList = async (
   query: string,
   accessToken: string
 ): Promise<SimplifiedAlbum[]> => {
+  if (!query) {
+    return []
+  }
   const res = await fetch(
     `https://api.spotify.com/v1/search?q=album:${query.replace(/[^\w\s]/gi, '')}&type=album`,
     {

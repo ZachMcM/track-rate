@@ -24,6 +24,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
     onSuccess: (data) => {
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ['review', review.id]})
+      queryClient.invalidateQueries({ queryKey: ['user', review.userId] })
     }
   })
 

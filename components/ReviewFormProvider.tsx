@@ -9,8 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react"
 
 export type ReviewFormProviderType = {
-  title: string;
-  setTitle: Dispatch<SetStateAction<string>>;
   reviewContent: string;
   setReviewContent: Dispatch<SetStateAction<string>>;
   rating: number;
@@ -23,8 +21,6 @@ export type ReviewFormProviderType = {
   setTrackTarget: Dispatch<SetStateAction<Track | undefined>>;
   favTrack: SimplifiedTrack | undefined;
   setFavTrack: Dispatch<SetStateAction<SimplifiedTrack | undefined>>;
-  titleError: boolean;
-  setTitleError: Dispatch<SetStateAction<boolean>>;
   favTrackError: boolean;
   setFavTrackError: Dispatch<SetStateAction<boolean>>;
   contentError: boolean;
@@ -49,7 +45,6 @@ export const ReviewFormProvider = ({
   children: React.ReactNode;
 }) => {
   // form variables
-  const [title, setTitle] = useState<string>("");
   const [reviewContent, setReviewContent] = useState<string>("");
   const [favTrack, setFavTrack] = useState<SimplifiedTrack>();
   const [rating, setRating] = useState<number>(0);
@@ -66,7 +61,6 @@ export const ReviewFormProvider = ({
   const [reviewForm, setReviewForm] = useState<boolean>(false);
 
   // error state
-  const [titleError, setTitleError] = useState<boolean>(false);
   const [favTrackError, setFavTrackError] = useState<boolean>(false);
   const [contentError, setContentError] = useState<boolean>(false);
 
@@ -78,7 +72,6 @@ export const ReviewFormProvider = ({
   const addReviewMutation = useMutation({
     mutationFn: () =>
       addReview({
-        title: title,
         content: reviewContent,
         type: type,
         rating: rating,
@@ -89,7 +82,11 @@ export const ReviewFormProvider = ({
       }),
       onSuccess: (data) => {
         console.log(data)
-        setReviewForm(false)
+        if (type == "album") {
+          setAlbumTarget(undefined)
+        } else {
+          setTrackTarget(undefined)
+        }
         queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
         queryClient.invalidateQueries({ queryKey: ['score', albumTarget ? albumTarget.id : trackTarget?.id || ""]})
         router.push(`/review/${data.id}`)
@@ -97,12 +94,10 @@ export const ReviewFormProvider = ({
   });
 
   const submitReview = async () => {
-    if (title && reviewContent && (type == "album" && favTrack || type == "track")) {
+    if (reviewContent && (type == "album" && favTrack || type == "track")) {
       addReviewMutation.mutate()
     } else {
-      if (!title) {
-        setTitleError(true);
-      }
+
       if (!reviewContent) {
         setContentError(true);
       }
@@ -115,8 +110,6 @@ export const ReviewFormProvider = ({
   return (
     <ReviewFormContext.Provider
       value={{
-        title,
-        setTitle,
         reviewContent,
         setReviewContent,
         favTrack,
@@ -135,8 +128,6 @@ export const ReviewFormProvider = ({
         setTrackTarget,
         reviewForm,
         setReviewForm,
-        titleError,
-        setTitleError,
         favTrackError,
         setFavTrackError,
         contentError,

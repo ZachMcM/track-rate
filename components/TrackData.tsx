@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Artist } from "@/app/types"
 import { BsSpotify } from "react-icons/bs"
 import { useQuery } from "@tanstack/react-query"
-import { formatCompactNumber, getAccessToken, getRating, getTrack } from "@/app/apiMethods"
+import { formatCompactNumber, formatName, getAccessToken, getRating, getTrack } from "@/app/apiMethods"
 import DataSkeleton from "./DataSkeleton"
 import Link from "next/link"
 import { TbPencil, TbPlaylistAdd, TbStarFilled } from "react-icons/tb"
@@ -49,10 +49,10 @@ export default function TrackData({ id }: { id: string }) {
         />
         <div className="flex flex-col space-y-5 items-center md:items-start">
           <div className="flex flex-col space-y-3">
-            <div className="flex flex-col space-y-1">
-              <Link href={`/track/${track.id}`} className="hover:opacity-80 duration-300 font-bold md:text-xl text-center md:text-start">{track.name}</Link>
-              <Link href={`/album/${track.album.id}`} className="hover:opacity-80 duration-300 font-bold text-center md:text-start">{track.album.name}</Link>
-              <p className="text-zinc-400 text-center md:text-start">
+            <div className="flex flex-col space-y-2">
+              <Link href={`/track/${track.id}`} className="hover:opacity-80 duration-300 font-bold text-lg md:text-xl text-center md:text-start">{track.name}</Link>
+              <Link href={`/album/${track.album.id}`} className="hover:opacity-80 duration-300 font-semibold text-center md:text-start text-zinc-400">{formatName(track.album.name, 30)}</Link>
+              <p className="text-zinc-400 text-center md:text-start text-sm">
                 {
                   track.artists.map((artist: Artist, i: number) => {
                     return <span key={artist.id}> {artist.name}{i != track.artists.length - 1 && ","} </span>;
@@ -87,7 +87,7 @@ export default function TrackData({ id }: { id: string }) {
             </div>
           </div>
           <div className="flex space-x-5 items-center">
-            <a href={track.external_urls.spotify} className="flex items-center space-x-2 bg-white tet-zinc-950 py-2 px-4 rounded-md hover:opacity-80 duration-300">
+            <a href={track.external_urls.spotify} className="flex items-center space-x-2 bg-white text-zinc-950 py-2 px-4 rounded-md hover:opacity-80 duration-300">
               <BsSpotify className="text-lg"/>
               <p className="font-medium text-sm">Spotify</p>
             </a>

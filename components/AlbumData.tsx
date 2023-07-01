@@ -49,9 +49,9 @@ export default function AlbumData({ id }: { id: string }) {
         />
         <div className="flex flex-col space-y-5 items-center md:items-start">
         <div className="flex flex-col space-y-3">
-          <div className="flex flex-col space-y-1">
-              <Link href={`/album/${album.id}`} className="hover:opacity-80 duration-300 font-bold md:text-xl text-center md:text-start">{album.name}</Link>
-              <p className="text-zinc-400 text-center md:text-start">
+          <div className="flex flex-col space-y-2 md:space-y-1">
+              <Link href={`/album/${album.id}`} className="hover:opacity-80 duration-300 font-bold text-lg md:text-xl text-center md:text-start">{album.name}</Link>
+              <p className="hover:opacity-80 duration-300 font-medium text-center md:text-start text-zinc-400">
                 {
                   album.artists.map((artist: Artist, i: number) => {
                     return <span key={artist.id}> {artist.name}{i != album.artists.length - 1 && ","} </span>;

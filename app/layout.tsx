@@ -8,7 +8,7 @@ import AlbumReviewForm from '@/components/AlbumReviewForm'
 
 export const metadata = {
   title: 'trackrate',
-  description: 'Rate the latest music and share your music opinions with others!',
+  description: 'Rate the latest tracks and albums and share your music opinions with others!',
 }
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
         <Provider>
           <ReviewFormProvider>
             <Navbar/>
-            <main className='p-5 md:py-16 md:px-12'>
+            <main className='p-2 md:py-16 md:px-12'>
               {children}
             </main>
             <ReviewForm/>

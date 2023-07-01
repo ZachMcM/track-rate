@@ -28,7 +28,7 @@ function FavoriteAlbumCard({ id }: { id: string }) {
   })
 
   return (
-    <div className="flex flex-col space-y-3 shadow-2xl border-zinc-800 border rounded-md p-5">
+    <div className="flex flex-col space-y-3 shadow-2xl shadow-black border-zinc-800 border rounded-md p-5">
     {
       favAlbum && !isLoading ?
       <div className="flex space-x-5 items-center">
@@ -71,7 +71,7 @@ function FavoriteArtistCard({ id }: { id: string }) {
   })
 
   return (
-    <div className="flex flex-col space-y-3 shadow-2xl border-zinc-800 border rounded-md p-5">
+    <div className="flex flex-col space-y-3 shadow-2xl shadow-black border-zinc-800 border rounded-md p-5">
     {
       favArtist && !isLoading ?
       <div className="flex space-x-5 items-center">
@@ -112,7 +112,7 @@ function FavoriteTrackCard({ id }: { id: string }) {
   })
 
   return (
-    <div className="flex flex-col space-y-3 shadow-2xl border-zinc-800 border rounded-md p-5">
+    <div className="flex flex-col space-y-3 shadow-2xl shadow-black border-zinc-800 border rounded-md p-5">
     {
       favTrack && !isLoading ?
       <div className="flex space-x-5 items-center">
