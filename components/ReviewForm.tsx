@@ -1,207 +1,140 @@
-'use client'
+"use client";
 
-import { useContext, useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { getAccessToken, getAlbum, getAlbumList, getTrackList } from "@/app/apiMethods"
-import { TbCheck, TbChevronDown, TbSearch, TbX } from "react-icons/tb"
-import { SimplifiedAlbum, Track } from "@/app/types"
-import Image from "next/image"
-import { useDetectClickOutside } from 'react-detect-click-outside';
-import { ReviewFormContext, ReviewFormProviderType } from "./ReviewFormProvider";
-import debounce from "lodash.debounce"
+import { useContext } from "react";
+import { TbArrowLeft, TbCheck, TbX } from "react-icons/tb";
+import { Artist } from "@/app/types";
+import Image from "next/image";
+import Stars from "./RatingPick";
+
+import { useDetectClickOutside } from "react-detect-click-outside";
+
+import { ReviewFormContext } from "./Provider";
+import { ReviewFormProviderType } from "@/app/types";
+import Link from "next/link";
+import RatingPick from "./RatingPick";
+import { uid } from "uid";
 
 export default function ReviewForm() {
-  // getting our access token
-  const tokenQuery = useQuery({ queryKey: ['access-token'], queryFn: getAccessToken })
-
   const {
-    setType,
-    type,
-    setAlbumResults,
-    albumResults,
-    trackResults,
-    setTrackResults,
-    setAlbumTarget,
-    setTrackTarget,
+    itemData,
+    setReviewContent,
+    setRating,
+    setContentError,
+    contentError,
+    reviewContent,
+    rating,
+    addReviewMutation,
+    submitReview,
     setReviewForm,
-    reviewForm
-  } = useContext(ReviewFormContext) as ReviewFormProviderType
+    setSearchModal,
+    pinned,
+    setPinned
+  } = useContext(ReviewFormContext) as ReviewFormProviderType;
 
-  const [dropdown, setDropdown] = useState<boolean>(false)
-
-  const dropdownRef = useDetectClickOutside({ onTriggered: () => setDropdown(false)})
-
-  const getResults = async () => {
-    if (!input) {
-      setAlbumResults([])
-      setTrackResults([])
-    }
-    if (type && input) {
-      if (type == "album") {
-        const arr = await getAlbumList(input, tokenQuery.data)
-        setAlbumResults(arr)
-      } else if (type == "track") {
-        const arr = await getTrackList(input, tokenQuery.data)
-        setTrackResults(arr)
-      }
-    }
-  }
-
-  const [input, setInput] = useState<string>('')
-  const debounceResults = debounce(() => getResults(), 300)
-
-  const getFullAlbum = async (id: string) => {
-    const album = await getAlbum(id, tokenQuery.data)
-    setAlbumTarget(album)
-    setReviewForm(false)
-  }
-
-  const modalRef = useDetectClickOutside({ onTriggered: () => closeForm()})
-
-  const closeForm = () => {
-    setType("")
-    setAlbumResults([])
-    setTrackResults([])
-    setReviewForm(false)
-  }
-
-  if (reviewForm) {
+  const modalRef = useDetectClickOutside({onTriggered: () => setReviewForm(false)});
+  
+  if (itemData) {
     return (
-      <div className="z-40 !m-0 shadow-black shadow-2xl  fixed w-full h-full left-0 top-0 bottom-0 backdrop-blur-md flex justify-center items-center">
-        <div ref={modalRef} className="flex flex-col space-y-8 p-6 w-full m-6 md:w-3/5 lg:w-2/5 rounded-md border border-zinc-800 bg-zinc-950">
-          <div className="relative flex items-center justify-between">
-            <div className="flex flex-col space-y-1">
-              <h3 className="font-medium text-lg md:text-xl">New Review</h3>
-              <p className="text-zinc-400 text-sm">Pick the music you want to review.</p>
-            </div>
-            <button 
-              className="hover:text-white duration-300 text-zinc-400 absolute top-0 right-0"
-              onClick={closeForm}
-            >
-              <TbX className="text-lg"/>
+      <div className="fixed inset-0 h-full w-full z-50 overflow-hidden bg-black/70 flex justify-center items-center p-3">
+        <div
+          ref={modalRef}
+          className="drop-shadow-md rounded-lg bg-zinc-100 flex flex-col w-full md:w-5/6"
+        >
+          <div className="p-4 bg-white rounded-t-lg w-full text-center drop-shadow-md flex items-center">
+            <p className="font-semibold text-lg basis-full">Create Review</p>
+            <button
+              className="p-2 rounded-full hover:bg-zinc-200 duration-300"
+              onClick={() => setReviewForm(false)}
+            > 
+              <TbX className="text-xl"/>
             </button>
           </div>
-          <div className="flex flex-col space-y-5">
-            <div className="relative w-full text-sm">
-              <button 
-                className="w-full border border-zinc-800 rounded-md flex items-center justify-between px-4 py-3"
-                onClick={() => {
-                  setAlbumResults([])
-                  setTrackResults([])
-                  setDropdown(true)
-                }}
-              >
-                <p className={`${type && "capitalize"}`}>{type || "Select music type"}</p>
-                <TbChevronDown className="text-xl"/>
-              </button>
-              {
-                dropdown &&
-                <div ref={dropdownRef} className="z-50 flex flex-col absolute top-14 border rounded-md bg-zinc-950 border-zinc-800 w-full">
-                  <button
-                    className={`hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-zinc-800 duration-300 m-2 rounded-md text-start ${type == "track" ? "bg-zinc-800 text-white" : "text-zinc-400"}`}
-                    onClick={() => {
-                      setType("track")
-                      setDropdown(false)
-                      setAlbumResults([])
-                      setTrackResults([])
-                    }}
+          <div className="p-8 flex md:space-x-8 items-start">
+            <Link 
+              href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
+              className={`hidden md:block shrink-0 drop-shadow-md w-44 h-44 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+            >
+              <Image
+                src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}
+                fill
+                alt={itemData.type == "artist" ? itemData.artistNames[0] : itemData.albumName || ""}
+                className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+              />
+            </Link>
+            <div className="flex flex-col space-y-5 w-full">
+              <div className="flex space-x-5 md:space-x-0 justify-start items-center">
+                <Link 
+                  href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
+                  className={`text-start md:hidden shrink-0 drop-shadow-md w-20 h-20 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+                >
+                  <Image
+                    src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}
+                    fill
+                    alt={itemData.type == "artist" ? itemData.artistNames[0] : itemData.albumName || ""}
+                    className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+                    />
+                </Link>
+                <div className="flex flex-col space-y-1 items-start">
+                  <Link 
+                    href={(itemData.type == "album" ? itemData.albumId : itemData.type == "track" ? itemData.trackId : itemData.artistIds[0]) || "/"} 
+                    className="font-medium text-xl md:text-2xl hover:text-sky-400 duration-300"
                   >
-                    <TbCheck className={`${type == "track" ? "visible" : "invisible"} text-xl`}/>
-                    <p>track</p>
-                  </button>
-                  <button
-                    className={`hover:text-white flex items-center space-x-2 capitalize p-2 hover:bg-zinc-800 duration-300 m-2 rounded-md text-start ${type == "album" ? "bg-zinc-800 text-white" : "text-zinc-400"}`}
-                    onClick={() => {
-                      setType("album")
-                      setDropdown(false)
-                      setAlbumResults([])
-                      setTrackResults([])
-                    }}
-                  >
-                    <TbCheck className={`${type == "album" ? "visible" : "invisible" } text-xl`}/>
-                    <p>album</p>
-                  </button>
+                      {itemData.type == "album" ? itemData.albumName : itemData.type == "track" ? itemData.trackName : itemData.artistNames[0]}
+                  </Link>
+                  {
+                    itemData.type != "artist" &&
+                    <p className="text-zinc-400 text-sm md:text-base">
+                      {
+                        itemData.artistNames.map((name: string, i: number) => {
+                          return (
+                            <Link key={uid()} className="hover:underline" href={`/artist/${itemData.artistIds[i]}`}>{name}{i != itemData.artistNames.length - 1 && ","} </Link>
+                          )
+                        })
+                      }
+                    </p>
+                  }
                 </div>
-              }
-            </div>
-            {
-              type &&
-              <div className="w-full relative text-sm">
-                <div className="flex space-x-2 items-center border-zinc-800 border rounded-md px-4 py-3 focus-within:ring-1 ring-zinc-800">
-                  <TbSearch className="text-xl text-zinc-400"/>
-                  <input
-                    onChange={(e) => {
-                      setInput(e.target.value)
-                      debounceResults()
-                    }}
-                    className="bg-zinc-950 border-none outline-none placeholder:text-zinc-400 w-full"
-                    placeholder={`Search ${type}s...`}
-                  />
-                </div>
-                {
-                  trackResults.length != 0 &&
-                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
-                    {
-                      trackResults.map((result: Track) => {
-                        return (
-                          <button 
-                            onClick={() => {
-                              console.log(result)
-                              setTrackResults([])
-                              setTrackTarget(result)
-                              setReviewForm(false)
-                            }}
-                            key={result.id} 
-                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
-                          >
-                            <Image
-                              src={result.album.images[0].url}
-                              height={40}
-                              width={40}
-                              alt={result.name}
-                              className="rounded-md"
-                            />
-                            <p className="font-medium">{result.name}</p>
-                          </button>
-                        )
-                      })
-                    }
-                  </div>
-                }
-                {
-                  albumResults.length != 0 &&
-                  <div className="rounded-md w-full max-h-40 flex flex-col overflow-y-auto bg-zinc-950 absolute top-14 border border-zinc-800">
-                    {
-                      albumResults.map((result: SimplifiedAlbum) => {
-                        return (
-                          <button 
-                            onClick={() => {
-                              console.log(result)
-                              setAlbumResults([])
-                              getFullAlbum(result.id)
-                            }}
-                            key={result.id} 
-                            className="flex space-x-4 items-center rounded-md text-start text-zinc-400 hover:text-white p-2 m-2 hover:bg-zinc-800 duration-300"
-                          >
-                            <Image
-                              src={result.images[0].url}
-                              height={40}
-                              width={40}
-                              alt={result.name}
-                              className="rounded-md"
-                            />
-                            <p className="font-medium">{result.name}</p>
-                          </button>
-                        )
-                      })
-                    }
-                  </div>
-                }
               </div>
-            }
+              <div className="flex space-x-12 items-center">
+                <RatingPick rating={rating} setRating={setRating}/>
+                <div className="flex flex-col space-y-2">
+                  <p className="font-medium">Pinned</p>
+                  <button
+                    className="h-7 w-7 rounded-lg drop-shadow-lg bg-white"
+                    onClick={() => setPinned(!pinned)}
+                  >
+                    <div className={`${!pinned && "opacity-0"} rounded-lg flex justify-center items-center w-full h-full text-white bg-sky-400 duration-300`}>
+                      <TbCheck className={`${!pinned && "opacity-0"} text-xl`}/>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <p className="font-medium">Review Content</p>
+                <textarea
+                  value={reviewContent}
+                  onChange={(e) => setReviewContent(e.target.value)}
+                  className="bg-white p-4 h-48 text-sm rounded-lg border duration-300 border-zinc-200 outline-none focus:ring-4 ring-sky-200"
+                />
+                { contentError && <p className="text-red-500 text-xs">Content is required</p>}
+              </div>
+              <button 
+                className="bg-sky-400 flex justify-center items-center hover:opacity-80 duration-300 font-medium text-white p-4 rounded-lg"
+                onClick={() => submitReview()}
+              >
+                {
+                  addReviewMutation.isIdle ?
+                  <p>Save Review</p> :
+                  <svg aria-hidden="true" className="w-6 h-6 text-sky-500 animate-spin fill-zinc-200" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                  </svg>
+                }
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

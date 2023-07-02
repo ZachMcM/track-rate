@@ -77,7 +77,7 @@ export default function AlbumData({ id }: { id: string }) {
                   onMouseEnter={() => setStarsTooltip(true)}
                   onMouseLeave={() => setStarsTooltip(false)}
                 >
-                  <p>{formatCompactNumber(rating.avg)}/5</p>
+                  <p>{rating.avg}/5</p>
                   <TbStarFilled/>
                 </button>
                 <div className={`${!starsTooltip ? "opacity-0" : "opacity-100 delay-300"} duration-300 py-1 px-3 text-xs text-zinc-950 bg-white rounded-md absolute w-max -top-7 -left-9`}>Average rating</div>                  

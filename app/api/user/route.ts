@@ -22,8 +22,16 @@ export async function GET(request: NextRequest) {
           }
         },
         likes: true,
-        followers: true,
-        follows: true
+        followers: {
+          include: {
+            followers: true,
+          }
+        },
+        follows: {
+          include: {
+            followers: true,
+          }
+        }
       }
     })
     return NextResponse.json(user)

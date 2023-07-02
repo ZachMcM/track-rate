@@ -2,11 +2,29 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
+import { NewReviewParams } from "@/app/types";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
   const body = await request.json()
-  const { itemId, itemName, rating, type, content, favTrackName, favTrackId } = body
+  const { 
+    trackName,
+    trackId,
+  
+    artistNames,
+    artistIds,
+    artistImages,
+  
+    albumName,
+    albumId,
+    albumImage,
+    
+    rating,
+    type,
+    content,
+    pinned,
+  } = body as NewReviewParams
+
   if (session && session.user) {
     if (session.user) {
       const newReview = await prisma.review.create({
@@ -15,10 +33,18 @@ export async function POST(request: NextRequest) {
           content: content,
           rating: rating,
           type: type,
-          itemId: itemId,
-          itemName: itemName,
-          favoriteTrackName: favTrackName,
-          favoriteTrackId: favTrackId
+          pinned: pinned,
+          
+          trackName: trackName,
+          trackId: trackId,
+
+          artistNames: artistNames,
+          artistIds: artistIds,
+          artistImages: artistImages,
+
+          albumName: albumName,
+          albumId: albumId,
+          albumImage: albumImage,
         }
       })
       return NextResponse.json(newReview)

@@ -1,4 +1,6 @@
 import { Prisma } from "@prisma/client"
+import { UseMutationResult } from "@tanstack/react-query"
+import { Dispatch, SetStateAction } from "react"
 
 export type FullUser = Prisma.UserGetPayload<{
   include: { 
@@ -10,8 +12,22 @@ export type FullUser = Prisma.UserGetPayload<{
       }
     }, 
     likes: true, 
-    followers: true, 
-    follows: true 
+    followers: {
+      include: {
+        followers: true
+      }
+    }, 
+    follows: {
+      include: {
+        followers: true
+      }
+    } 
+  }
+}>
+
+export type UserExtendedFollowers = Prisma.UserGetPayload<{
+  include: { 
+    followers: true
   }
 }>
 
@@ -28,14 +44,66 @@ export type Rating = {
   total: number
 }
 
+export type SearchResults = {
+  albums: SimplifiedAlbum[],
+  tracks: Track[],
+  artists: Artist[]
+}
+
+export type ReviewFormProviderType = {
+  reviewContent: string;
+  setReviewContent: Dispatch<SetStateAction<string>>;
+  rating: number;
+  setRating: Dispatch<SetStateAction<number>>;
+  pinned: boolean,
+  setPinned: Dispatch<SetStateAction<boolean>>
+
+  searchModal: boolean;
+  setSearchModal: Dispatch<SetStateAction<boolean>>;
+  reviewForm: boolean,
+  setReviewForm: Dispatch<SetStateAction<boolean>>
+
+  contentError: boolean;
+  setContentError: Dispatch<SetStateAction<boolean>>;
+
+  itemData: ReviewFormParams | undefined,
+  setItemData: Dispatch<SetStateAction<ReviewFormParams | undefined>>
+
+  addReviewMutation: UseMutationResult<any, unknown, void, unknown>,
+  submitReview: () => Promise<void>
+};
+
+export type ReviewFormParams = {
+  type: "artist" | "album" | "track",
+
+  trackName?: string,
+  trackId?: string,
+
+  artistNames: string[],
+  artistIds: string[],
+  artistImages: string[]
+
+  albumName?: string,
+  albumId?: string
+  albumImage?: string
+}
+
 export type NewReviewParams = {
-  itemId: string,
-  itemName: string
+  trackName?: string,
+  trackId?: string,
+
+  artistNames: string[],
+  artistIds: string[],
+  artistImages: string[]
+
+  albumName?: string,
+  albumId?: string
+  albumImage?: string
+  
   rating: number,
-  type: string,
+  type: "artist" | "album" | "track",
   content: string,
-  favTrackName?: string
-  favTrackId?: string
+  pinned: boolean
 }
 
 export type Track = {

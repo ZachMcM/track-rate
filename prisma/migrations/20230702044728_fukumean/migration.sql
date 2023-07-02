@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Review" ALTER COLUMN "trackId" DROP NOT NULL,
+ALTER COLUMN "trackName" DROP NOT NULL;

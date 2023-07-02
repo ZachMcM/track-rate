@@ -4,8 +4,9 @@ import ReviewContent from "@/components/ReviewContent"
 
 export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
   const review = await getReview(params.id)
+  // TODO
   return {
-    title: `${review.itemName} review`
+    title: ``
   }
 }
 

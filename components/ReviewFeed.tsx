@@ -47,7 +47,7 @@ export default function ReviewFeed({ initialReviews }: { initialReviews: FullRev
     <ul className="flex flex-col space-y-8">
       {
         reviews.map((review: FullReview, i: number) => {
-          if (i === reviews.length - 3) {
+          if (i === reviews.length - 2) {
             return (
               <li ref={ref} key={review.id}><ReviewCard review={review}/></li>
             )

@@ -3,13 +3,13 @@ import { uid } from "uid"
 
 export default function RatingDisplay({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center space-x-1 text-xl text-zinc-400">
+    <div className="flex items-center space-x-1">
       {
         Array(5).fill("").map((s: string, i: number) => {
           if (rating >= i + 1) {
-            return <TbStarFilled key={uid()}/>
+            return <TbStarFilled className="text-yellow-500" key={uid()}/>
           } else {
-            return <TbStar key={uid()}/>
+            return <TbStarFilled className="text-zinc-300" key={uid()}/>
           }
         })
       }

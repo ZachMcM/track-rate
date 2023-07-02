@@ -1,4 +1,4 @@
-import { Like, ReviewComment, User } from "@prisma/client";
+import { Like, Review, ReviewComment, User } from "@prisma/client";
 import {
   Album,
   Artist,
@@ -7,7 +7,7 @@ import {
   FullUser,
   NewReviewParams,
   Rating,
-  SimplifiedAlbum,
+  SearchResults,
   Track,
 } from "./types";
 
@@ -23,21 +23,21 @@ export const formatCompactNumber = (num: number) => {
   } else if (num >= 1_000_000_000_000 && num < 1_000_000_000_000_000) {
     return (num / 1_000_000_000_000).toFixed(1) + "T";
   }
-}
+};
 
 export const formatName = (name: string, max: number) => {
   if (name.length > max) {
-    return `${name.substring(0, max)}...`
+    return `${name.substring(0, max)}...`;
   } else {
-    return name
+    return name;
   }
-}
+};
 
 export const getRating = async (itemId: string): Promise<Rating> => {
-  const res = await fetch(`/api/rating?itemId=${itemId}`) 
-  const data = await res.json()
-  return data
-}
+  const res = await fetch(`/api/rating?itemId=${itemId}`);
+  const data = await res.json();
+  return data;
+};
 
 export const getUser = async (id: string): Promise<FullUser> => {
   const res = await fetch(`/api/user?id=${id}`);
@@ -45,34 +45,17 @@ export const getUser = async (id: string): Promise<FullUser> => {
   return data;
 };
 
-export const updateProfile = async (
-  body: {
-    bio: string;
-    name: string;
-    spotifyUsername: string
-  }
-) => {
+export const updateProfile = async (body: {
+  bio: string;
+  name: string;
+  spotifyUsername: string;
+}) => {
   const res = await fetch(`/api/user/profile`, {
     method: "PUT",
-    body: JSON.stringify(body)
-  })
-  const data = await res.json()
-  return data
-};
-
-export const updateFavorites = async (
-  body: {
-    favAlbum: string;
-    favArtist: string;
-    favTrack: string
-  }
-) => {
-  const res = await fetch(`/api/user/favorites`, {
-    method: "PUT",
-    body: JSON.stringify(body)
-  })
-  const data = await res.json()
-  return data
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  return data;
 };
 
 export const getReview = async (id: string): Promise<FullReview> => {
@@ -89,7 +72,7 @@ export const updateFollow = async (userId: string): Promise<User> => {
   return data;
 };
 
-export const addReview = async (newReviewParams: NewReviewParams) => {
+export const addReview = async (newReviewParams: NewReviewParams): Promise<Review> => {
   const res = await fetch(`/api/review`, {
     method: "POST",
     body: JSON.stringify(newReviewParams),
@@ -129,10 +112,10 @@ export const deleteComment = async (id: string): Promise<ReviewComment> => {
 };
 
 export const getComment = async (commentId: string): Promise<FullComment> => {
-  const res = await fetch(`/api/comment?id=${commentId}`)
-  const data = await res.json()
-  return data
-}
+  const res = await fetch(`/api/comment?id=${commentId}`);
+  const data = await res.json();
+  return data;
+};
 
 export const getAccessToken = async () => {
   const res = await fetch("/api/access-token", {
@@ -142,15 +125,15 @@ export const getAccessToken = async () => {
   return data.access_token;
 };
 
-export const getTrackList = async (
-  query: string,
+export const getSearchResults = async (
+  input: string,
   accessToken: string
-): Promise<Track[]> => {
-  if (!query) {
-    return []
-  }
-  const res = await fetch(
-    `https://api.spotify.com/v1/search?q=track:${query.replace(/[^\w\s]/gi, '')}&type=track`,
+): Promise<SearchResults> => {
+  const query = await fetch(
+    `https://api.spotify.com/v1/search?q=${input.replace(
+      /[^\w\s]/gi,
+      ""
+    )}&type=album%2Cartist%2Ctrack&market=us&limit=5`,
     {
       method: "GET",
       headers: {
@@ -159,50 +142,15 @@ export const getTrackList = async (
       },
     }
   );
-  const data = await res.json();
-  return data.tracks.items;
-};
 
-export const getArtistList = async (
-  query: string,
-  accessToken: string
-): Promise<Artist[]> => {
-  if (!query) {
-    return []
-  }
-  const res = await fetch(
-    `https://api.spotify.com/v1/search?q=artist:${query.replace(/[^\w\s]/gi, '')}&type=artist`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-  const data = await res.json();
-  return data.artists.items;
-};
+  const data = await query.json();
 
-export const getAlbumList = async (
-  query: string,
-  accessToken: string
-): Promise<SimplifiedAlbum[]> => {
-  if (!query) {
-    return []
-  }
-  const res = await fetch(
-    `https://api.spotify.com/v1/search?q=album:${query.replace(/[^\w\s]/gi, '')}&type=album`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-  const data = await res.json();
-  return data.albums.items;
+  const res = {
+    albums: data.albums.items,
+    tracks: data.tracks.items,
+    artists: data.artists.items,
+  };
+  return res;
 };
 
 export const getAlbum = async (

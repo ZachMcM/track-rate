@@ -1,12 +1,10 @@
 'use client'
 
 import { getUser } from "@/app/apiMethods"
-import { User } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import UserListItem from "./UserListItem"
-import Alert from "./Alert"
-import { useSession } from "next-auth/react"
 import LoadingSpinner from "./LoadingSpinner"
+import { UserExtendedFollowers } from "@/app/types"
 
 export default function FollowingList({ id }: { id: string }) {
   const { data: user, isLoading } = useQuery({
@@ -14,23 +12,23 @@ export default function FollowingList({ id }: { id: string }) {
     queryFn: () => getUser(id)
   })
 
-  const { data: session } = useSession()
-
   if (user && !isLoading) {
     return (
       <div className="flex flex-col space-y-3">
         <p className="font-medium">{user.name}'s Following</p>
         {
           user.follows.length != 0 ?       
-          <div className="flex flex-col space-y-8">
+          <div className="flex flex-col space-y-8 bg-white drop-shadow-lg rounded-lg p-2">
             {
               user.follows
-              .map((following: User) => {
-                return <UserListItem key={following.id} userId={following.id}/>
+              .map((following: UserExtendedFollowers) => {
+                return <UserListItem key={following.id} user={following}/>
               })
             }
           </div> :
-          <Alert message={`${user.id == session?.user.id ? "You are" : user.name + " is"}  not following anyone.`}/>
+          <div className="flex px-5 py-10 bg-white rounded-md justify-center items-center drop-shadow-lg">
+            <p className="text-zinc-400 text-sm">Not following anyone</p>
+          </div>
         }
       </div>
     )

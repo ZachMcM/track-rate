@@ -2,21 +2,41 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import SearchBar from "./SearchBar"
-import ReviewButton from "./ReviewButton"
-import { TbMenu2, TbPlayerTrackNextFilled, TbUser } from "react-icons/tb"
+import { TbMenu2, TbPlayerTrackNextFilled, TbPlus } from "react-icons/tb"
 import Sidebar from "./Sidebar"
 import { useSession } from "next-auth/react"
 import ProfileDropdwon from "./ProfileDropdown"
+import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { ReviewFormContext } from "./Provider"
+import { ReviewFormProviderType } from "@/app/types"
+import ReviewForm from "./ReviewForm"
+import SearchModal from "./SearchModal"
 
 export default function Navbar() {
   const [sideBar, setSidebar] = useState<boolean>(false)
   const { data: session, status } = useSession()
   const [dropdown, setDropdown] = useState<boolean>(false)
 
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const { 
+    setSearchModal,
+  } = useContext(ReviewFormContext) as ReviewFormProviderType
+
+  const handleModalClick = () => {
+    if (session) {
+      setSearchModal(true)
+    } else {
+      router.push(`/signin?callbackUrl=${pathname}`)
+    }
+  }
+
   return (
-    <nav className="sticky shadow-2xl shadow-black bg-zinc-950 top-0 left-0 w-full z-20 border-b px-5 md:px-10 border-zinc-800 h-16 flex items-center justify-between">
+    <nav className="sticky drop-shadow-md bg-white top-0 left-0 w-full z-20 px-5 md:px-10 h-16 flex items-center justify-between">
       <button
         className="hover:text-white flex md:hidden"
         onClick={() => setSidebar(true)}
@@ -29,16 +49,20 @@ export default function Navbar() {
           <p>trackrate</p>
         </Link>
         <div className="flex items-center">
-          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-800 rounded-md" href={"/users"}>Users</Link>
-          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-800 rounded-md" href={"/music"}>Tracks</Link>
-          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-800 rounded-md" href={"/music"}>Albums</Link>
+          <SearchBar/>
+          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-100 rounded-md" href={"/users"}>Users</Link>
+          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-100 rounded-md" href={"/music"}>Tracks</Link>
+          <Link className="duration-300 text-sm font-medium py-2 px-4 hover:bg-zinc-100 rounded-md" href={"/music"}>Albums</Link>
         </div>
       </div>
-        
       <div className="flex items-center space-x-3 text-sm">
-        <ReviewButton/>
+          <button 
+          className="flex space-x-2 items-center p-2.5 bg-zinc-200 drop-shadow-2xl rounded-full hover:bg-zinc-300 duration-300"
+          onClick={handleModalClick}
+          >
+          <TbPlus className="text-xl"/>
+        </button>
         {/* Todo */}
-        <SearchBar/>
         {
           status != "loading" ?
           <>
@@ -48,22 +72,22 @@ export default function Navbar() {
               { dropdown && <ProfileDropdwon userId={session.user.id} name={session.user.name || ""} email={session.user.email || ""} setDropdown={setDropdown}/>}
                 <button 
                   onClick={() => setDropdown(true)}
-                  className="flex items-center space-x-2 hover:opacity-80 duration-300"
+                  className="flex items-center space-x-2 hover:ring-4 rounded-full ring-sky-200 duration-300"
                 >
                   <div className="relative w-10 h-10 aspect-square ">
                     <Image
                       fill
                       src={session.user.image || ""}
                       alt="avatar"
-                      className="rounded-full border border-zinc-800 p-0.5 bg-zinc-800"
+                      className="rounded-full bg-zinc-100"
                     />
                   </div>
                 </button>
               </div> :
-              <Link className="duration-300 text-sm text-zinc-950 px-4 py-2 font-medium bg-white rounded-md hover:opacity-80" href={"/signin?callbackUrl=/"}>Sign In</Link>
+              <Link className="duration-300 text-sm text-zinc-950 px-4 py-2 font-medium bg-zinc rounded-md hover:opacity-80" href={"/signin?callbackUrl=/"}>Sign In</Link>
             }
           </> :
-          <div className="w-10 h-10 aspect-square rounded-full bg-zinc-800 animate-pulse flex"></div>
+          <div className="w-10 h-10 aspect-square rounded-full bg-zinc-200 animate-pulse flex"></div>
         }
       </div>
       <Sidebar setSidebar={setSidebar} sideBar={sideBar}/>

@@ -1,11 +1,10 @@
 import { updateFollow } from "@/app/apiMethods";
-import { FullUser } from "@/app/types";
+import { FullUser, UserExtendedFollowers } from "@/app/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from 'next-auth/react'
 import { useState } from "react";
-import { TbUserPlus, TbUserX } from "react-icons/tb";
 
-export default function FollowButton({ user }: { user: FullUser }) {
+export default function FollowButton({ user }: { user: UserExtendedFollowers }) {
   const queryClient = useQueryClient()
   const { data: session } = useSession()
 
@@ -14,6 +13,7 @@ export default function FollowButton({ user }: { user: FullUser }) {
     onSuccess: (data) => {
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ['user', user?.id]})
+      queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
     }
   })
 
@@ -32,7 +32,7 @@ export default function FollowButton({ user }: { user: FullUser }) {
 
   return (
     <button
-      className="flex w-fit space-x-2 items-center text-xs md:text-sm px-4 py-2 rounded-md font-medium border border-zinc-800 hover:bg-zinc-800 duration-300"
+      className="py-3 px-4 rounded-md drop-shadow-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
       onClick={() => {
         followMutation.mutate()
         setFollowing(!following)
@@ -40,14 +40,8 @@ export default function FollowButton({ user }: { user: FullUser }) {
     >
     {
       following ? 
-      <div className="flex space-x-2 items-center">
-        <p>Unfollow</p>
-        <TbUserX className="text-lg"/>
-      </div> : 
-      <div className="flex space-x-2 items-center">
-        <p>Follow</p>
-        <TbUserPlus className="text-lg"/>
-      </div>
+      <p>Unfollow</p> : 
+      <p>Follow</p>
     }
   </button>
   )

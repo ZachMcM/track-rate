@@ -13,7 +13,7 @@ export default async function Home() {
 
   if (!session) {
     return (
-      <div className="flex flex-col mt-10 space-y-16 w-full p-5 md:px-44">
+      <div className="flex flex-col mt-10 space-y-16 w-full p-5 md:px-10 lg:px-44">
         <div className="w-full flex flex-col space-y-10">
           <div className="flex flex-col space-y-5 items-center">
             <div className="flex flex-col space-y-2 items-center text-center">
@@ -50,8 +50,8 @@ export default async function Home() {
     ) 
   } else {
     return (
-      <div className="flex flex-col space-y-5 mt-10 md:space-y-10 p-5 md:px-44">
-        <h1 className="text-3xl md:text-5xl font-bold">Your feed</h1>
+      <div className="flex flex-col space-y-2 mt-10 p-5 lg:px-44">
+        <h1 className="font-medium text-lg">Timeline</h1>
         <CustomFeed/>
       </div>
     )

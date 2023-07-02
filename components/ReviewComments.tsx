@@ -35,7 +35,7 @@ export default function ReviewComments({ review }: { review: FullReview }) {
   }
 
   return (
-    <div className="flex flex-col space-y-16 text-zinc-400">
+    <div id="#comments" className="flex flex-col space-y-16 text-zinc-400">
       <div className="flex flex-col space-y-5">
         <p className="font-medium text-xs md:text-sm border-b border-zinc-800 pb-3 flex items-center"><TbMessageCircle2Filled className="mr-2"/> {formatCompactNumber(review.comments.length)} Comment{review.comments.length != 1 && "s"}</p>
         <div className="flex flex-col space-y-8">

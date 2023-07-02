@@ -49,11 +49,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
         className={`text-xl duration-300 ${session && "hover:opacity-80 "}`}
         onClick={toggleLike}
       >
-        {
-          liked ?
-          <TbHeartFilled/> :
-          <TbHeart/>
-        }
+        <TbHeartFilled className={`${liked && "text-red-500"}`}/>
       </button>
       <p>{formatCompactNumber(likeCount)} Like{likeCount != 1 && "s"}</p>
     </div>

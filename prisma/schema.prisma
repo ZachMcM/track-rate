@@ -38,9 +38,6 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   bio           String?
-  favTrack      String?
-  favAlbum      String?
-  favArtist     String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
@@ -73,10 +70,19 @@ model Review {
   content String
   rating Int
   type String 
-  itemId String
-  itemName String
-  favoriteTrackName String?
-  favoriteTrackId String?
+
+  trackId String?
+  trackName String?
+
+  artistNames String[]
+  artistIds String[]
+  artistImages String[]
+
+  albumName String?
+  albumId String?
+  albumImage String?
+  
+  pinned Boolean
 }
 
 model ReviewComment {

@@ -1,10 +1,7 @@
 import './globals.css'
 import Provider from '../components/Provider'
 import Navbar from '@/components/Navbar'
-import { ReviewFormProvider } from '@/components/ReviewFormProvider'
-import ReviewForm from '@/components/ReviewForm'
-import TrackReviewForm from '@/components/TrackReviewForm'
-import AlbumReviewForm from '@/components/AlbumReviewForm'
+import ReviewModals from '@/components/ReviewModals'
 
 export const metadata = {
   title: 'trackrate',
@@ -17,18 +14,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className='bg-zinc-950 text-white'>
+    <html lang="en" className='scroll-smooth' suppressHydrationWarning>
+      <body className='bg-zinc-100 text-zinc-950'>
         <Provider>
-          <ReviewFormProvider>
-            <Navbar/>
-            <main className='p-2 md:py-16 md:px-12'>
-              {children}
-            </main>
-            <ReviewForm/>
-            <TrackReviewForm/>
-            <AlbumReviewForm/>
-          </ReviewFormProvider>
+          <Navbar/>
+          {children}
+          <ReviewModals/>
         </Provider>
       </body>
     </html>
