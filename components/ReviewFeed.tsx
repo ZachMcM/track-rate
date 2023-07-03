@@ -2,7 +2,7 @@
 
 import { FullReview } from "@/app/types";
 import LoadingSpinner from "./LoadingSpinner";
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "./review/ReviewCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
@@ -44,10 +44,10 @@ export default function ReviewFeed({ initialReviews }: { initialReviews: FullRev
   const reviews = data?.pages.flatMap((page) => page) ?? initialReviews
 
   return (
-    <ul className="flex flex-col space-y-8">
+    <ul className="flex flex-col bg-white drop-shadow-lg rounded-lg">
       {
         reviews.map((review: FullReview, i: number) => {
-          if (i === reviews.length - 2) {
+          if (i === reviews.length - 3) {
             return (
               <li ref={ref} key={review.id}><ReviewCard review={review}/></li>
             )
@@ -58,7 +58,9 @@ export default function ReviewFeed({ initialReviews }: { initialReviews: FullRev
       }
       {
         isFetchingNextPage &&
-        <LoadingSpinner/>
+        <div className="p-5">
+          <LoadingSpinner/>
+        </div>
       }
     </ul>
   )

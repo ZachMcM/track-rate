@@ -3,14 +3,14 @@
 import { Artist, FullReview } from "@/app/types";
 import { Review } from "@prisma/client";
 import Image from "next/image";
-import RatingDisplay from "./RatingDisplay";
+import RatingDisplay from "../RatingDisplay";
 import { useQuery } from "@tanstack/react-query";
 import { formatCompactNumber } from "@/app/apiMethods";
 import Link from "next/link";
-import { TbMessageCircle2Filled } from "react-icons/tb";
-import ReviewLikes from "./ReviewLikes";
+import { TbMessage, TbMessageCircle2Filled } from "react-icons/tb";
 import { useSession } from "next-auth/react"
 import { uid } from "uid";
+import LikeButton from "./LikeButton";
 
 export default function ReviewCard({ review }: { review: FullReview }) {
   const { data: session } = useSession()
@@ -30,10 +30,10 @@ export default function ReviewCard({ review }: { review: FullReview }) {
   const initialLike = getInitialLike()
 
   return (
-    <div className="relative hover:opacity-80 duration-300 w-full h-full flex flex-col p-8 space-y-5 bg-white rounded-md drop-shadow-md">
+    <div className="relative hover:bg-zinc-100 duration-300 h-full flex flex-col p-8 w-full space-y-5 border-b border-zinc-200">
       <div className="flex items-center space-x-5">
         <Link 
-          className={`z-10 relative h-24 w-24 drop-shadow-lg ${review.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+          className={`z-10 shrink-0 relative h-24 w-24 drop-shadow-lg ${review.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
           href={`/review/${review.id}`} 
         >
           <Image
@@ -52,7 +52,7 @@ export default function ReviewCard({ review }: { review: FullReview }) {
            </Link>          
           {
             review.type != "artist" &&
-            <p className="text-zinc-400 text-sm md:text-base z-10">
+            <p className="text-zinc-500 text-sm md:text-base z-10">
             {
               review.artistNames.map((name: string, i: number) => {
                 return (
@@ -70,20 +70,20 @@ export default function ReviewCard({ review }: { review: FullReview }) {
       </div>
       <div className="flex flex-col space-y-5">
         <div className="flex space-x-2 items-center">
-          <Link href={`/profile/${review.userId}`} className="h-8 w-8 relative hover:ring-4 ring-sky-200 duration-300 rounded-full">
+          <Link href={`/profile/${review.userId}`} className="h-8 w-8 drop-shadow-lg  relative hover:ring-4 ring-sky-200 duration-300 rounded-full">
             <Image
               src={review.user?.image || ""}
               fill
               alt="avatar"
-              className="rounded-full"
+              className="rounded-full drop-shadow-lg "
             />
           </Link>
           <Link href={`/profile/${review.userId}`}><p className="hover:text-sky-400 duration-300 font-medium">{review.user.name}</p></Link>
         </div>
-        <div className="flex items-center space-x-5 text-zinc-400">
-          <div className="z-10"><ReviewLikes initialLike={initialLike} review={review}/></div>
+        <div className="flex items-center space-x-5 text-zinc-500">
+          <div className="z-10"><LikeButton initialLike={initialLike} review={review}/></div>
           <Link href={`/review/${review.id}`} className="flex space-x-2 items-center hover:opacity-80 duration-300">
-            <TbMessageCircle2Filled className="text-xl"/>
+            <TbMessage className="text-xl"/>
             <p className="text-sm">{formatCompactNumber(review.comments.length)} Comment{review.comments.length != 1 && "s"}</p>
           </Link>
         </div>

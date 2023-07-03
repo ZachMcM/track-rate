@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSession } from "next-auth/react"
-import { TbHeart, TbHeartFilled } from "react-icons/tb"
+import { TbHeartFilled } from "react-icons/tb"
 import { FullReview } from "@/app/types"
 import { formatCompactNumber, updateLike } from "@/app/apiMethods"
-import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 
-export default function ReviewLikes({ review, initialLike }: { review: FullReview, initialLike: boolean }) {
+export default function LikeButton({ review, initialLike }: { review: FullReview, initialLike: boolean }) {
   const { data: session } = useSession()
 
   const router = useRouter()
@@ -25,6 +25,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ['review', review.id]})
       queryClient.invalidateQueries({ queryKey: ['user', review.userId] })
+      router.refresh()
     }
   })
 
@@ -44,7 +45,7 @@ export default function ReviewLikes({ review, initialLike }: { review: FullRevie
   }
 
   return (
-    <div className="flex space-x-2 items-center text-zinc-400 text-sm">
+    <div className="flex space-x-2 items-center text-zinc-500 text-sm">
       <button 
         className={`text-xl duration-300 ${session && "hover:opacity-80 "}`}
         onClick={toggleLike}

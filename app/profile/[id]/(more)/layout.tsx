@@ -1,4 +1,4 @@
-import ProfileMenu from "@/components/ProfileMenu";
+import ProfileMenu from "@/components/profile/ProfileMenu";
 
 export default function ProfileMoreLayout({ children, params }: {children: React.ReactNode, params: { id: string }}) {  
   return (       

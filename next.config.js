@@ -3,7 +3,8 @@ const nextConfig = {
   images: {
     domains: [
       "lh3.googleusercontent.com",
-      "i.scdn.co"
+      "i.scdn.co",
+      "rpiubyotsurmrmuepinw.supabase.co"
     ]
   },
   async headers() {

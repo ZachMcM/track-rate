@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image"
 import Link from "next/link"
 import FollowButton from "./FollowButton"
@@ -9,7 +11,7 @@ export default function UserListItem({ user }: { user: UserExtendedFollowers }) 
 
   return (
     <div className="relative w-full flex justify-between items-center p-3 hover:bg-zinc-100 rounded-lg duration-300">
-      <div className="flex space-x-2 items-center">
+      <div className="flex space-x-3 items-center">
         <div className="relative h-10 w-10">
           <Image
             src={user.image || ""}

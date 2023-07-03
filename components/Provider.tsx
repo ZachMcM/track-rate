@@ -16,20 +16,20 @@ export const ReviewFormContext = createContext<ReviewFormProviderType | null>(
   null
 );
 
-
 const Provider = ({ children } : { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <ReviewFormProvider>
-          {children}
+            {children}
         </ReviewFormProvider>
       </QueryClientProvider>
     </SessionProvider>
   )
 }
 
-export const ReviewFormProvider = ({
+
+const ReviewFormProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -90,7 +90,14 @@ export const ReviewFormProvider = ({
 
         queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
         queryClient.invalidateQueries({ queryKey: ['score', idKey]})
-        router.push(`/review/${data?.id}`)
+        router.refresh()
+        router.push(`/profile/${data?.userId}`)
+        setReviewForm(false)
+        setItemData(undefined)
+        setContentError(false)
+        setRating(0)
+        setReviewContent("")
+        setPinned(false)
       }
   });
 

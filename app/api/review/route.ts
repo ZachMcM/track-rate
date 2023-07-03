@@ -3,6 +3,7 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
 import { NewReviewParams } from "@/app/types";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
           albumImage: albumImage,
         }
       })
+      revalidateTag(session.user.id)
       return NextResponse.json(newReview)
     } else {
       return NextResponse.json({error: "Invalid Request" }, { status: 400 })

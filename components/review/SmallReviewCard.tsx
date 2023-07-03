@@ -3,7 +3,7 @@ import { FullReview } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import RatingDisplay from "./RatingDisplay";
+import RatingDisplay from "../RatingDisplay";
 
 export default function SmallReview({ review }: { review: FullReview }) {
   return (
@@ -20,7 +20,7 @@ export default function SmallReview({ review }: { review: FullReview }) {
           />
       </Link>
       <div className="flex flex-col space-y-1 items-center">
-        <p className="font-medium text-sm md:text-base">{review.type == "album" ? formatName(review.albumName || "", 10) : review.type == "track" ? formatName(review.trackName || "", 10) : formatName(review.artistNames[0], 10)}</p>
+        <p className="font-medium text-sm md:text-base">{review.type == "album" ? formatName(review.albumName || "", 15) : review.type == "track" ? formatName(review.trackName || "", 15) : formatName(review.artistNames[0], 15)}</p>
         <div className="text-sm md:text-base"><RatingDisplay rating={review.rating}/></div>
       </div>
     </div>

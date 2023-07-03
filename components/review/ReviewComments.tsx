@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react"
 import { addComment, formatCompactNumber } from "@/app/apiMethods"
 import { useState } from "react"
 import { ReviewComment } from "@prisma/client"
-import Comment from "./Comment"
+import Comment from "../Comment"
 import { TbMessageCircle2Filled } from "react-icons/tb"
 
 export default function ReviewComments({ review }: { review: FullReview }) {
@@ -35,7 +35,7 @@ export default function ReviewComments({ review }: { review: FullReview }) {
   }
 
   return (
-    <div id="#comments" className="flex flex-col space-y-16 text-zinc-400">
+    <div id="#comments" className="flex flex-col space-y-16 text-zinc-500">
       <div className="flex flex-col space-y-5">
         <p className="font-medium text-xs md:text-sm border-b border-zinc-800 pb-3 flex items-center"><TbMessageCircle2Filled className="mr-2"/> {formatCompactNumber(review.comments.length)} Comment{review.comments.length != 1 && "s"}</p>
         <div className="flex flex-col space-y-8">
@@ -54,7 +54,7 @@ export default function ReviewComments({ review }: { review: FullReview }) {
           <div className="flex flex-col space-y-5 w-3/4 md:w-1/2 self-end">
             <div className="flex flex-col space-y-1">
               <textarea
-                  className={`h-28 overflow-y-auto placeholder:text-zinc-400 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-zinc-800 ${
+                  className={`h-28 overflow-y-auto placeholder:text-zinc-500 text-xs md:text-sm bg-transparent border rounded-md p-4 outline-none ring-zinc-800 ${
                     error
                       ? "border-red-500 focus:ring-0"
                       : "border-zinc-800 focus:ring-2"

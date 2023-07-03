@@ -227,7 +227,7 @@ export default function SearchModal() {
                             setSearchModal(false)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-full drop-shadow-md">
+                          <div className="h-16 w-16 relative rounded-full drop-shadow-lg">
                             {
                               artist.images && artist.images[0]?.url ?
                               <Image

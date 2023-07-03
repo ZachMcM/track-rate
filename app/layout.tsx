@@ -1,6 +1,6 @@
 import './globals.css'
 import Provider from '../components/Provider'
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/nav-items/Navbar'
 import ReviewModals from '@/components/ReviewModals'
 
 export const metadata = {

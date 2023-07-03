@@ -11,7 +11,17 @@ export type FullUser = Prisma.UserGetPayload<{
         user: true
       }
     }, 
-    likes: true, 
+    likes: {
+      include: {
+        review: {
+          include: {
+            comments: true,
+            likes: true,
+            user: true
+          }
+        }
+      }
+    }, 
     followers: {
       include: {
         followers: true
@@ -28,6 +38,18 @@ export type FullUser = Prisma.UserGetPayload<{
 export type UserExtendedFollowers = Prisma.UserGetPayload<{
   include: { 
     followers: true
+  }
+}>
+
+export type ExtendeLike = Prisma.LikeGetPayload<{
+  include: {
+    review: {
+      include: {
+        comments: true,
+        likes: true,
+        user: true
+      }
+    }
   }
 }>
 

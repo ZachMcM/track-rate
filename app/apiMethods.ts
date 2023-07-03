@@ -45,14 +45,24 @@ export const getUser = async (id: string): Promise<FullUser> => {
   return data;
 };
 
-export const updateProfile = async (body: {
+export const updateProfile = async ({bio, name, spotifyUsername, pfp}: {
   bio: string;
   name: string;
   spotifyUsername: string;
+  pfp?: File
 }) => {
+  const formData = new FormData()
+
+  if (pfp) {
+    formData.append("avatar", pfp)
+  }
+  formData.append("bio", bio)
+  formData.append("name", name)
+  formData.append("spotifyUsername", spotifyUsername)
+
   const res = await fetch(`/api/user/profile`, {
     method: "PUT",
-    body: JSON.stringify(body),
+    body: formData,
   });
   const data = await res.json();
   return data;

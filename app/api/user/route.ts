@@ -21,7 +21,20 @@ export async function GET(request: NextRequest) {
             createdAt: 'desc'
           }
         },
-        likes: true,
+        likes: {
+          include: {
+            review: {
+              include: {
+                comments: true,
+                likes: true,
+                user: true
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
         followers: {
           include: {
             followers: true,

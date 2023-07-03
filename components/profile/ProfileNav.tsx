@@ -1,40 +1,13 @@
 'use client'
 
-import { getUser } from "@/app/apiMethods"
-import { useQuery } from "@tanstack/react-query"
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-export default function ProfileMenu({ id }: { id: string }) {
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user', id],
-    queryFn: () => getUser(id)
-  })
-
+export default function ProfileNav({ id }: { id: string }) {
   const pathname = usePathname()
 
   return (
-    <nav className="bg-white drop-shadow-lg rounded-lg flex flex-col space-y-3 md:flex-row md:space-y-0 items-start md:space-x-5 p-4 md:items-center">
-      <div className="flex space-x-2 items-center">
-        <Link href={`/profile/${id}`} className="h-10 w-10 relative shrink-0 hover:ring-4 ring-sky-200 duration-300 rounded-full">
-          {
-            isLoading ?
-            <div className="bg-zinc-200 animate-pulse w-full h-full absolute inset-0 rounded-full"></div> :
-            <Image
-              src={user?.image || ""}
-              fill
-              alt="avatar"
-              className="rounded-full"
-            />
-          }
-        </Link>
-        {
-          isLoading ?
-          <div className="bg-zinc-100 w-32 h-2 rouned-full animate-pulse"></div> : 
-          <Link href={`/profile/${id}`}><p className="hover:text-sky-400 duration-300 font-medium">{user?.name}</p></Link>
-        }
-      </div>      
+    <> 
       <div className="flex md:items-center gap-2 md:gap-0 flex-wrap items-start md:space-y-0 md:space-x-1 text-zinc-400 text-sm font-normal md:text-zinc-950 md:font-medium md:text-base">
         <Link 
           href={`/profile/${id}/reviews`} 
@@ -78,7 +51,6 @@ export default function ProfileMenu({ id }: { id: string }) {
             Lists
         </Link>
       </div>
-    </nav>
-
+    </>
   )
 }

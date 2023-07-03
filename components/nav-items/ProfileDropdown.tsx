@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { TbArrowBarRight, TbHeart, TbSettings, TbUser } from "react-icons/tb";
+import { TbArrowBarRight, TbHeart, TbRun, TbSettings, TbUser } from "react-icons/tb";
 import { signOut } from "next-auth/react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
@@ -40,11 +40,11 @@ export default function ProfileDropdwon({
           <p>Profile</p>
         </Link>
         <Link
-          href={`/profile/${userId}/likes`}
+          href={`/profile/${userId}/activity`}
           className="flex space-x-2 items-center p-2 m-1 hover:bg-zinc-100 duration-300 rounded-md"
         >
-          <TbHeart className="text-lg" />
-          <p>Likes</p>
+          <TbRun className="text-lg" />
+          <p>Activity</p>
         </Link>
         <Link
           href="/settings"
