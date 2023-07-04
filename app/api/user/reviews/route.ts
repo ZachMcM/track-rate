@@ -13,19 +13,14 @@ export async function GET(request: NextRequest) {
       include: {
         reviews: {
           include: {
-            _count: true
+            comments: true,
+            likes: true,
+            user: true,
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
         },
-        followers: {
-          include: {
-           followers: true
-          }
-        },
-        follows: {
-          include: {
-            followers: true
-          }
-        }
       }
     })
     return NextResponse.json(user)

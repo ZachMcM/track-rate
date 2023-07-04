@@ -1,20 +1,15 @@
 import { Metadata, ResolvingMetadata } from "next"
 import { getReview } from "@/app/serverMethods"
-import ReviewContent from "@/components/ReviewContent"
+import ReviewPage from "@/components/review/ReviewPage"
 
 export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
   const review = await getReview(params.id)
-  // TODO
   return {
-    title: ``
+    title: `${review.user.name} review of ${review.type == "track" ? review.trackName : review.type == "album" ? review.albumName : review.artistNames[0]}`
   }
 }
 
-export default function ReviewPage({ params }: { params: { id: string }}) {
-  return (
-    <div className="p-5">
-      <ReviewContent id={params.id}/>
-    </div>
-  )
+export default function Reivew({ params }: { params: { id: string }}) {
+  return <ReviewPage id={params.id}/>
 }
 

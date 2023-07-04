@@ -2,7 +2,6 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
-import { revalidateTag } from "next/cache";
 
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -29,8 +28,6 @@ export async function PATCH(request: NextRequest) {
             userId_reviewId: data
           }
         })
-        revalidateTag(review.userId)
-        revalidateTag(session.user.id)
         return NextResponse.json(deletedLike)
       } else {
         const newLike = await prisma.like.create({
@@ -39,8 +36,6 @@ export async function PATCH(request: NextRequest) {
             reviewId: data.reviewId
           }
         })
-        revalidateTag(review.userId)
-        revalidateTag(session.user.id)
         return NextResponse.json(newLike)
       }
     } else {

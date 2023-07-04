@@ -1,6 +1,5 @@
 'use client'
 
-import { addReview } from "@/app/apiMethods";
 import { ReviewFormParams, ReviewFormProviderType } from "@/app/types";
 import { useMutation } from "@tanstack/react-query";
 import { createContext, useState } from "react";
@@ -54,25 +53,12 @@ const ReviewFormProvider = ({
   const addReviewMutation = useMutation({
     mutationFn: async () => {
       if (itemData) {
-        const newReview = addReview({
-          content: reviewContent,
-          rating: rating,
-  
-          trackName: itemData.trackName,
-          trackId: itemData.trackId,
-  
-          albumId: itemData.albumId,
-          albumImage: itemData.albumImage,
-          albumName: itemData.albumName,
-  
-          artistIds: itemData.artistIds,
-          artistImages: itemData.artistImages,
-          artistNames: itemData.artistNames,
-          type: itemData?.type,
-
-          pinned: pinned,
-        })
-        return newReview
+        const res = await fetch(`/api/review`, {
+          method: "POST",
+          body: JSON.stringify(itemData),
+        });
+        const data = await res.json();
+        return data;
       }
     },
       onSuccess: (data) => {
@@ -88,9 +74,8 @@ const ReviewFormProvider = ({
           idKey = data?.artistIds[0]
         }
 
-        queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
-        queryClient.invalidateQueries({ queryKey: ['score', idKey]})
-        router.refresh()
+        queryClient.invalidateQueries({ queryKey: ['user-reviews', { id: session?.user.id }]})
+        queryClient.invalidateQueries({ queryKey: ['score', { id: idKey }]})
         router.push(`/profile/${data?.userId}`)
         setReviewForm(false)
         setItemData(undefined)

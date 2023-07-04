@@ -2,7 +2,27 @@ import { Prisma } from "@prisma/client"
 import { UseMutationResult } from "@tanstack/react-query"
 import { Dispatch, SetStateAction } from "react"
 
-export type FullUser = Prisma.UserGetPayload<{
+export type UserExtended = Prisma.UserGetPayload<{
+  include: {
+    reviews: {
+      include: {
+        _count: true
+      }
+    },
+    followers: {
+      include: {
+        followers: true
+      }
+    },
+    follows: {
+      include: {
+        followers: true
+      }
+    }
+  }
+}>
+
+export type UserExtendedReviews = Prisma.UserGetPayload<{
   include: { 
     reviews: {
       include: {
@@ -11,6 +31,11 @@ export type FullUser = Prisma.UserGetPayload<{
         user: true
       }
     }, 
+  }
+}>
+
+export type UserExtendedLikes = Prisma.UserGetPayload<{
+  include: { 
     likes: {
       include: {
         review: {
@@ -21,17 +46,7 @@ export type FullUser = Prisma.UserGetPayload<{
           }
         }
       }
-    }, 
-    followers: {
-      include: {
-        followers: true
-      }
-    }, 
-    follows: {
-      include: {
-        followers: true
-      }
-    } 
+    }
   }
 }>
 
@@ -53,11 +68,11 @@ export type ExtendeLike = Prisma.LikeGetPayload<{
   }
 }>
 
-export type FullReview = Prisma.ReviewGetPayload<{
+export type ExtendedReview = Prisma.ReviewGetPayload<{
   include: { user: true, likes: true, comments: true }
 }>
 
-export type FullComment = Prisma.ReviewCommentGetPayload<{
+export type ExtendedComment = Prisma.ReviewCommentGetPayload<{
   include: { user: true }
 }>
 

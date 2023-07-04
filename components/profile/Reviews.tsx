@@ -1,21 +1,37 @@
 'use client'
 
-import { FullReview, ReviewFormProviderType } from "@/app/types";
+import { ExtendedReview, ReviewFormProviderType } from "@/app/types";
 import ReviewCard from "../review/ReviewCard";
 import { useContext, useState } from "react";
 import { ReviewFormContext } from "../Provider";
 import { TbCheck, TbChevronDown } from "react-icons/tb";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useSession } from "next-auth/react"
+import { useQuery } from "@tanstack/react-query";
+import { getUserReviews } from "@/app/apiMethods";
+import LoadingSpinner from "../LoadingSpinner";
 
-export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }) {
+export default function Reviews({ id }: { id: string }) {
+  const { data: user, isLoading } = useQuery({
+    queryFn: () => getUserReviews(id),
+    queryKey: ['user-reviews', { id: id }]
+  })
+
+  if (user && !isLoading) {
+    return <ReviewList reviews={user.reviews}/>
+  } else {
+    return <LoadingSpinner/>
+  }
+}
+
+function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
   const { data: session } = useSession()
 
   const {
     setSearchModal
   } = useContext(ReviewFormContext) as ReviewFormProviderType
 
-  const [reviewArr, setReviewArr] = useState<FullReview[]>(reviews)
+  const [reviewArr, setReviewArr] = useState<ExtendedReview[]>(reviews)
 
   const reviewTypes: ReviewType[] = [
     "Album",
@@ -28,47 +44,47 @@ export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }
     console.log(sortBy, thisType)
     if (thisType == "All") {
       if (thisSort == "Date latest") {
-        const sorted = reviews.sort((a: FullReview, b: FullReview) => {
+        const sorted = reviews.sort((a: ExtendedReview, b: ExtendedReview) => {
           return (new Date(b.createdAt)).getTime() - (new Date(a.createdAt)).getTime()
         })
         setReviewArr(sorted)
       } else if (thisSort == "Date earliest") {
-        const sorted = reviews.sort((a: FullReview, b: FullReview) => {
+        const sorted = reviews.sort((a: ExtendedReview, b: ExtendedReview) => {
           return (new Date(a.createdAt)).getTime() - (new Date(b.createdAt)).getTime()
         })
         setReviewArr(sorted)
       } else if (thisSort == "Rating highest") {
-        const sorted = reviews.sort((a: FullReview, b: FullReview) => {
+        const sorted = reviews.sort((a: ExtendedReview, b: ExtendedReview) => {
           return b.rating - a.rating
         })
         setReviewArr(sorted)
       } else {
-        const sorted = reviews.sort((a: FullReview, b: FullReview) => {
+        const sorted = reviews.sort((a: ExtendedReview, b: ExtendedReview) => {
           return a.rating - b.rating
         })
         setReviewArr(sorted)
       }
     } else {
-      const filtered = reviews.filter((review: FullReview) => {
+      const filtered = reviews.filter((review: ExtendedReview) => {
         return review.type == thisType.toLowerCase()
       })
       if (thisSort == "Date latest") {
-        const sorted = filtered.sort((a: FullReview, b: FullReview) => {
+        const sorted = filtered.sort((a: ExtendedReview, b: ExtendedReview) => {
           return (new Date(b.createdAt)).getTime() - (new Date(a.createdAt)).getTime()
         })
         setReviewArr(sorted)
       } else if (thisSort == "Date earliest") {
-        const sorted = filtered.sort((a: FullReview, b: FullReview) => {
+        const sorted = filtered.sort((a: ExtendedReview, b: ExtendedReview) => {
           return (new Date(a.createdAt)).getTime() - (new Date(b.createdAt)).getTime()
         })
         setReviewArr(sorted)
       } else if (thisSort == "Rating highest") {
-        const sorted = filtered.sort((a: FullReview, b: FullReview) => {
+        const sorted = filtered.sort((a: ExtendedReview, b: ExtendedReview) => {
           return b.rating - a.rating
         })
         setReviewArr(sorted)
       } else {
-        const sorted = filtered.sort((a: FullReview, b: FullReview) => {
+        const sorted = filtered.sort((a: ExtendedReview, b: ExtendedReview) => {
           return a.rating - b.rating
         })
         setReviewArr(sorted)
@@ -103,15 +119,15 @@ export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }
       <div className="flex flex-col-reverse md:space-y-0 md:flex-row md:space-x-8 items-start w-full">
         {
           reviewArr.length != 0 ?
-          <div className="flex flex-col basis-2/3 rounded-lg drop-shadow-md bg-white">
+          <div className="flex flex-col mt-10 md:mt-0 bg-white drop-shadow-lg border border-zinc-200 rounded-lg basis-2/3">
             {
-              reviewArr.map((review: FullReview) => {
+              reviewArr.map((review: ExtendedReview) => {
                 return <ReviewCard review={review}/>
               })
             }
           </div>
           :
-          <div className="flex px-5 py-10 bg-white rounded-md justify-center items-center drop-shadow-lg basis-2/3">
+          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-lg border border-zinc-200 justify-center items-center basis-2/3">
             <p className="text-zinc-500 text-sm">No reviews</p>
           </div>
         }
@@ -119,7 +135,7 @@ export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }
         {
           session &&
           <button 
-            className="p-4 rounded-lg drop-shadow-lg w-full bg-white font-medium text-center hover:opacity-80 duration-300"
+            className="p-4 rounded-lg drop-shadow-lg border border-zinc-200 w-full bg-white font-medium text-center hover:opacity-80 duration-300"
             onClick={() => setSearchModal(true)}
           >
             <p>New Review</p>
@@ -127,7 +143,7 @@ export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }
         }
           <div className="flex flex-col space-y-3">
             <p className="font-medium text-lg">Filters</p>
-            <div className="rounded-lg drop-shadow-lg w-full bg-white flex flex-col">
+            <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
               <button 
                 className="flex justify-between items-center p-4 hover:opacity-80 duration-300"
                 onClick={() => setSortDropdown(!sortDropdown)}
@@ -157,7 +173,7 @@ export default function ProfileReviewList({ reviews }: { reviews: FullReview[] }
                 }
               </div>
             </div>
-            <div className="rounded-lg drop-shadow-lg w-full bg-white flex flex-col">
+            <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
               <button 
                 className="flex justify-between items-center p-4 hover:opacity-80 duration-300"
                 onClick={() => setTypeDropdown(!typeDropdown)}

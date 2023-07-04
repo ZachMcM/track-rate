@@ -1,18 +1,16 @@
 'use client'
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react"
-import { FullUser } from "@/app/types";
-import { updateProfile } from "@/app/apiMethods";
 import Image from "next/image";
 import Toast from "../Toast";
-import { useRouter } from "next/navigation";
+import { User } from "@prisma/client";
 
 export default function ProfileForm({
   user,
 }: {
-  user: FullUser;
+  user: User;
 }) {
   const queryClient = useQueryClient()
 
@@ -23,31 +21,36 @@ export default function ProfileForm({
 
   const [usernameError, setUsernameError] = useState<boolean>(false)
 
-  const [toastMessage, setToastMessage] = useState<string>('')
-
   const { update } = useSession()
-  const router = useRouter()
 
   const updateMutation = useMutation({
-    mutationFn: () => updateProfile({
-      bio: bio,
-      name: username,
-      spotifyUsername: spotify,
-      pfp: pfp
-    }),
+    mutationFn: async () =>{
+      const formData = new FormData()
+
+      if (pfp) {
+        formData.append("avatar", pfp)
+      }
+      formData.append("bio", bio)
+      formData.append("name", username)
+      formData.append("spotifyUsername", spotify)
+    
+      const res = await fetch(`/api/user/profile`, {
+        method: "PUT",
+        body: formData,
+      });
+      const data = await res.json();
+      return data;
+    },
     onSuccess: (data) => {
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['user', user.id]})
+      queryClient.invalidateQueries({ queryKey: ['user', { id: user.id }]})
       update()
-      setToastMessage(data)
       setToast(true)
-      router.refresh()
     }
   })
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files
-
     if (!fileList) return
     console.log(fileList[0].name)
     setPfp(fileList[0])
@@ -75,7 +78,7 @@ export default function ProfileForm({
                 setUsernameError(false)
                 setUsername(e.target.value)
               }}
-              className={`placeholder:text-zinc-500 shadow-lg bg-white bg-transparent duration-300 border rounded-lg px-4 py-3 outline-none ring-sky-200 ${
+              className={`placeholder:text-zinc-500 drop-shadow-md bg-white bg-transparent duration-300 border border-zinc-200 rounded-lg px-4 py-3 outline-none ring-sky-200 ${
                 usernameError
                   ? "border-red-500 focus:ring-0"
                   : "border-zinc-200 focus:ring-2"
@@ -88,7 +91,7 @@ export default function ProfileForm({
             } 
           </div>
         </div>
-        <div className="relative hover:opacity-80 duration-300 space-y-2 items-center justify-center border-zinc-200 border shadow-lg rounded-lg bg-white py-8">
+        <div className="relative hover:opacity-80 duration-300 space-y-2 items-center justify-center border-zinc-200 border drop-shadow-md rounded-lg bg-white py-8">
           <div className="flex space-y-3 flex-col items-center">
             <div className="relative h-16 w-16 rounded-full drop-shadow-lg ">
               {
@@ -121,7 +124,7 @@ export default function ProfileForm({
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="h-44 py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white shadow-lg outline-none focus:ring-2 ring-sky-200 duration-300"
+            className="h-44 py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white drop-shadow-md outline-none focus:ring-2 ring-sky-200 duration-300"
             placeholder="Your bio"
           />
         </div>
@@ -130,13 +133,13 @@ export default function ProfileForm({
           <input
             value={spotify}
             onChange={(e) => setSpotify(e.target.value)}
-            className="py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white shadow-lg outline-none bg-transparent focus:ring-2 ring-sky-200 duration-300"
+            className="py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white drop-shadow-md outline-none bg-transparent focus:ring-2 ring-sky-200 duration-300"
             placeholder="Your spotify username"
           />
         </div>
       </div>
       <button
-        className="flex px-4 py-3 justify-center rounded-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
+        className="flex px-4 py-3.5 justify-center rounded-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
         onClick={submitChanges}
       > 
         { updateMutation.isLoading ?           
@@ -147,7 +150,10 @@ export default function ProfileForm({
           <p>Save Changes</p>
         }
       </button>
-      <Toast setToast={setToast} toast={toast}/>
+      <Toast setToast={setToast} toast={toast}>
+        <p className="font-medium">Changes saved</p>
+        <p className="text-xs text-zinc-400">Your profile changes have been saved and your profile will reflect these updates.</p>
+      </Toast>
     </div>
   );
 }

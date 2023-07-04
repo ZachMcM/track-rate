@@ -1,16 +1,23 @@
+'use client'
+
 import { useSession } from 'next-auth/react'
 import Image from "next/image"
 import Link from "next/link"
 import { useQuery } from "@tanstack/react-query"
-import { formatCompactNumber } from "@/app/apiMethods"
+import { formatCompactNumber, getUser } from "@/app/apiMethods"
 import FollowButton from "../FollowButton"
 import { BsSpotify } from 'react-icons/bs'
-import { getUser } from '@/app/serverMethods'
-import ProfileButtons from './ProfileButtons'
+import ProfileSkeleton from './ProfileSkeleton'
 
-export default async function ProfileDashboard({ id }: { id: string }) {
-  const user = await getUser(id)
+export default function ProfileDashboard({ id }: { id: string }) {
+  const { data: session } = useSession()
 
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', { id: id }],
+    queryFn: () => getUser(id)
+  })
+
+  if (user && !isLoading) {
     return (
       <div className="flex flex-col items-center space-y-8 md:flex-row md:space-y-0 md:justify-between md:items-start rounded-lg">
         <div className='flex flex-col space-y-3 items-center md:space-y-0 md:flex-row md:space-x-5'>
@@ -49,8 +56,26 @@ export default async function ProfileDashboard({ id }: { id: string }) {
               <Link href={`/profile/${user.id}/following`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Following</Link>
             </div>
           </div>
-          <ProfileButtons user={user}/>
+          {
+            session &&
+            <>
+            {
+              session.user.id == user.id ?
+              <Link href="/settings"
+                className='py-3 px-4 text-center rounded-md drop-shadow-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300'
+              >
+                <p>Settings</p>
+              </Link> : 
+              <FollowButton user={user}/>
+            }
+            </>
+          }
         </div>
       </div>
-    )
+    )    
+  } else {
+    return <ProfileSkeleton/>    
+  }
+
+
 }

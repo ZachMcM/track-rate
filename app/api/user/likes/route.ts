@@ -11,21 +11,20 @@ export async function GET(request: NextRequest) {
         id: id
       },
       include: {
-        reviews: {
+        likes: {
           include: {
-            _count: true
+            review: {
+              include: {
+                comments: true,
+                likes: true,
+                user: true
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
         },
-        followers: {
-          include: {
-           followers: true
-          }
-        },
-        follows: {
-          include: {
-            followers: true
-          }
-        }
       }
     })
     return NextResponse.json(user)

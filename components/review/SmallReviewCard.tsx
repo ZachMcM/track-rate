@@ -1,11 +1,12 @@
-import { formatName, getAccessToken, getAlbum, getArtist, getTrack } from "@/app/apiMethods";
-import { FullReview } from "@/app/types";
-import { useQuery } from "@tanstack/react-query";
+'use client'
+
+import { formatName } from "@/app/apiMethods";
+import { ExtendedReview } from "@/app/types";
 import Image from "next/image";
 import Link from "next/link";
 import RatingDisplay from "../RatingDisplay";
 
-export default function SmallReview({ review }: { review: FullReview }) {
+export default function SmallReview({ review }: { review: ExtendedReview }) {
   return (
     <div className="bg-transparent flex flex-col items-center text-center space-y-2 md:space-y-3">
       <Link 

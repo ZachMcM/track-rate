@@ -3,7 +3,6 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
 import { NewReviewParams } from "@/app/types";
-import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -48,13 +47,28 @@ export async function POST(request: NextRequest) {
           albumImage: albumImage,
         }
       })
-      revalidateTag(session.user.id)
       return NextResponse.json(newReview)
     } else {
       return NextResponse.json({error: "Invalid Request" }, { status: 400 })
     }
   } else {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const id  = searchParams.get("id")
+
+  if (id) {
+    const deletedReview = await prisma.review.delete({
+      where: {
+        id: id
+      }
+    })
+    return NextResponse.json(deletedReview)
+  } else {
+    return NextResponse.json({ error: "Invalid request, no id"}, { status: 400 })
   }
 }
 

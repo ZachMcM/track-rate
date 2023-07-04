@@ -36,7 +36,7 @@ export default function SignIn() {
             <div className="h-[1px] bg-zinc-200 w-24"></div>
           </div>
           <button
-            className="py-2 px-4 w-5/6 drop-shadow-2xl border border-zinc-200 self-center hover:opacity-80 duration-300 text-white bg-zinc-950 rounded-md flex items-center space-x-2 justify-center"
+            className="py-2 px-4 w-5/6 drop-shadow-lg border border-zinc-200 self-center hover:opacity-80 duration-300 text-white bg-zinc-950 rounded-md flex items-center space-x-2 justify-center"
             onClick={() => signIn("google")}
           >
             <FcGoogle className="text-lg" />

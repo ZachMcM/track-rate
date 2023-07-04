@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import ProfileDropdwon from "./ProfileDropdown"
+import ProfileDropdown from "./ProfileDropdown"
 import Image from "next/image"
 
 export default function AvatarButton({ user }: { user: {
@@ -16,7 +16,7 @@ export default function AvatarButton({ user }: { user: {
 
   return (
     <div className="relative">
-    { dropdown && <ProfileDropdwon userId={user.id} name={user.name || ""} email={user.email || ""} setDropdown={setDropdown}/>}
+    { dropdown && <ProfileDropdown userId={user.id} name={user.name || ""} email={user.email || ""} setDropdown={setDropdown}/>}
       <button 
         onClick={() => setDropdown(true)}
         className="flex items-center space-x-2 hover:ring-4 rounded-full ring-sky-200 duration-300"

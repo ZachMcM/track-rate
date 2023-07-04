@@ -1,12 +1,18 @@
 import { getUser } from "@/app/serverMethods"
-import { FullReview } from "@/app/types"
-import ProfileReviewList from "@/components/profile/ProfileReviewList"
+import Reviews from "@/components/profile/Reviews"
+import ProfileReviewList from "@/components/profile/Reviews"
+import { Metadata, ResolvingMetadata } from "next"
 
-
-export default async function ProfileReviews({ params }: { params: { id: string }}) {
+export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
   const user = await getUser(params.id)
+  return {
+    title: `${user.name}'s reviews`
+  }
+}
+
+export default function ProfileReviews({ params }: { params: { id: string }}) {
 
   return (  
-    <ProfileReviewList reviews={user.reviews}/>
+    <Reviews id={params.id}/>
   )
 }

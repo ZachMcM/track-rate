@@ -4,12 +4,11 @@ import { useCallback, useContext, useEffect, useState } from "react"
 import { ReviewFormContext } from "./Provider"
 import { Artist, ReviewFormProviderType, SimplifiedAlbum, Track } from "@/app/types"
 import { useQuery } from "@tanstack/react-query"
-import { formatName, getAccessToken, getSearchResults } from "@/app/apiMethods"
+import { formatName, getAccessToken } from "@/app/apiMethods"
 import debounce from "lodash.debounce"
 import Image from "next/image"
 import { useDetectClickOutside } from "react-detect-click-outside"
 import { TbUser, TbX } from "react-icons/tb"
-import { table } from "console"
 import { uid } from "uid"
 
 export default function SearchModal() {
@@ -51,8 +50,28 @@ export default function SearchModal() {
           }
         )
       }
-      const searchResults = await getSearchResults(search, accessToken)
-      return searchResults
+      const query = await fetch(
+        `https://api.spotify.com/v1/search?q=${search.replace(
+          /[^\w\s]/gi,
+          ""
+        )}&type=album%2Cartist%2Ctrack&market=us&limit=5`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    
+      const data = await query.json();
+    
+      const res = {
+        albums: data.albums.items,
+        tracks: data.tracks.items,
+        artists: data.artists.items,
+      };
+      return res;
     },
     enabled: !!accessToken
   })
@@ -63,8 +82,8 @@ export default function SearchModal() {
  
   return (
     <div className="fixed inset-0 h-full w-full z-50 overflow-hidden bg-black/70 flex justify-center items-center p-3">
-      <div ref={modalRef} className="drop-shadow-md rounded-md bg-zinc-100 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-2/5 items-center">
-        <div className="p-4 bg-white rounded-t-md w-full text-center drop-shadow-md flex items-center">
+      <div ref={modalRef} className="drop-shadow-lg rounded-md bg-zinc-100 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-2/5 items-center">
+        <div className="p-4 bg-white rounded-t-md w-full text-center drop-shadow-lg flex items-center">
           <p className="font-semibold text-lg basis-full">Search Music</p>
           <button
             className="p-2 rounded-full hover:bg-zinc-200 duration-300"
@@ -77,7 +96,7 @@ export default function SearchModal() {
           <div className="relative w-full">
             <input 
               type="text"
-              className="bg-white z-50 rounded-md border focus:ring-4 outline-none ring-sky-200 duration-300 border-zinc-300 w-full py-3 px-4 placeholder:text-zinc-400"
+              className="bg-white z-50 rounded-lg drop-shadow-lg border focus:ring-4 outline-none ring-sky-200 duration-300 border-zinc-300 w-full py-3 px-4 placeholder:text-zinc-400"
               placeholder="Search music..." 
               onChange={(e) => {
                 setSearch(e.target.value)
@@ -86,7 +105,7 @@ export default function SearchModal() {
             />
             {
             searchResults && searchResults.albums.length != 0 && searchResults.tracks.length != 0 && searchResults.artists.length != 0 &&
-            <div className="absolute rounded-md w-full h-96 overflow-y-auto top-14 bg-white drop-shadow-md flex flex-col space-y-4 py-4">
+            <div className="absolute rounded-md w-full h-96 overflow-y-auto top-14 bg-white drop-shadow-lg flex flex-col space-y-4 py-4">
               <div className="flex flex-col">
                 <p className="font-semibold text-lg px-5">Albums</p>
                 <div className="flex flex-col">
@@ -116,7 +135,7 @@ export default function SearchModal() {
                             setReviewForm(true)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-md drop-shadow-md">
+                          <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
                           {
                               album.images && album.images[0]?.url ?
                               <Image
@@ -177,7 +196,7 @@ export default function SearchModal() {
                             setSearchModal(false)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-md drop-shadow-md">
+                          <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
                           {
                               track.album.images && track.album.images[0]?.url ?
                               <Image

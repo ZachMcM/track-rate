@@ -1,7 +1,6 @@
 'use client'
 
-import { updateFollow } from "@/app/apiMethods";
-import { FullUser, UserExtendedFollowers } from "@/app/types";
+import { UserExtendedFollowers } from "@/app/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from 'next-auth/react'
 import { useState } from "react";
@@ -14,11 +13,17 @@ export default function FollowButton({ user }: { user: UserExtendedFollowers }) 
   const router = useRouter()
 
   const followMutation = useMutation({
-    mutationFn: () => updateFollow(user?.id || ""),
+    mutationFn: async () => {
+      const res = await fetch(`/api/follower?userId=${user.id}`, {
+        method: "PATCH",
+      });
+      const data = await res.json();
+      return data;
+    },
     onSuccess: (data) => {
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['user', user?.id]})
-      queryClient.invalidateQueries({ queryKey: ['user', session?.user.id]})
+      queryClient.invalidateQueries({ queryKey: ['user', { id: user?.id }]})
+      queryClient.invalidateQueries({ queryKey: ['user', { id: session?.user.id }]})
       router.refresh()
     }
   })

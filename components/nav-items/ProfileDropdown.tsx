@@ -1,13 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { TbArrowBarRight, TbHeart, TbRun, TbSettings, TbUser } from "react-icons/tb";
+import { TbArrowBarRight, TbRun, TbSettings, TbUser } from "react-icons/tb";
 import { signOut } from "next-auth/react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
-export default function ProfileDropdwon({
+export default function ProfileDropdown({
   userId,
   name,
   email,
@@ -23,7 +22,7 @@ export default function ProfileDropdwon({
   });
 
   return (
-    <div className="absolute top-11 drop-shadow-md bg-white right-0 rounded-md">
+    <div className="absolute top-11 drop-shadow-lg border border-zinc-200 bg-white right-0 rounded-md">
       <div
         ref={dropdownRef}
         className="px-4 py-3 border-b border-zinc-200 font-normal text-sm flex flex-col"

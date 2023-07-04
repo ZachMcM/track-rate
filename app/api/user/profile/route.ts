@@ -38,7 +38,6 @@ export async function PUT(request: NextRequest) {
           image: `https://rpiubyotsurmrmuepinw.supabase.co/storage/v1/object/public/avatars/${data.path}`
         }
       })
-
       revalidateTag(session.user.id)
       return NextResponse.json(updateUser)
     } else {
@@ -52,7 +51,6 @@ export async function PUT(request: NextRequest) {
           spotifyUsername: spotifyUsername
         }
       })
-
       revalidateTag(session.user.id)
       return NextResponse.json(updateUser)
     }

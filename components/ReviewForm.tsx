@@ -38,9 +38,9 @@ export default function ReviewForm() {
       <div className="fixed inset-0 h-full w-full z-50 overflow-hidden bg-black/70 flex justify-center items-center p-3">
         <div
           ref={modalRef}
-          className="drop-shadow-md rounded-lg bg-zinc-100 flex flex-col w-full md:w-5/6"
+          className="drop-shadow-lg rounded-lg bg-zinc-100 flex flex-col w-full md:w-5/6"
         >
-          <div className="p-4 bg-white rounded-t-lg w-full text-center drop-shadow-md flex items-center">
+          <div className="p-4 bg-white rounded-t-lg w-full text-center drop-shadow-lg flex items-center">
             <p className="font-semibold text-lg basis-full">Create Review</p>
             <button
               className="p-2 rounded-full hover:bg-zinc-200 duration-300"
@@ -52,7 +52,7 @@ export default function ReviewForm() {
           <div className="p-8 flex md:space-x-8 items-start">
             <Link 
               href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
-              className={`hidden md:block shrink-0 drop-shadow-md w-44 h-44 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+              className={`hidden md:block shrink-0 drop-shadow-lg w-44 h-44 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
             >
               <Image
                 src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}
@@ -65,7 +65,7 @@ export default function ReviewForm() {
               <div className="flex space-x-5 md:space-x-0 justify-start items-center">
                 <Link 
                   href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
-                  className={`text-start md:hidden shrink-0 drop-shadow-md w-20 h-20 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+                  className={`text-start md:hidden shrink-0 drop-shadow-lg w-20 h-20 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
                 >
                   <Image
                     src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}

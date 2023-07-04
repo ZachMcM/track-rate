@@ -4,6 +4,9 @@ import { TbAlignLeft, TbArrowRight, TbHeartFilled, TbStarFilled, TbUserCheck } f
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import CustomFeed from "@/components/CustomFeed";
+
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
  
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -46,7 +49,7 @@ export default async function Home() {
     ) 
   } else {
     return (
-      <div className="flex flex-col space-y-2 mt-10 p-5 lg:px-44">
+      <div className="flex flex-col space-y-3 mx-8 my-10 md:mx-14">
         <h1 className="font-medium text-lg">Timeline</h1>
         <CustomFeed/>
       </div>

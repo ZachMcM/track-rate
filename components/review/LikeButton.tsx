@@ -1,31 +1,55 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
-import { TbHeartFilled } from "react-icons/tb"
-import { FullReview } from "@/app/types"
-import { formatCompactNumber, updateLike } from "@/app/apiMethods"
+import { TbHeart, TbHeartFilled } from "react-icons/tb"
+import { formatCompactNumber } from "@/app/apiMethods"
 import { usePathname } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
+import { ExtendedReview } from "@/app/types"
+import { Like } from "@prisma/client"
 
-export default function LikeButton({ review, initialLike }: { review: FullReview, initialLike: boolean }) {
-  const { data: session } = useSession()
+export default function LikeButton({ review }: { review: ExtendedReview }) {
+  const { data: session, status } = useSession()
 
   const router = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
 
-  const [liked, setLiked] = useState<boolean>(initialLike)
+  useEffect(() => {
+    const getInitialLike = () => {
+      if (session) {
+        for (const like of review.likes) {
+          if (like.userId == session.user.id) {
+            setLiked(true)
+            return
+          }
+        }
+        setLiked(false)
+      } else {
+        setLiked(false)
+      }
+    }
+    getInitialLike()
+  }, [status])
+
+  const [liked, setLiked] = useState<boolean>()
   const [likeCount, setLikeCount] = useState<number>(review.likes.length)
 
   const likeMutation = useMutation({
-    mutationFn: () => updateLike(review.id),
+    mutationFn: async (): Promise<Like> => {
+      const res = await fetch(`/api/likes?reviewId=${review.id}`, {
+        method: "PATCH",
+      });
+      const data = await res.json();
+      return data;
+    },
     onSuccess: (data) => {
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['review', review.id]})
-      queryClient.invalidateQueries({ queryKey: ['user', review.userId] })
-      router.refresh()
+      queryClient.invalidateQueries({ queryKey: ['review', { id: review.id }]})
+      queryClient.invalidateQueries({ queryKey: ['user-likes', { id: review.userId }]})
+      queryClient.invalidateQueries({ queryKey: ['user-reviews', { id: review.userId }]})
     }
   })
 
@@ -45,12 +69,16 @@ export default function LikeButton({ review, initialLike }: { review: FullReview
   }
 
   return (
-    <div className="flex space-x-2 items-center text-zinc-500 text-sm">
+    <div className="flex space-x-2 items-center justify-center">
       <button 
-        className={`text-xl duration-300 ${session && "hover:opacity-80 "}`}
+        className="duration-300 hover:opacity-70 text-xl"
         onClick={toggleLike}
       >
-        <TbHeartFilled className={`${liked && "text-red-500"}`}/>
+        {
+          liked ? 
+          <TbHeartFilled className="text-red-500"/> :
+          <TbHeart/>
+        }
       </button>
       <p>{formatCompactNumber(likeCount)} Like{likeCount != 1 && "s"}</p>
     </div>
