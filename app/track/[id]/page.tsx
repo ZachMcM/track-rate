@@ -11,7 +11,7 @@ import { BsSpotify } from "react-icons/bs";
 import { uid } from "uid";
 import MusicReviews from "@/components/music/MusicReviews";
 
-export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string }, parent: ResolvingMetadata}): Promise<Metadata> {
   const track = await getTrack(params.id)
   return {
     title: track.name 

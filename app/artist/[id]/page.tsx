@@ -8,7 +8,7 @@ import Image from "next/image";
 import { BsSpotify } from "react-icons/bs";
 import MusicReviews from "@/components/music/MusicReviews";
 
-export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string }, parent: ResolvingMetadata}): Promise<Metadata> {
   const artist = await getArtist(params.id)
   return {
     title: artist.name 

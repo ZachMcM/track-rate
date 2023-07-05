@@ -5,7 +5,7 @@ import ProfileSkeleton from "@/components/profile/ProfileSkeleton";
 import { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 
-export async function generateMetadata({ params }: { params: { id: string }, parent?: ResolvingMetadata}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string }, parent: ResolvingMetadata}): Promise<Metadata> {
   const user = await getUser(params.id)
   return {
     title: `${user.name}'s profile`
