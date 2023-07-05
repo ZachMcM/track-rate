@@ -14,24 +14,24 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky bg-white drop-shadow-lg border-b border-zinc-200 top-0 left-0 w-full z-20 px-4 py-3 md:px-10 flex items-center justify-between">
+      <nav className="sticky bg-white drop-shadow-lg border-b border-zinc-200 top-0 left-0 w-full z-20 px-5 py-3 md:px-10 flex items-center justify-between">
         {/* Todo */}
-        <div className="flex space-x-5 items-center">
-          <Link href="/" className="hidden md:flex font-bold items-center space-x-2 hover:opacity-80 duration-300">
+        <div className="flex space-x-3 items-center">
+          <Link href="/" className="flex font-bold items-center space-x-2 hover:opacity-80 duration-300">
             <TbPlayerTrackNextFilled className="text-xl"/>
-            <p>trackrate</p>
+            <p className="hidden md:block">trackrate</p>
           </Link>
           {/* Todo */}
           <button 
-            className="text-sm bg-zinc-100 border-zinc-200 border drop-shadow-lg rounded-lg px-4 md:pr-10 py-2.5 flex items-center space-x-2 "
+            className="text-sm bg-zinc-100 border-zinc-200 border drop-shadow-lg rounded-lg py-2.5 w-40 md:w-52 px-3 flex items-center space-x-2 "
             onClick={() => setSearchBar(true
               )}
           >
-            <TbSearch className="text-xl text-zinc-500"/>
-            <p className="text-zinc-500">Search trackrate...</p>
+            <TbSearch className="text-xl md:text-zinc-500"/>
+            <p className="text-zinc-500">Search...</p>
           </button>  
         </div>
-        <div className="flex items-center space-x-5 text-sm">
+        <div className="flex items-center space-x-3 text-sm">
           {
             session &&
             <NewReviewButton/>

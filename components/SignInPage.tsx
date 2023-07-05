@@ -25,7 +25,7 @@ export default function SignInPage() {
       >
         <TbArrowLeft className="text-2xl"/>
       </Link>
-      <div className="flex flex-col space-y-5 p-10 bg-white rounded-lg drop-shadow-lg">
+      <div className="flex flex-col space-y-5 m-3 p-5 md:p-10 bg-white rounded-lg drop-shadow-lg">
         <div className="flex flex-col space-y-2 items-center">
           <h3 className="text-2xl font-medium text-center">Welcome back</h3>
           <p className="test-sm text-zinc-500 md:max-w-md text-center">
@@ -35,9 +35,9 @@ export default function SignInPage() {
         </div>
         <div className="flex flex-col space-y-5">
           <div className="flex items-center space-x-3 justify-center">
-            <div className="h-[1px] bg-zinc-200 w-24"></div>
+            <div className="h-[1px] bg-zinc-200 w-16 md:w-24"></div>
             <p className="text-zinc-500 text-xs uppercase">Continue with Google</p>
-            <div className="h-[1px] bg-zinc-200 w-24"></div>
+            <div className="h-[1px] bg-zinc-200 w-16 md:w-24"></div>
           </div>
           <button
             className="py-2 px-4 w-5/6 drop-shadow-lg border border-zinc-200 self-center hover:opacity-80 duration-300 text-white bg-zinc-950 rounded-md flex items-center space-x-2 justify-center"

@@ -27,7 +27,7 @@ export default function NewReviewButton() {
 
   return (
     <button 
-      className="p-2.5 font-medium border drop-shadow-lg bg-zinc-100 rounded-full hover:opacity-80 duration-300"
+      className="p-2.5 font-medium border border-zinc-200 drop-shadow-lg bg-zinc-100 rounded-lg hover:opacity-80 duration-300"
       onClick={handleModalClick}
     >
       <TbPlus className="text-xl"/>

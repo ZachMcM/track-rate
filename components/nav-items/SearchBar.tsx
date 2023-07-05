@@ -112,7 +112,7 @@ export default function SearchBar({
     <div className="bg-black/70 z-50 inset-0 fixed justify-center flex items-center">
       <div
         ref={modalRef}
-        className="drop-shadow-lg rounded-md bg-white flex flex-col w-full  md:w-2/5 items-center border p-8"
+        className="drop-shadow-lg rounded-md bg-white flex flex-col w-full m-3 md:w-2/5 items-center border p-8"
       >
         <button
           className="p-2 rounded-full hover:bg-zinc-200 duration-300 absolute right-0 top-0 m-2"
@@ -120,7 +120,7 @@ export default function SearchBar({
         >
           <TbX className="text-xl" />
         </button>
-        <div className="mt-8 items-center drop-shadow-lg bg-zinc-100 border border-zinc-200 rounded-lg py-3 px-5 w-full focus-within:ring-2 ring-sky-200">
+        <div className="mt-8 relative items-center drop-shadow-lg bg-zinc-100 border border-zinc-200 rounded-lg py-3 px-5 w-full focus-within:ring-2 ring-sky-200">
           <input
             value={input}
             onFocus={() => setDropdown(true)}

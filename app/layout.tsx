@@ -19,7 +19,9 @@ export default function RootLayout({
       <body className='bg-zinc-100 text-zinc-950'>
         <Provider>
           <Navbar/>
-          {children}
+          <main className='min-h-screen'>
+            {children}
+          </main>
           <Footer/>
           <ReviewModals/>
         </Provider>

@@ -42,7 +42,7 @@ export default function ReviewComments({ review }: { review: ExtendedReview }) {
   }
 
   return (
-    <div id="#comments" className="flex flex-col space-y-10">
+    <div id="#comments" className="flex flex-col w-full space-y-10">
       <div className="flex flex-col space-y-3">
         <p className="font-medium text-lg ">
           {formatCompactNumber(review.comments.length)} Comment{review.comments.length != 1 && "s"}

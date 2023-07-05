@@ -62,7 +62,7 @@ export default function ReviewPageClient({ id }: { id: string }) {
     return (
       <>
         <div className="flex flex-col-reverse md:flex-row md:space-y-0 md:space-x-14 items-start">
-          <div className="flex flex-col space-y-14 basis-2/3 mt-10 md:mt-0">
+          <div className="flex flex-col space-y-14 w-full basis-2/3 mt-10 md:mt-0">
             <div className="space-y-8 flex flex-col">
               <div className="flex space-x-3 items-center">
                 <Link href={`/profile/${review.userId}`} className="h-10 w-10 drop-shadow-lg  relative hover:ring-4 ring-sky-200 duration-300 rounded-full">
