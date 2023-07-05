@@ -10,12 +10,12 @@ export default function ShareButton({ className, link, type }: { className: stri
   const share =  async () => {
     try {
       await navigator.share({
-        url: "https://traclrate.app" + link
+        url: "https://trackrate.app" + link
       })
     } catch (e) {
       console.log(e)
       try {
-        await navigator.clipboard.writeText("https://traclrate.app" + link)
+        await navigator.clipboard.writeText("https://trackrate.app" + link)
         setToast(true)
       } catch (e) {
         console.log(e)
