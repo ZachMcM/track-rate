@@ -4,22 +4,11 @@ import { Album, Artist, Props, SimplifiedTrack } from "@/app/types";
 import MusicReviewButton from "@/components/MusicReviewButton";
 import MusicStats from "@/components/music/MusicStats";
 import ShareButton from "@/components/ShareButton";
-import { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image";
 import Link from "next/link";
 import { BsSpotify } from "react-icons/bs";
 import { uid } from "uid";
 import MusicReviews from "@/components/music/MusicReviews";
-
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const album = await getAlbum(params.id)
-  return {
-    title: album.name 
-  }
-}
 
 async function getAlbum(id: string): Promise<Album> {
   const accessToken = await getAccessToken()

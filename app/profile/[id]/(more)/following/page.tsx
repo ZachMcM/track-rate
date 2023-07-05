@@ -1,20 +1,39 @@
-import { getUser } from "@/app/serverMethods"
-import { Props } from "@/app/types"
-import Following from "@/components/profile/Following"
-import { Metadata, ResolvingMetadata } from "next"
+'use client'
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata>  {
-  const user = await getUser(params.id)
-  return {
-    title: `${user.name}'s following`
+import { getUser } from "@/app/apiMethods"
+import { UserExtendedFollowers } from "@/app/types"
+import { useQuery } from "@tanstack/react-query"
+import UserListItem from "@/components/UserListItem"
+import LoadingSpinner from "@/components/LoadingSpinner"
+
+export default function Following({ params }: { params: { id: string } }) {
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', { id: params.id }],
+    queryFn: () => getUser(params.id)
+  })
+
+  if (user && !isLoading) {
+    return (
+      <div className="flex flex-col space-y-3">
+        <p className="font-medium text-lg">Following</p>
+        {
+          user.follows.length != 0 ?       
+          <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg p-2">
+            {
+              user.follows
+              .map((following: UserExtendedFollowers) => {
+                return <UserListItem key={following.id} user={following}/>
+              })
+            }
+          </div> :
+          <div className="flex px-5 py-10 bg-white rounded-md justify-center items-center drop-shadow-lg border border-zinc-200">
+            <p className="text-zinc-400 text-sm">Not following anyone</p>
+          </div>
+        }
+      </div>
+    )
+  } else {
+    return <LoadingSpinner/> 
   }
-}
 
-export default function UserFollowing({ params }: { params: { id: string }}) {
-  return (
-    <Following id={params.id}/>
-  )
 }

@@ -1,22 +1,11 @@
 import { getAccessToken } from "@/app/serverMethods";
-import { Artist, Props } from "@/app/types";
+import { Artist } from "@/app/types";
 import MusicReviewButton from "@/components/MusicReviewButton";
 import MusicStats from "@/components/music/MusicStats";
 import ShareButton from "@/components/ShareButton";
-import { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image";
 import { BsSpotify } from "react-icons/bs";
 import MusicReviews from "@/components/music/MusicReviews";
-
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata>  {
-  const artist = await getArtist(params.id)
-  return {
-    title: artist.name 
-  }
-}
 
 async function getArtist(id: string): Promise<Artist> {
   const accessToken = await getAccessToken()
