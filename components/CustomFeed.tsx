@@ -42,7 +42,11 @@ export default async function CustomFeed() {
     },
     include: {
       user: true,
-      comments: true,
+      comments: {
+        include: {
+          user: true
+        }
+      },
       likes: true
     },
     take: 2,
@@ -62,7 +66,11 @@ export default async function CustomFeed() {
       ],
       include: {
         user: true,
-        comments: true,
+        comments: {
+          include: {
+            user: true
+          }
+        },
         likes: true
       },
       take: 2

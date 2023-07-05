@@ -1,9 +1,10 @@
 import GeneralFeed from "@/components/GeneralFeed";
 import Link from "next/link";
-import { TbAlignLeft, TbArrowRight, TbHeartFilled, TbStarFilled, TbUserCheck } from "react-icons/tb";
+import { TbAlignLeft, TbArrowRight, TbHeartFilled, TbHome, TbStarFilled, TbUserCheck } from "react-icons/tb";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import CustomFeed from "@/components/CustomFeed";
+import ReviewClientButton from "@/components/ReviewClientButton";
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -11,48 +12,26 @@ export const fetchCache = 'force-no-store'
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
-    return (
-      <div className="flex flex-col mt-20 space-y-16 w-full p-5 md:px-10 lg:px-44">
-        <div className="w-full flex flex-col space-y-10">
-          <div className="flex flex-col space-y-5 items-center">
-            <div className="flex flex-col space-y-2 items-center text-center">
-              <h1 className="text-3xl md:text-5xl font-bold">Review the latest albums and tracks.</h1>
-              <p className="text-zinc-500 font-medium md:text-xl">A social media web app for rock and roll fans rap fans and everything in between.</p>
-            </div>
-            <Link href="/signin" className="font-medium text-sm bg-sky-400 text-white hover:opacity-80 duration-300 rounded-md py-3 px-4 flex items-center space-x-2">
-              <p>Get Started</p>
-              <TbArrowRight className="text-lg"/>
-            </Link>
+  return (
+    <div className="flex space-y-5 mx-8 mt-20 md:mx-20 flex-col">
+      <h1 className="text-3xl font-semibold">Your Feed</h1>
+      <div className="flex flex-col-reverse md:flex-row md:space-y-0 md:space-x-8 items-start">
+        {
+          session ?
+          <CustomFeed/> :
+          <GeneralFeed/>
+        }
+        <div className="drop-shadow-lg mb-8 mt-0 rounded-lg bg-white w-full basis-1/3">
+          <div className="p-5 flex space-x-2 items-center border-b border-zinc-200">
+            <TbHome className="text-lg"/>
+            <p className="font-medium text-lg">Home</p>
           </div>
-          <div className="flex flex-col space-y-3 md:space-y-0 md:grid grid-cols-2 gap-5 font-medium">
-            <div className="bg-white drop-shadow-lg rounded-lg flex space-x-3 p-5">
-              <TbHeartFilled className="text-red-500 text-3xl"/>
-              <p>Show another user some love by liking their review.</p>
-            </div>
-            <div className="bg-white drop-shadow-lg rounded-lg flex space-x-3 p-5">
-              <TbStarFilled className="text-yellow-500 text-3xl"/>
-              <p>Rate tracks or albums on a five star scale to show what you thought.</p>
-            </div>
-            <div className="bg-white drop-shadow-lg rounded-lg flex space-x-3 p-5">
-              <TbUserCheck className="text-3xl"/>
-              <p>Build a network by following other users.</p>
-            </div>
-            <div className="bg-white drop-shadow-lg rounded-lg flex space-x-3 p-5">
-              <TbAlignLeft className="text-3xl"/>
-              <p>Write reviews to share your thoughts on the latest music.</p>
-              </div>
+          <div className="flex flex-col space-y-5 bg-zinc-100 p-5 rounded-b-lg">
+            <p className="text-zinc-500">This is your trackrate homepage. Come here to view the latest and greatest reviews from your friends and the community!</p>
+            <ReviewClientButton/>
           </div>
         </div>
-        <GeneralFeed/>
       </div>
-    ) 
-  } else {
-    return (
-      <div className="flex flex-col space-y-3 mx-8 my-10 md:mx-14">
-        <h1 className="font-medium text-lg">Timeline</h1>
-        <CustomFeed/>
-      </div>
-    )
-  }
+    </div>
+  ) 
 }

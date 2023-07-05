@@ -3,7 +3,6 @@
 import { ReviewFormParams, ReviewFormProviderType } from "@/app/types";
 import { useMutation } from "@tanstack/react-query";
 import { createContext, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react"
 import { SessionProvider } from "next-auth/react"
@@ -45,7 +44,6 @@ const ReviewFormProvider = ({
 
   const [contentError, setContentError] = useState<boolean>(false);
 
-  const router = useRouter()
   const { data: session } = useSession()
 
   const queryClient = useQueryClient()
@@ -53,9 +51,28 @@ const ReviewFormProvider = ({
   const addReviewMutation = useMutation({
     mutationFn: async () => {
       if (itemData) {
+        const bodyParams = {
+          content: reviewContent,
+          rating: rating,
+  
+          trackName: itemData.trackName,
+          trackId: itemData.trackId,
+  
+          albumId: itemData.albumId,
+          albumImage: itemData.albumImage,
+          albumName: itemData.albumName,
+  
+          artistIds: itemData.artistIds,
+          artistImages: itemData.artistImages,
+          artistNames: itemData.artistNames,
+          type: itemData?.type,
+
+          pinned: pinned,          
+        }
+
         const res = await fetch(`/api/review`, {
           method: "POST",
-          body: JSON.stringify(itemData),
+          body: JSON.stringify(bodyParams),
         });
         const data = await res.json();
         return data;
@@ -73,10 +90,12 @@ const ReviewFormProvider = ({
         } else {
           idKey = data?.artistIds[0]
         }
+        const musicId = itemData?.type == "track" ? itemData.trackId : itemData?.type == "album" ? itemData.albumId : itemData?.artistIds[0]
 
+        queryClient.invalidateQueries({ queryKey: ["music-reviews", { id: musicId }]})
+        queryClient.invalidateQueries({ queryKey: ["music-rating", { id: musicId }]})
         queryClient.invalidateQueries({ queryKey: ['user-reviews', { id: session?.user.id }]})
-        queryClient.invalidateQueries({ queryKey: ['score', { id: idKey }]})
-        router.push(`/profile/${data?.userId}`)
+
         setReviewForm(false)
         setItemData(undefined)
         setContentError(false)

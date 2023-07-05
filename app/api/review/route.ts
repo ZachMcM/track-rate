@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
 
   if (session && session.user) {
     if (session.user) {
+      console.log(body)
+
       const newReview = await prisma.review.create({
         data: {
           userId: session.user.id,
@@ -83,7 +85,11 @@ export async function GET(request: NextRequest) {
       include: {
         user: true,
         likes: true,
-        comments: true
+        comments: {
+          include: {
+            user: true
+          }
+        }
       }
     }))
     return NextResponse.json(review)

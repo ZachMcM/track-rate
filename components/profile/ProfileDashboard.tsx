@@ -43,15 +43,15 @@ export default function ProfileDashboard({ id }: { id: string }) {
         </div>
         <div className='flex flex-col space-y-5'>
           <div className="flex">
-            <div className="flex flex-col text-center border-r border-zinc-200 px-4">
+            <div className="flex flex-col text-center border-r border-zinc-200 px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.reviews.length)}</p>
               <Link href={`/profile/${user.id}`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Review{user.reviews.length != 1 && "s"}</Link>
             </div>
-            <div className="flex flex-col text-center border-r border-zinc-200 px-4">
+            <div className="flex flex-col text-center border-r border-zinc-200 px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.followers.length)}</p>
               <Link href={`/profile/${user.id}/followers`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
             </div>
-            <div className="flex flex-col text-center px-4">
+            <div className="flex flex-col text-center px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.follows.length)}</p>
               <Link href={`/profile/${user.id}/following`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Following</Link>
             </div>

@@ -26,7 +26,11 @@ export type UserExtendedReviews = Prisma.UserGetPayload<{
   include: { 
     reviews: {
       include: {
-        comments: true,
+        comments: {
+          include: {
+            user: true
+          }
+        },
         likes: true,
         user: true
       }
@@ -56,11 +60,15 @@ export type UserExtendedFollowers = Prisma.UserGetPayload<{
   }
 }>
 
-export type ExtendeLike = Prisma.LikeGetPayload<{
+export type ExtendedLike = Prisma.LikeGetPayload<{
   include: {
     review: {
       include: {
-        comments: true,
+        comments: {
+          include: {
+            user: true
+          }
+        },
         likes: true,
         user: true
       }
@@ -69,7 +77,15 @@ export type ExtendeLike = Prisma.LikeGetPayload<{
 }>
 
 export type ExtendedReview = Prisma.ReviewGetPayload<{
-  include: { user: true, likes: true, comments: true }
+  include: { 
+    user: true, 
+    likes: true, 
+    comments: {
+      include: {
+        user: true
+      }
+    } 
+  }
 }>
 
 export type ExtendedComment = Prisma.ReviewCommentGetPayload<{
@@ -77,8 +93,13 @@ export type ExtendedComment = Prisma.ReviewCommentGetPayload<{
 }>
 
 export type Rating = {
-  avg: number,
-  total: number
+  involvedReviews: {
+    _avg: {
+      rating: number
+    },
+    _count: number
+  },
+  yourRating: number
 }
 
 export type SearchResults = {

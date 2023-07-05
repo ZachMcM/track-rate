@@ -2,7 +2,6 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/prisma/client";
-import { useSession } from "next-auth/react"
 
 import type { DefaultSession } from 'next-auth';
 

@@ -18,7 +18,7 @@ export default function Following({ id }: { id: string }) {
         <p className="font-medium text-lg">Following</p>
         {
           user.follows.length != 0 ?       
-          <div className="flex flex-col space-y-8 bg-white drop-shadow-lg border border-zinc-200 rounded-lg p-2">
+          <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg p-2">
             {
               user.follows
               .map((following: UserExtendedFollowers) => {

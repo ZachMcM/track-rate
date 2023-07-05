@@ -14,7 +14,7 @@ export default function DeleteModal({ setModal, confirm, isLoading, type }: FnPa
   const modalRef = useDetectClickOutside({ onTriggered: () => setModal(false)})
 
   return (
-    <div className="!m-0 fixed w-full h-full left-0 p-5 top-0 bottom-0  z-50 overflow-hidden bg-black/70 flex justify-center items-center">
+    <div className="!m-0 fixed p-5 inset-0 z-50 bg-black/70 flex justify-center items-center">
       <div ref={modalRef} className="flex flex-col space-y-5 p-5 md:p-8 w-full md:w-3/5 lg:w-2/5 rounded-lg bg-white drop-shadow-lg border border-zinc-200">
         <div className="flex flex-col space-y-1 items-center md:items-start">
           <h3 className="font-medium text-lg md:text-start text-center">Are you absolutely sure?</h3>

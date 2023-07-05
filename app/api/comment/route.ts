@@ -57,21 +57,3 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
   }
 }
-
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const id = searchParams.get("id")
-  if (id) {
-    const comment = await prisma.reviewComment.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        user: true
-      }
-    })
-    return NextResponse.json(comment)
-  } else {
-    return NextResponse.json({error: "Invalid request, no id"}, {status: 400})
-  }
-}

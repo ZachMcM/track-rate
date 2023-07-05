@@ -74,11 +74,11 @@ export default function ProfileMenu({ id }: { id: string }) {
             Activity
         </Link>
         <p className="md:hidden">•</p>
-        <Link 
+        {/* <Link 
           href={`/profile/${id}/lists`} 
           className={`md:px-4 md:py-2 hover:text-sky-400 duration-300 rounded-lg ${pathname == `/profile/${id}/lists` ? "text-sky-400" : "md:hover:bg-zinc-100 md:hover:text-zinc-950"}`}>
             Lists
-        </Link>
+        </Link> */}
       </div>
     </nav>
 

@@ -1,11 +1,8 @@
 "use client";
 
 import { useContext } from "react";
-import { TbArrowLeft, TbCheck, TbX } from "react-icons/tb";
-import { Artist } from "@/app/types";
+import { TbCheck, TbX } from "react-icons/tb";
 import Image from "next/image";
-import Stars from "./RatingPick";
-
 import { useDetectClickOutside } from "react-detect-click-outside";
 
 import { ReviewFormContext } from "./Provider";
@@ -16,22 +13,31 @@ import { uid } from "uid";
 
 export default function ReviewForm() {
   const {
+    setItemData,
     itemData,
     setReviewContent,
     setRating,
-    setContentError,
     contentError,
     reviewContent,
     rating,
     addReviewMutation,
     submitReview,
     setReviewForm,
-    setSearchModal,
     pinned,
-    setPinned
+    setPinned,
+    setContentError
   } = useContext(ReviewFormContext) as ReviewFormProviderType;
 
-  const modalRef = useDetectClickOutside({onTriggered: () => setReviewForm(false)});
+  const closeForm = () => {
+    setItemData(undefined)
+    setReviewContent("")
+    setPinned(false)
+    setRating(0)
+    setContentError(false)
+    setReviewForm(false)
+  }
+
+  const modalRef = useDetectClickOutside({onTriggered: closeForm});
   
   if (itemData) {
     return (
@@ -44,7 +50,7 @@ export default function ReviewForm() {
             <p className="font-semibold text-lg basis-full">Create Review</p>
             <button
               className="p-2 rounded-full hover:bg-zinc-200 duration-300"
-              onClick={() => setReviewForm(false)}
+              onClick={closeForm}
             > 
               <TbX className="text-xl"/>
             </button>
@@ -83,7 +89,7 @@ export default function ReviewForm() {
                   </Link>
                   {
                     itemData.type != "artist" &&
-                    <p className="text-zinc-400 text-sm md:text-base">
+                    <p className="text-zinc-500 text-sm md:text-base">
                       {
                         itemData.artistNames.map((name: string, i: number) => {
                           return (

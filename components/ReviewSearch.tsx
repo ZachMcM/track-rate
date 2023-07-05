@@ -11,7 +11,7 @@ import { useDetectClickOutside } from "react-detect-click-outside"
 import { TbUser, TbX } from "react-icons/tb"
 import { uid } from "uid"
 
-export default function SearchModal() {
+export default function ReviewSearch() {
   const {
     setSearchModal,
     setReviewForm,

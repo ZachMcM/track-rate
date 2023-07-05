@@ -15,7 +15,11 @@ export default async function GeneralFeed() {
     ],
     include: {
       user: true,
-      comments: true,
+      comments: {
+        include: {
+          user: true
+        }
+      },
       likes: true
     },
     take: 2

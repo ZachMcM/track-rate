@@ -10,7 +10,7 @@ export default function SmallReview({ review }: { review: ExtendedReview }) {
   return (
     <div className="bg-transparent flex flex-col items-center text-center space-y-2 md:space-y-3">
       <Link 
-        href={`/review/${review.id}`} 
+        href={`${review.type == "artist" ? `/artist/${review.artistIds[0]}` : `/album/${review.albumId}`}`} 
         className={`relative drop-shadow-lg h-20 w-20 md:h-44 md:w-44 ${review.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
       >
         <Image

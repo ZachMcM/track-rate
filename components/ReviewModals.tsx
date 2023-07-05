@@ -4,7 +4,7 @@ import { useContext } from "react"
 import { ReviewFormContext } from "./Provider"
 import { ReviewFormProviderType } from "@/app/types"
 import ReviewForm from "./ReviewForm"
-import SearchModal from "./SearchModal"
+import ReviewSearch from "./ReviewSearch"
 
 export default function ReviewModals() {
   const { reviewForm, searchModal } = useContext(ReviewFormContext) as ReviewFormProviderType
@@ -12,7 +12,7 @@ export default function ReviewModals() {
   return (
     <>
       { reviewForm && <ReviewForm/>}
-      { searchModal && <SearchModal/> }
+      { searchModal && <ReviewSearch/> }
     </>
   )
 }

@@ -115,7 +115,7 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
 
   return ( 
     <div className="flex flex-col space-y-3">
-      <p className="font-medium text-lg hidden md:block">Reviews</p>
+      <p className="font-medium text-lg">Reviews</p>
       <div className="flex flex-col-reverse md:space-y-0 md:flex-row md:space-x-8 items-start w-full">
         {
           reviewArr.length != 0 ?

@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 import ReviewCard from "../review/ReviewCard"
-import { ExtendeLike } from "@/app/types"
+import { ExtendedLike } from "@/app/types"
 import LoadingSpinner from "../LoadingSpinner"
 
 export default function Likes({ id }: { id: string }) {
@@ -25,7 +25,7 @@ export default function Likes({ id }: { id: string }) {
           <div className="flex flex-col bg-white drop-shadow-lg border-zinc-200 border rounded-lg">
             {
               user.likes
-              .map((like: ExtendeLike) => {
+              .map((like: ExtendedLike) => {
                 return (
                   <ReviewCard review={like.review}/>
                 )

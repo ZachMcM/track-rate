@@ -2,6 +2,7 @@ import './globals.css'
 import Provider from '../components/Provider'
 import Navbar from '@/components/nav-items/Navbar'
 import ReviewModals from '@/components/ReviewModals'
+import Footer from '@/components/Footer'
 
 export const metadata = {
   title: 'trackrate',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <Provider>
           <Navbar/>
           {children}
+          <Footer/>
           <ReviewModals/>
         </Provider>
       </body>
