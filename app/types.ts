@@ -2,6 +2,11 @@ import { Prisma } from "@prisma/client"
 import { UseMutationResult } from "@tanstack/react-query"
 import { Dispatch, SetStateAction } from "react"
 
+export type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
 export type UserExtended = Prisma.UserGetPayload<{
   include: {
     reviews: {

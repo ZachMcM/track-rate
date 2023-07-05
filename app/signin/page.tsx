@@ -6,6 +6,10 @@ import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { TbArrowLeft } from "react-icons/tb";
 
+export const metadata = {
+  title: "sign in"
+}
+
 export default function SignIn() {
   const { data: session } = useSession();
 

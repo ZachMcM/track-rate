@@ -1,6 +1,6 @@
 import { formatName } from "@/app/apiMethods";
 import { getAccessToken } from "@/app/serverMethods";
-import { Artist, Track } from "@/app/types";
+import { Artist, Props, Track } from "@/app/types";
 import MusicReviewButton from "@/components/MusicReviewButton";
 import MusicStats from "@/components/music/MusicStats";
 import ShareButton from "@/components/ShareButton";
@@ -11,7 +11,10 @@ import { BsSpotify } from "react-icons/bs";
 import { uid } from "uid";
 import MusicReviews from "@/components/music/MusicReviews";
 
-export async function generateMetadata({ params }: { params: { id: string }, parent: ResolvingMetadata}): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent?: ResolvingMetadata
+): Promise<Metadata>  {
   const track = await getTrack(params.id)
   return {
     title: track.name 

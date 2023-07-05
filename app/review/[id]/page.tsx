@@ -5,8 +5,12 @@ import Link from "next/link"
 import { formatName } from "@/app/apiMethods"
 import { uid } from "uid"
 import ReviewPageClient from "@/components/review/ReviewPageClient"
+import { Props } from "@/app/types"
 
-export async function generateMetadata({ params }: { params: { id: string }, parent: ResolvingMetadata}): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent?: ResolvingMetadata
+): Promise<Metadata>  {
   const review = await getReview(params.id)
   return {
     title: `${review.user.name} review of ${review.type == "track" ? review.trackName : review.type == "album" ? review.albumName : review.artistNames[0]}`

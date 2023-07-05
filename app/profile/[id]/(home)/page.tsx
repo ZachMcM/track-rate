@@ -5,7 +5,7 @@ import ReviewCard from "@/components/review/ReviewCard"
 import { TbChevronRight } from "react-icons/tb"
 import Link from "next/link"
 import { useQuery } from "@tanstack/react-query"
-import { getUser, getUserReviews } from "@/app/apiMethods"
+import { getUserReviews } from "@/app/apiMethods"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import { ExtendedReview } from "@/app/types"
 
