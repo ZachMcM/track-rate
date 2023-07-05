@@ -23,7 +23,7 @@ export default function Navbar() {
           </Link>
           {/* Todo */}
           <button 
-            className="text-sm bg-zinc-100 border-zinc-200 border drop-shadow-lg rounded-lg px-4 md:pr-10 py-2.5 flex items-center space-x-2 focus-within:ring-2 ring-sky-200 duration-300"
+            className="text-sm bg-zinc-100 border-zinc-200 border drop-shadow-lg rounded-lg px-4 md:pr-10 py-2.5 flex items-center space-x-2 "
             onClick={() => setSearchBar(true
               )}
           >
