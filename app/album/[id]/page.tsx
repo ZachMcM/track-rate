@@ -13,7 +13,7 @@ import MusicReviews from "@/components/music/MusicReviews";
 
 export async function generateMetadata(
   { params, searchParams }: Props,
-  parent?: ResolvingMetadata
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const album = await getAlbum(params.id)
   return {

@@ -9,7 +9,7 @@ import { Props } from "@/app/types"
 
 export async function generateMetadata(
   { params, searchParams }: Props,
-  parent?: ResolvingMetadata
+  parent: ResolvingMetadata
 ): Promise<Metadata>  {
   const review = await getReview(params.id)
   return {

@@ -5,7 +5,7 @@ import { Metadata, ResolvingMetadata } from "next"
 
 export async function generateMetadata(
   { params, searchParams }: Props,
-  parent?: ResolvingMetadata
+  parent: ResolvingMetadata
 ): Promise<Metadata>  {
   const user = await getUser(params.id)
   return {
