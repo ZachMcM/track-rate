@@ -67,7 +67,7 @@ export default function ProfileForm({
   const [toast, setToast] = useState<boolean>(false)
 
   return (
-    <div className="flex space-y-10 flex-col w-full md:w-3/4">
+    <div className="flex space-y-10 flex-col w-full items-center">
       <div className="flex flex-col space-y-5 w-full">
         <div className="flex flex-col space-y-2">
           <p className="font-medium">Username</p>
@@ -139,7 +139,7 @@ export default function ProfileForm({
         </div>
       </div>
       <button
-        className="flex px-4 py-3.5 justify-center bg-sky-400 rounded-lg font-medium text-white hover:opacity-80 duration-300"
+        className="flex px-4 py-3.5 justify-center w-full bg-sky-400 rounded-lg font-medium text-white hover:opacity-80 duration-300"
         onClick={submitChanges}
       > 
         { updateMutation.isLoading ?           

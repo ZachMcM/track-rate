@@ -9,7 +9,7 @@ export default async function Reivew({ params }: { params: { id: string }}) {
   const review = await getReview(params.id)
 
   return (
-    <div className="flex space-y-10 mx-5 my-10 md:m-16 flex-col">
+    <div className="flex space-y-10 mx-3 my-10 md:m-14 lg:mx-48 2xl:mx-96 flex-col">
       <div className="flex items-center space-x-4 md:space-x-8">
         <Link 
           className={`shrink-0 relative h-24 w-24 md:h-52 md:w-52 drop-shadow-md ${review.type == "artist" ? "rounded-full" : "rounded-lg"} hover:opacity-80 duration-300`}
@@ -24,7 +24,7 @@ export default async function Reivew({ params }: { params: { id: string }}) {
         </Link>
         <div className="flex flex-col md:space-y-2">
           <Link 
-            href={(review.type == "album" ? review.albumId : review.type == "track" ? review.trackId : review.artistIds[0]) || "/"} 
+            href={(review.type == "album" ? `/album/${review.albumId}` : review.type == "track" ? `/track/${review.trackId}` : `/artist/${review.artistIds[0]}`)} 
             className="z-10 font-medium text-lg md:text-2xl hover:opacity-70 duration-300"
           >
             <p className="hidden md:block">{review.type == "album" ? review.albumName : review.type == "track" ? review.trackName : review.artistNames[0]}</p>

@@ -28,7 +28,7 @@ export default async function Track({ params }: { params: { id: string } }) {
   const track = await getTrack(params.id)
 
   return (
-    <div className="flex space-y-10 mx-5 my-10 md:m-16 flex-col">
+    <div className="flex space-y-10 mx-3 my-10 md:m-14 lg:mx-48 2xl:mx-96 flex-col">
       <div className="flex flex-col space-y-10 md:flex-row md:space-y-0 md:justify-between items-center">
         <div className="flex items-center space-x-6 md:space-x-8">
           <div 

@@ -62,7 +62,7 @@ export default function ProfileDashboard({ id }: { id: string }) {
             {
               session.user.id == user.id ?
               <Link href="/settings"
-                className='py-3 px-4 text-center rounded-lg drop-shadow-md bg-sky-400 font-medium text-white hover:opacity-80 duration-300'
+                className='py-3 w-full px-4 text-center rounded-lg drop-shadow-md bg-sky-400 font-medium text-white hover:opacity-80 duration-300'
               >
                 <p>Settings</p>
               </Link> : 

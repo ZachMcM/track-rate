@@ -13,7 +13,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions)
 
   return (
-    <div className="flex flex-col mx-8 mt-20 md:mx-20">
+    <div className="flex flex-col mt-20 mx-3 my-10 md:m-14 lg:mx-48 2xl:mx-96 ">
       {
         !session &&
         <div className="flex-col my-20 space-y-5 w-full flex items-center text-center">

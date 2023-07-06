@@ -27,10 +27,10 @@ export default function NewReviewButton() {
 
   return (
     <button 
-      className="p-2.5 flex space-x-2 items-center font-medium bg-zinc-950 dark:bg-white dark:text-zinc-950 text-white rounded-lg hover:opacity-80 duration-300"
+      className="p-1.5 md:p-2.5 flex space-x-2 items-center font-medium bg-zinc-950 dark:bg-white dark:text-zinc-950 text-white rounded-lg hover:opacity-80 duration-300"
       onClick={handleModalClick}
     >
-      <TbCirclePlus className="text-xl"/>
+      <TbCirclePlus className="text-2xl md:text-xl"/>
       <p className="hidden md:block">New Review</p>
     </button>
   )
