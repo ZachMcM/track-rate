@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext } from "react"
-import { ReviewFormContext } from "./Provider"
+import { ReviewFormContext } from "../Provider"
 import { ReviewFormProviderType } from "@/app/types"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
@@ -14,7 +14,7 @@ export default function ReviewClientButton() {
 
   return (
     <button 
-      className="bg-zinc-950 py-2.5 px-3 w-full text-white font-medium rounded-lg hover:opacity-80"
+      className="bg-sky-400 py-2.5 px-3 w-full text-white font-medium rounded-lg duration-300 hover:opacity-80"
       onClick={() => {
         if (session) {
           setSearchModal(true)

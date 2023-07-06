@@ -119,7 +119,7 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
       <div className="flex flex-col-reverse md:space-y-0 md:flex-row md:space-x-8 items-start w-full">
         {
           reviewArr.length != 0 ?
-          <div className="flex flex-col mt-10 md:mt-0 bg-white drop-shadow-lg border border-zinc-200 rounded-lg basis-2/3">
+          <div className="flex flex-col mt-10 md:mt-0 dark:bg-zinc-900 bg-white drop-shadow-md rounded-lg basis-2/3">
             {
               reviewArr.map((review: ExtendedReview) => {
                 return <ReviewCard review={review}/>
@@ -127,7 +127,7 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
             }
           </div>
           :
-          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-lg border border-zinc-200 justify-center items-center basis-2/3">
+          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-md dark:bg-zinc-900 justify-center items-center basis-2/3">
             <p className="text-zinc-500 text-sm">No reviews</p>
           </div>
         }
@@ -135,7 +135,7 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
         {
           session &&
           <button 
-            className="p-4 rounded-lg drop-shadow-lg border border-zinc-200 w-full bg-white font-medium text-center hover:opacity-80 duration-300"
+            className="p-4 rounded-lg drop-shadow-md bg-sky-400 text-white w-full font-medium text-center hover:opacity-80 duration-300"
             onClick={() => setSearchModal(true)}
           >
             <p>New Review</p>
@@ -143,37 +143,37 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
         }
           <div className="flex flex-col space-y-3">
             <p className="font-medium text-lg">Filters</p>
-            <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
+            <div className="flex flex-col bg-white drop-shadow-md dark:bg-zinc-900 rounded-lg">
               <button 
                 className="flex justify-between items-center p-4 hover:opacity-80 duration-300"
                 onClick={() => setSortDropdown(!sortDropdown)}
               >
-                <p className="text-zinc-500 ">Sort by</p>
+                <p className="text-zinc-500">Sort by</p>
                 <div className="flex space-x-2 font-medium items-center">
                   <p>{sortBy}</p>
                   <TbChevronDown/>
                 </div>
               </button>
-              <div ref={sortDropdownRef} className={`${!sortDropdown ? "h-0" : "h-48"} border-t overflow-hidden duration-300 border-zinc-200 flex flex-col items-start`}>
+              <div ref={sortDropdownRef} className={`${!sortDropdown ? "h-0" : "h-48 border-t"} dark:border-zinc-700 overflow-hidden duration-300 border-zinc-200 flex flex-col items-start`}>
                 {
                   sortBys.map((sort: SortBy) => {
                     return (
                       <button
-                        className="text-zinc-500 py-3 hover:text-zinc-950 duration-300 flex px-4 space-x-2 items-center"
+                        className="text-zinc-500 py-3 hover:text-zinc-950 dark:hover:text-white duration-300 flex px-4 space-x-2 items-center"
                         onClick={() => {
                           setSortBy(sort)
                           changeFilters(reviewType, sort)
                         }}
                       >
-                        { sort == sortBy && <TbCheck className="text-green-400"/>}
-                        <p className={`text-sm ${sortBy == sort && "text-zinc-950"}`}>{sort}</p>
+                        { sort == sortBy && <TbCheck className={`text-zinc-950 dark:text-white`}/>}
+                        <p className={`text-sm ${sortBy == sort && "text-zinc-950 dark:text-white"}`}>{sort}</p>
                       </button>
                     )
                   })
                 }
               </div>
             </div>
-            <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
+            <div className="flex flex-col bg-white drop-shadow-md dark:bg-zinc-900 rounded-lg">
               <button 
                 className="flex justify-between items-center p-4 hover:opacity-80 duration-300"
                 onClick={() => setTypeDropdown(!typeDropdown)}
@@ -184,19 +184,19 @@ function ReviewList({ reviews }: { reviews: ExtendedReview[] }) {
                   <TbChevronDown/>
                 </div>
               </button>
-              <div ref={typeDropdownRef} className={`${!typeDropdown ? "h-0" : "h-48"} border-t overflow-hidden duration-300 border-zinc-200 flex flex-col items-start`}>
+              <div ref={typeDropdownRef} className={`${!typeDropdown ? "h-0" : "h-48 border-t"} overflow-hidden duration-300 dark:border-zinc-700 border-zinc-200 flex flex-col items-start`}>
                 {
                   reviewTypes.map((thisType: ReviewType) => {
                     return (
                       <button 
-                        className="text-zinc-500 py-3 hover:text-zinc-950 duration-300 flex px-4 space-x-2 items-center"
+                        className="text-zinc-500 py-3 hover:text-zinc-950 dark:hover:text-white duration-300 flex px-4 space-x-2 items-center"
                         onClick={() => {
                           setReviewType(thisType)
                           changeFilters(thisType, sortBy)
                         }}
                       >
-                        { thisType == reviewType && <TbCheck className="text-green-400"/>}
-                        <p className={`text-sm ${thisType == reviewType && "text-zinc-950"}`}>{thisType}</p>
+                        { thisType == reviewType && <TbCheck className={`text-zinc-950 dark:text-white`}/>}
+                        <p className={`text-sm ${thisType == reviewType && "text-zinc-950 dark:text-white"}`}>{thisType}</p>
                       </button>
                     )
                   })

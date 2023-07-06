@@ -136,6 +136,11 @@ export type ReviewFormProviderType = {
   submitReview: () => Promise<void>
 };
 
+export type DarkModeProviderType = {
+  setDarkMode: Dispatch<SetStateAction<boolean>>,
+  darkMode: boolean,
+}
+
 export type ReviewFormParams = {
   type: "artist" | "album" | "track",
 

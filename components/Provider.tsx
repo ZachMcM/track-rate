@@ -1,12 +1,13 @@
 'use client'
 
-import { ReviewFormParams, ReviewFormProviderType } from "@/app/types";
+import { DarkModeProviderType, ReviewFormParams, ReviewFormProviderType } from "@/app/types";
 import { useMutation } from "@tanstack/react-query";
-import { createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react"
 import { SessionProvider } from "next-auth/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { useMediaQuery } from "react-responsive";
 
 const queryClient = new QueryClient()
 
@@ -14,23 +15,64 @@ export const ReviewFormContext = createContext<ReviewFormProviderType | null>(
   null
 );
 
+export const DarkModeContext = createContext<DarkModeProviderType | null>(null)
+
 const Provider = ({ children } : { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <ReviewFormProvider>
-            {children}
+            <DarkModeProvider>
+              {children}
+            </DarkModeProvider>
         </ReviewFormProvider>
       </QueryClientProvider>
     </SessionProvider>
   )
 }
 
+const DarkModeProvider = ({
+  children,
+}: {
+  children: ReactNode
+}) => {
+  const [darkMode, setDarkMode] = useState<boolean>(true)
+
+  const systemPrefersDark = useMediaQuery(
+    {
+      query: "(prefers-color-scheme: dark)",
+    },
+    undefined,
+    (isSystemDark) => setDarkMode(isSystemDark)
+  );
+
+  const value = useMemo(
+    () => (darkMode === undefined ? !!systemPrefersDark : darkMode),
+    [darkMode, systemPrefersDark]
+  );
+
+  useEffect(() => {
+    if (value) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [value]);
+
+  return (
+    <DarkModeContext.Provider value={{
+      setDarkMode: setDarkMode,
+      darkMode: darkMode,
+    }}>
+      {children}
+    </DarkModeContext.Provider>
+  )
+}
 
 const ReviewFormProvider = ({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) => {
 
   const [reviewContent, setReviewContent] = useState<string>("");

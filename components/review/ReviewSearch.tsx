@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useContext, useEffect, useState } from "react"
-import { ReviewFormContext } from "./Provider"
+import { ReviewFormContext } from "../Provider"
 import { Artist, ReviewFormProviderType, SimplifiedAlbum, Track } from "@/app/types"
 import { useQuery } from "@tanstack/react-query"
 import { formatName, getAccessToken } from "@/app/apiMethods"
@@ -82,11 +82,11 @@ export default function ReviewSearch() {
  
   return (
     <div className="fixed inset-0 h-full w-full z-50 overflow-hidden bg-black/70 flex justify-center items-center p-3">
-      <div ref={modalRef} className="drop-shadow-lg rounded-md bg-zinc-100 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-2/5 items-center">
-        <div className="p-4 bg-white rounded-t-md w-full text-center drop-shadow-lg flex items-center">
+      <div ref={modalRef} className="drop-shadow-md rounded-lg dark:bg-zinc-900 bg-zinc-100 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-2/5 items-center">
+        <div className="p-4 bg-white dark:bg-zinc-900 dark:border-b border-zinc-800 rounded-t-md w-full text-center drop-shadow-md flex items-center">
           <p className="font-semibold text-lg basis-full">Search Music</p>
           <button
-            className="p-2 rounded-full hover:bg-zinc-200 duration-300"
+            className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300"
             onClick={() => setSearchModal(false)}
           > 
             <TbX className="text-xl"/>
@@ -96,7 +96,7 @@ export default function ReviewSearch() {
           <div className="relative w-full">
             <input 
               type="text"
-              className="bg-white z-50 rounded-lg drop-shadow-lg border focus:ring-4 outline-none ring-sky-200 duration-300 border-zinc-300 w-full py-3 px-4 placeholder:text-zinc-400"
+              className="bg-white z-50 rounded-lg drop-shadow-md dark:bg-zinc-950 dark:ring-zinc-800 dark:border-zinc-800 border focus:ring-1 outline-none ring-zinc-400 duration-300 border-zinc-300 w-full py-3 px-4 placeholder:text-zinc-400"
               placeholder="Search music..." 
               onChange={(e) => {
                 setSearch(e.target.value)
@@ -105,7 +105,7 @@ export default function ReviewSearch() {
             />
             {
             searchResults && searchResults.albums.length != 0 && searchResults.tracks.length != 0 && searchResults.artists.length != 0 &&
-            <div className="absolute rounded-md w-full h-96 overflow-y-auto top-14 bg-white drop-shadow-lg flex flex-col space-y-4 py-4">
+            <div className="absolute rounded-lg w-full h-96 overflow-y-auto top-14 dark:bg-zinc-900 bg-white drop-shadow-md flex flex-col space-y-4 py-4">
               <div className="flex flex-col">
                 <p className="font-semibold text-lg px-5">Albums</p>
                 <div className="flex flex-col">
@@ -114,7 +114,7 @@ export default function ReviewSearch() {
                       return (
                         <button 
                           key={uid()} 
-                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
+                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
                           onClick={() => {
                             setItemData({
                               albumName: album.name,
@@ -135,16 +135,16 @@ export default function ReviewSearch() {
                             setReviewForm(true)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
+                          <div className="h-16 w-16 relative rounded-lg drop-shadow-md">
                           {
                               album.images && album.images[0]?.url ?
                               <Image
                                 src={album.images[0].url}
                                 fill
                                 alt={album.name}
-                                className="rounded-md bg-zinc-100"
+                                className="rounded-lg"
                               /> :
-                              <div className="bg-zinc-200 absolute inset-0"></div>
+                              <div className="absolute bg-zinc-100 dark:bg-zinc-800 inset-0"></div>
                             }
                           </div>
                           <div className="flex flex-col space-y-1">
@@ -173,7 +173,7 @@ export default function ReviewSearch() {
                       return (
                         <button 
                           key={uid()} 
-                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
+                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
                           onClick={() => {
                             setItemData({
                               trackName: track.name,
@@ -196,16 +196,16 @@ export default function ReviewSearch() {
                             setSearchModal(false)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
+                          <div className="h-16 w-16 relative rounded-lg drop-shadow-md">
                           {
                               track.album.images && track.album.images[0]?.url ?
                               <Image
                                 src={track.album.images[0].url}
                                 fill
                                 alt={track.name}
-                                className="rounded-md bg-zinc-100"
+                                className="rounded-lg"
                               /> :
-                              <div className="bg-zinc-200 absolute inset-0"></div>
+                              <div className="absolute bg-zinc-100 dark:bg-zinc-800 inset-0"></div>
                             }
                           </div>
                           <div className="flex flex-col space-y-1">
@@ -234,7 +234,7 @@ export default function ReviewSearch() {
                       return (
                         <button
                           key={uid()}  
-                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
+                          className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
                           onClick={() => {
                             setItemData({
                               artistNames: [artist.name],
@@ -246,16 +246,16 @@ export default function ReviewSearch() {
                             setSearchModal(false)
                           }}
                         >
-                          <div className="h-16 w-16 relative rounded-full drop-shadow-lg">
+                          <div className="h-16 w-16 relative rounded-full drop-shadow-md">
                             {
                               artist.images && artist.images[0]?.url ?
                               <Image
                                 src={artist.images[0].url}
                                 fill
                                 alt={artist.name}
-                                className="bg-zinc-100 rounded-full"
+                                className=" rounded-full"
                               /> :
-                              <div className="bg-zinc-100 absolute inset-0 flex justify-center items-center rounded-full"><TbUser className="text-3xl text-zinc-400"/></div>
+                              <div className="absolute bg-zinc-100 dark:bg-zinc-800 inset-0 flex justify-center items-center rounded-full"><TbUser className="text-3xl text-zinc-500"/></div>
                             }
                           </div>
                           <div className="flex flex-col space-y-1">

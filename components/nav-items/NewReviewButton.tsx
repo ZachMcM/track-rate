@@ -5,7 +5,7 @@ import { ReviewFormContext } from "../Provider"
 import { ReviewFormProviderType } from "@/app/types"
 import { useSession } from "next-auth/react"
 import { usePathname, useRouter } from "next/navigation"
-import { TbPlus } from "react-icons/tb"
+import { TbCirclePlus } from "react-icons/tb"
 
 export default function NewReviewButton() {
   const { 
@@ -27,10 +27,11 @@ export default function NewReviewButton() {
 
   return (
     <button 
-      className="p-2.5 font-medium border border-zinc-200 drop-shadow-lg bg-zinc-100 rounded-lg hover:opacity-80 duration-300"
+      className="p-2.5 flex space-x-2 items-center font-medium bg-zinc-950 dark:bg-white dark:text-zinc-950 text-white rounded-lg hover:opacity-80 duration-300"
       onClick={handleModalClick}
     >
-      <TbPlus className="text-xl"/>
+      <TbCirclePlus className="text-xl"/>
+      <p className="hidden md:block">New Review</p>
     </button>
   )
 }

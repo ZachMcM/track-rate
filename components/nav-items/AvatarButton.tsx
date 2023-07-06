@@ -3,6 +3,7 @@
 import { useState } from "react"
 import ProfileDropdown from "./ProfileDropdown"
 import Image from "next/image"
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export default function AvatarButton({ user }: { user: {
   name?: string | null | undefined;
@@ -10,7 +11,7 @@ export default function AvatarButton({ user }: { user: {
   image?: string | null | undefined;
 } & {
   id: string;
-} }) {
+}}) {
   const [dropdown, setDropdown] = useState<boolean>(false)
 
 
@@ -19,14 +20,14 @@ export default function AvatarButton({ user }: { user: {
     { dropdown && <ProfileDropdown userId={user.id} name={user.name || ""} email={user.email || ""} setDropdown={setDropdown}/>}
       <button 
         onClick={() => setDropdown(true)}
-        className="flex items-center space-x-2 hover:ring-4 rounded-full ring-sky-200 duration-300"
+        className="flex items-center space-x-2 hover:opacity-80 rounded-full duration-300"
       >
-        <div className="relative w-10 h-10 aspect-square drop-shadow-lg ">
+        <div className="relative w-10 h-10 aspect-square drop-shadow-md">
           <Image
             fill
             src={user.image || ""}
             alt="avatar"
-            className="rounded-full bg-zinc-100 drop-shadow-lg"
+            className="rounded-full drop-shadow-md"
           />
         </div>
       </button>

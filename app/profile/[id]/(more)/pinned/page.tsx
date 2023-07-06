@@ -24,7 +24,7 @@ export default function Pinned({ params }: { params: { id: string } }) {
           pinnedReviews.length != 0 ?
           <>
             {
-              <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
+              <div className="flex flex-col rounded-lg drop-shadow-md dark:bg-zinc-900 bg-white">
                 {
                   pinnedReviews.map((review: ExtendedReview) => {
                     return <ReviewCard review={review}/>
@@ -33,8 +33,8 @@ export default function Pinned({ params }: { params: { id: string } }) {
               </div>
             }
           </> :
-          <div className="flex px-5 py-10 bg-white rounded-lg justify-center items-center drop-shadow-lg border border-zinc-200">
-            <p className="text-zinc-500 text-sm">No pinned reviews</p>
+          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-md dark:bg-zinc-900 justify-center items-center basis-2/3">
+            <p className="text-zinc-500 text-sm">No pinned</p>
           </div>
         }
       </div> 

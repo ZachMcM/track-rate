@@ -15,14 +15,14 @@ export default function DeleteModal({ setModal, confirm, isLoading, type }: FnPa
 
   return (
     <div className="!m-0 fixed p-5 inset-0 z-50 bg-black/70 flex justify-center items-center">
-      <div ref={modalRef} className="flex flex-col space-y-5 p-5 md:p-8 w-full md:w-3/5 lg:w-2/5 rounded-lg bg-white drop-shadow-lg border border-zinc-200">
+      <div ref={modalRef} className="flex flex-col space-y-5 p-5 md:p-8 w-full md:w-3/5 lg:w-2/5 rounded-lg dark:bg-zinc-900 bg-white drop-shadow-md">
         <div className="flex flex-col space-y-1 items-center md:items-start">
           <h3 className="font-medium text-lg md:text-start text-center">Are you absolutely sure?</h3>
           <p className="text-sm text-zinc-500 md:text-start text-center w-full">This action cannot be undone. This will permanently delete your {type}.</p>
         </div>
         <div className="flex items-center flex-col space-y-3 md:space-y-0 md:flex-row md:justify-end md:space-x-3 text-sm md:text-md w-full font-medium">
           <button
-            className="w-full md:w-fit px-4 py-3 rounded-lg border border-zinc-200 hover:opacity-70 drop-shadow-lg bg-white duration-300"
+            className="w-full md:w-fit px-4 py-3 rounded-lg  hover:opacity-70 dark:text-zinc-950 bg-white duration-300"
             onClick={() => setModal(false)}
           >
             <p>Cancel</p>

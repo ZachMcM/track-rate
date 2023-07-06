@@ -1,13 +1,13 @@
 'use client'
 
 import { ExtendedReview, ReviewFormProviderType } from "@/app/types";
-import LoadingSpinner from "./LoadingSpinner";
-import ReviewCard from "./review/ReviewCard";
+import LoadingSpinner from "../LoadingSpinner";
+import ReviewCard from "./ReviewCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useRef } from "react";
 import { useIntersection } from "@mantine/hooks";
 import { useSession } from "next-auth/react"
-import { ReviewFormContext } from "./Provider";
+import { ReviewFormContext } from "../Provider";
 
 export default function ReviewFeed({ initialReviews }: { initialReviews: ExtendedReview[]}) {
   const { data: session } = useSession()
@@ -52,7 +52,7 @@ export default function ReviewFeed({ initialReviews }: { initialReviews: Extende
   const reviews = data?.pages.flatMap((page) => page) ?? initialReviews
 
   return (
-    <ul className="flex basis-2/3 flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg w-full">
+    <ul className="flex basis-2/3 flex-col dark:bg-zinc-900 bg-white drop-shadow-md rounded-lg w-full">
       {
         reviews.map((review: ExtendedReview, i: number) => {
           if (i === reviews.length - 3) {

@@ -78,10 +78,10 @@ export default function ProfileForm({
                 setUsernameError(false)
                 setUsername(e.target.value)
               }}
-              className={`placeholder:text-zinc-500 drop-shadow-md bg-white bg-transparent duration-300 border border-zinc-200 rounded-lg px-4 py-3 outline-none ring-sky-200 ${
+              className={`placeholder:text-zinc-500 drop-shadow-md dark:bg-zinc-900 dark:border-zinc-800 dark:ring-zinc-800 bg-white bg-transparent duration-300 border border-zinc-200 rounded-lg px-4 py-3 outline-none ring-zinc-200 ${
                 usernameError
                   ? "border-red-500 focus:ring-0"
-                  : "border-zinc-200 focus:ring-2"
+                  : "border-zinc-200 focus:ring-1"
               }`}
               placeholder="Your username"
             />
@@ -91,22 +91,22 @@ export default function ProfileForm({
             } 
           </div>
         </div>
-        <div className="relative hover:opacity-80 duration-300 space-y-2 items-center justify-center border-zinc-200 border drop-shadow-md rounded-lg bg-white py-8">
+        <div className="relative hover:opacity-80 duration-300 space-y-2 items-center justify-center dark:bg-zinc-900 dark:border-zinc-800 dark:ring-zinc-800 border-zinc-200 border drop-shadow-md rounded-lg bg-white py-8">
           <div className="flex space-y-3 flex-col items-center">
-            <div className="relative h-16 w-16 rounded-full drop-shadow-lg ">
+            <div className="relative h-16 w-16 rounded-full drop-shadow-md ">
               {
                 !pfp ?
                 <Image
                   src={user.image || ""}
                   fill
                   alt="avatar"
-                  className="rounded-full drop-shadow-lg "
+                  className="rounded-full drop-shadow-md "
                 /> :
                 <Image
                   src={URL.createObjectURL(pfp)}
                   fill
                   alt="avatar"
-                  className="rounded-full drop-shadow-lg "
+                  className="rounded-full drop-shadow-md "
                 />
               }
             </div>
@@ -124,7 +124,7 @@ export default function ProfileForm({
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="h-44 py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white drop-shadow-md outline-none focus:ring-2 ring-sky-200 duration-300"
+            className="h-44 py-3 px-4 placeholder:text-zinc-500 rounded-lg border dark:bg-zinc-900 dark:border-zinc-800 dark:ring-zinc-800 border-zinc-200 bg-white drop-shadow-md outline-none focus:ring-1 ring-zinc-200 duration-300"
             placeholder="Your bio"
           />
         </div>
@@ -133,13 +133,13 @@ export default function ProfileForm({
           <input
             value={spotify}
             onChange={(e) => setSpotify(e.target.value)}
-            className="py-3 px-4 placeholder:text-zinc-500 rounded-lg border border-zinc-200 bg-white drop-shadow-md outline-none bg-transparent focus:ring-2 ring-sky-200 duration-300"
+            className="py-3 px-4 placeholder:text-zinc-500 rounded-lg border dark:bg-zinc-900 dark:border-zinc-800 dark:ring-zinc-800 border-zinc-200 bg-white drop-shadow-md outline-none bg-transparent focus:ring-1 ring-zinc-200 duration-300"
             placeholder="Your spotify username"
           />
         </div>
       </div>
       <button
-        className="flex px-4 py-3.5 justify-center rounded-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
+        className="flex px-4 py-3.5 justify-center bg-sky-400 rounded-lg font-medium text-white hover:opacity-80 duration-300"
         onClick={submitChanges}
       > 
         { updateMutation.isLoading ?           
@@ -150,10 +150,13 @@ export default function ProfileForm({
           <p>Save Changes</p>
         }
       </button>
-      <Toast setToast={setToast} toast={toast}>
-        <p className="font-medium">Changes saved</p>
-        <p className="text-xs text-zinc-400">Your profile changes have been saved and your profile will reflect these updates.</p>
-      </Toast>
+      {
+        toast &&
+        <Toast setToast={setToast}>
+          <p className="font-medium">Changes saved</p>
+          <p className="text-xs text-zinc-400">Your profile changes have been saved and your profile will reflect these updates.</p>
+        </Toast>
+      }
     </div>
   );
 }

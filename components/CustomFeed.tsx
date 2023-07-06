@@ -3,7 +3,7 @@ import prisma from "@/prisma/client"
 import { User } from "@prisma/client"
 import { getServerSession } from "next-auth/next"
 import { notFound } from "next/navigation"
-import ReviewFeed from "./ReviewFeed"
+import ReviewFeed from "./review/ReviewFeed"
 
 export default async function CustomFeed() {
   const session = await getServerSession(authOptions)

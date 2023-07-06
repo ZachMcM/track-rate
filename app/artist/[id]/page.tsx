@@ -1,6 +1,6 @@
 import { getAccessToken } from "@/app/serverMethods";
 import { Artist } from "@/app/types";
-import MusicReviewButton from "@/components/MusicReviewButton";
+import MusicReviewButton from "@/components/music/MusicReviewButton";
 import MusicStats from "@/components/music/MusicStats";
 import ShareButton from "@/components/ShareButton";
 import Image from "next/image";
@@ -28,13 +28,13 @@ export default async function Artist({ params }: { params: { id: string } }) {
       <div className="flex flex-col space-y-10 md:flex-row md:space-y-0 md:justify-between items-center">
         <div className="flex items-center space-x-6 md:space-x-8">
           <div 
-            className="shrink-0 rounded-full relative h-28 w-28 md:h-60 md:w-60 drop-shadow-lg"
+            className="shrink-0 rounded-full relative h-28 w-28 md:h-60 md:w-60 drop-shadow-md"
           >
             <Image
               src={artist.images && artist.images[0].url}
               fill
               alt={artist.name}
-              className="rounded-full drop-shadow-lg"
+              className="rounded-full drop-shadow-md"
             />
           </div>
           <p className="z-10 font-medium text-2xl md:text-4xl">{artist.name}</p>
@@ -42,7 +42,7 @@ export default async function Artist({ params }: { params: { id: string } }) {
         <MusicStats 
           data={{
             artistIds: [artist.id],
-            artistImages: [artist.images[0].url],
+            artistImages: [artist.images && artist.images[0].url],
             artistNames: [artist.name],
             type: "artist"
           }}
@@ -61,18 +61,18 @@ export default async function Artist({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-          <div className="bg-white w-full flex flex-col font-medium items-center shadow-lg border border-zinc-200 rounded-lg basis-1/3">
-            <a href={artist.external_urls.spotify} className="hover:bg-zinc-100 duration-300 flex items-center space-x-2 py-2.5 px-5 border-b border-zinc-200 w-full justify-center">
-              <BsSpotify className="text-lg text-green-400"/>
+          <div className="bg-white w-full flex flex-col font-medium items-center shadow-md dark:bg-zinc-900  rounded-lg basis-1/3">
+            <a href={artist.external_urls.spotify} className="hover:bg-zinc-200 rounded-t-lg dark:hover:bg-zinc-800 dark:border-zinc-800 duration-300 flex items-center space-x-2 py-2.5 px-5 border-b border-zinc-200 w-full justify-center">
+              <BsSpotify className="text-lg"/>
               <p>Listen on Spotify</p>
             </a>
             <ShareButton 
-              className="flex items-center space-x-2 py-2.5 px-5 border-b border-zinc-200 w-full justify-center hover:bg-zinc-100 duration-300" 
+              className="flex items-center space-x-2 py-2.5 px-5 dark:hover:bg-zinc-800 dark:border-zinc-800 border-b border-zinc-200 w-full justify-center hover:bg-zinc-200 duration-300" 
               link={`/artist/${artist.id}`}
               type="artist"
             />
             <MusicReviewButton 
-              className="flex rounded-b-lg hover:bg-zinc-100 duration-300 items-center space-x-2 py-2.5 px-5 w-full justify-center"
+              className="flex rounded-b-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 dark:border-zinc-800 duration-300 items-center space-x-2 py-2.5 px-5 w-full justify-center"
               type="artist"
               data={{
                 artistIds: [artist.id],

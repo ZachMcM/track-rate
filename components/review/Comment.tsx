@@ -47,9 +47,9 @@ export default function Comment({ comment }: { comment: ExtendedComment}) {
   }
 
   return (
-    <div className="last:border-none flex items-center justify-between border-b border-zinc-200 p-5">
+    <div className="last:border-none flex items-center justify-between border-b dark:border-zinc-800 border-zinc-200 p-5">
       <div className="flex space-x-3">
-        <Link className="hover:ring-4 relative h-8 w-8 ring-sky-200 rounded-full duration-300" href={`/profile/${comment.userId}`}>
+        <Link className="hover:opacity-80 relative h-8 w-8 rounded-full duration-300" href={`/profile/${comment.userId}`}>
           <Image
             src={comment.user.image || ""}
             fill
@@ -59,7 +59,7 @@ export default function Comment({ comment }: { comment: ExtendedComment}) {
         </Link>
         <div className="flex flex-col space-y-1">
           <div className="flex items-center space-x-2">
-            <Link className="hover:text-sky-400 duration-300 font-medium text-sm" href={`/profile/${comment.userId}`}>{comment.user.name}</Link>
+            <Link className="hover:opacity-70 duration-300 font-medium text-sm" href={`/profile/${comment.userId}`}>{comment.user.name}</Link>
             <p className="text-zinc-500 text-sm">{getTimeAgo()}</p>
           </div>
           <p className="text-sm text-zinc-500">{comment.content}</p>

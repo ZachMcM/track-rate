@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import Image from "next/image"
 import Link from "next/link"
-import RatingDisplay from "../RatingDisplay"
+import RatingDisplay from "./RatingDisplay"
 import LikeButton from "./LikeButton"
 import { useState } from "react"
 import { ExtendedReview } from "@/app/types"
@@ -13,7 +13,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import DeleteModal from "../DeleteModal"
 import { useRouter } from "next/navigation"
 import ReviewComments from "./ReviewComments"
-import MusicReviewButton from "../MusicReviewButton"
+import MusicReviewButton from "../music/MusicReviewButton"
 import ShareButton from "../ShareButton"
 import LoadingSpinner from "../LoadingSpinner"
 
@@ -65,25 +65,25 @@ export default function ReviewPageClient({ id }: { id: string }) {
           <div className="flex flex-col space-y-14 w-full basis-2/3 mt-10 md:mt-0">
             <div className="space-y-8 flex flex-col">
               <div className="flex space-x-3 items-center">
-                <Link href={`/profile/${review.userId}`} className="h-10 w-10 drop-shadow-lg  relative hover:ring-4 ring-sky-200 duration-300 rounded-full">
+                <Link href={`/profile/${review.userId}`} className="h-10 w-10 drop-shadow-md relative hover:opacity-80 duration-300 rounded-full">
                   <Image
                     src={review.user?.image || ""}
                     fill
                     alt="avatar"
-                    className="rounded-full drop-shadow-lg "
+                    className="rounded-full drop-shadow-md"
                   />
                 </Link>
-                <Link href={`/profile/${review.userId}`}><p className="hover:text-sky-400 duration-300 font-medium text-lg">{review.user.name}</p></Link>
+                <Link href={`/profile/${review.userId}`}><p className="hover:opacity-70 duration-300 font-medium text-lg">{review.user.name}</p></Link>
               </div>
               <div className="text-xl"><RatingDisplay rating={review.rating}/></div>
-              <p className="text-zinc-700 whitespace-pre-wrap">{review.content}</p>
+              <p className="whitespace-pre-wrap">{review.content}</p>
             </div>
             <ReviewComments review={review}/>
           </div>
-          <div className="bg-white w-full flex flex-col font-medium items-center shadow-lg border border-zinc-200 rounded-lg basis-1/3">
-            <div className="py-2.5 px-5 border-b border-zinc-200 w-full flex justify-center"><LikeButton review={review}/></div>
+          <div className="bg-white w-full dark:bg-zinc-900 flex flex-col font-medium items-center shadow-md rounded-lg basis-1/3">
+            <div className="py-2.5 px-5 border-b dark:border-zinc-800 border-zinc-200 w-full flex justify-center"><LikeButton review={review}/></div>
             <ShareButton
-              className="py-2.5 px-5 border-b border-zinc-200 w-full hover:bg-zinc-100 duration-300 justify-center flex"
+              className={`py-2.5 px-5 border-zinc-200 w-full dark:border-zinc-800 dark:hover:bg-zinc-800 hover:bg-zinc-200 duration-300 justify-center flex ${session ? "border-b" : "rounded-b-lg"}`}
               link={`/review/${review.id}`}
               type="review"
             />
@@ -105,14 +105,14 @@ export default function ReviewPageClient({ id }: { id: string }) {
                   albumId: review.albumId || undefined,
                   albumImage: review.albumImage || undefined
                 }}
-                className="py-2.5 px-5 w-full capitalize last:rounded-b-lg hover:bg-zinc-100 duration-300 border-b border-zinc-200"
+                className={`py-2.5 px-5 w-full capitalize dark:border-zinc-800 dark:hover:bg-zinc-800 last:rounded-b-lg hover:bg-zinc-200 duration-300 ${session && session.user.id == review.userId ? "border-b" : "rounded-b-lg"} border-zinc-200`}
               />
             }
             {
               session && session.user.id == review.userId &&
               <>
                 <button
-                  className="flex items-center last:rounded-b-lg justify-center space-x-2 py-2.5 px-5 w-full capitalize hover:bg-zinc-100 duration-300"
+                  className="flex items-center last:rounded-b-lg dark:border-zinc-800 dark:hover:bg-zinc-800 justify-center space-x-2 py-2.5 px-5 w-full capitalize hover:bg-zinc-200 duration-300"
                   onClick={() => setDeleteModal(true)}
                 >
                   <TbTrash className="text-xl"/>

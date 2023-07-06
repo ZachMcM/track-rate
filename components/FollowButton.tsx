@@ -44,7 +44,7 @@ export default function FollowButton({ user }: { user: UserExtendedFollowers }) 
   if (session) {
     return (
       <button
-        className="py-3 px-4 rounded-md drop-shadow-lg bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
+        className="py-3 px-4 rounded-lg drop-shadow-md bg-sky-400 font-medium text-white hover:opacity-80 duration-300"
         onClick={() => {
           followMutation.mutate()
           setFollowing(!following)

@@ -10,7 +10,7 @@ export default function UserListItem({ user }: { user: UserExtendedFollowers }) 
   const { data: session } = useSession()
 
   return (
-    <div className="relative w-full flex justify-between items-center p-3 hover:bg-zinc-100 rounded-lg duration-300">
+    <div className="relative flex justify-between items-center p-3 dark:hover:bg-zinc-800 m-3 hover:bg-zinc-100 rounded-lg duration-300">
       <div className="flex space-x-3 items-center">
         <div className="relative h-10 w-10">
           <Image

@@ -5,7 +5,7 @@ import { TbCheck, TbX } from "react-icons/tb";
 import Image from "next/image";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
-import { ReviewFormContext } from "./Provider";
+import { ReviewFormContext } from "../Provider";
 import { ReviewFormProviderType } from "@/app/types";
 import Link from "next/link";
 import RatingPick from "./RatingPick";
@@ -41,15 +41,15 @@ export default function ReviewForm() {
   
   if (itemData) {
     return (
-      <div className="fixed inset-0 h-full w-full z-50 overflow-hidden bg-black/70 flex justify-center items-center p-3">
+      <div className="fixed inset-0 h-full w-full z-50 bg-black/70 flex justify-center items-center p-3">
         <div
           ref={modalRef}
-          className="drop-shadow-lg rounded-lg bg-zinc-100 flex flex-col w-full md:w-5/6"
+          className="drop-shadow-md rounded-lg dark:bg-zinc-900 bg-zinc-100 flex flex-col w-full md:w-5/6"
         >
-          <div className="p-4 bg-white rounded-t-lg w-full text-center drop-shadow-lg flex items-center">
+          <div className="p-4 dark:bg-zinc-900 bg-white dark:border-b border-zinc-800 rounded-t-lg w-full text-center flex items-center">
             <p className="font-semibold text-lg basis-full">Create Review</p>
             <button
-              className="p-2 rounded-full hover:bg-zinc-200 duration-300"
+              className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300"
               onClick={closeForm}
             > 
               <TbX className="text-xl"/>
@@ -58,32 +58,32 @@ export default function ReviewForm() {
           <div className="p-8 flex md:space-x-8 items-start">
             <Link 
               href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
-              className={`hidden md:block shrink-0 drop-shadow-lg w-44 h-44 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+              className={`hidden md:block shrink-0 drop-shadow-md w-44 h-44 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:opacity-80 duration-300`}
             >
               <Image
                 src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}
                 fill
                 alt={itemData.type == "artist" ? itemData.artistNames[0] : itemData.albumName || ""}
-                className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+                className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-md`}
               />
             </Link>
             <div className="flex flex-col space-y-5 w-full">
               <div className="flex space-x-5 md:space-x-0 justify-start items-center">
                 <Link 
                   href={itemData.type == "track" ? `/track/${itemData.trackId}` : itemData.type == "album" ? `/album/${itemData.albumId}` : `/artist/${itemData.artistIds}`} 
-                  className={`text-start md:hidden shrink-0 drop-shadow-lg w-20 h-20 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:ring-4 ring-sky-200 duration-300`}
+                  className={`text-start md:hidden shrink-0 drop-shadow-md w-20 h-20 relative ${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} hover:opacity-80 duration-300`}
                 >
                   <Image
                     src={itemData.type == "artist" ? itemData.artistImages[0] : itemData.albumImage || ""}
                     fill
                     alt={itemData.type == "artist" ? itemData.artistNames[0] : itemData.albumName || ""}
-                    className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+                    className={`${itemData.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-md`}
                     />
                 </Link>
                 <div className="flex flex-col space-y-1 items-start">
                   <Link 
                     href={(itemData.type == "album" ? itemData.albumId : itemData.type == "track" ? itemData.trackId : itemData.artistIds[0]) || "/"} 
-                    className="font-medium text-xl md:text-2xl hover:text-sky-400 duration-300"
+                    className="font-medium text-xl md:text-2xl hover:opacity-70 duration-300"
                   >
                       {itemData.type == "album" ? itemData.albumName : itemData.type == "track" ? itemData.trackName : itemData.artistNames[0]}
                   </Link>
@@ -106,10 +106,10 @@ export default function ReviewForm() {
                 <div className="flex flex-col space-y-2">
                   <p className="font-medium">Pinned</p>
                   <button
-                    className="h-7 w-7 rounded-lg drop-shadow-lg bg-white"
+                    className="h-7 w-7 rounded-lg drop-shadow-md bg-white dark:border dark:border-white dark:bg-transparent"
                     onClick={() => setPinned(!pinned)}
                   >
-                    <div className={`${!pinned && "opacity-0"} rounded-lg flex justify-center items-center w-full h-full text-white bg-sky-400 duration-300`}>
+                    <div className={`${!pinned && "opacity-0"} rounded-lg flex justify-center items-center w-full h-full text-white dark:bg-white dark:text-zinc-950 bg-zinc-950 duration-300`}>
                       <TbCheck className={`${!pinned && "opacity-0"} text-xl`}/>
                     </div>
                   </button>
@@ -120,7 +120,7 @@ export default function ReviewForm() {
                 <textarea
                   value={reviewContent}
                   onChange={(e) => setReviewContent(e.target.value)}
-                  className="bg-white p-4 h-48 text-sm rounded-lg border duration-300 border-zinc-200 outline-none focus:ring-4 ring-sky-200"
+                  className="bg-white dark:bg-zinc-950 dark:border-zinc-800 border border-zinc-200 p-4 h-48 text-sm placeholder:text-zinc-500 rounded-lg duration-300 outline-none focus:ring-1 ring-zinc-400 dark:ring-zinc-800 drop-shadow-md"
                 />
                 { contentError && <p className="text-red-500 text-xs">Content is required</p>}
               </div>

@@ -21,14 +21,14 @@ export default function MusicReviews({ id, type }: { id: string, type: string })
       <>
       {
         relatedReviews.length != 0 ?
-        <div className="flex flex-col bg-white drop-shadow-lg border border-zinc-200 rounded-lg">
+        <div className="flex flex-col dark:bg-zinc-900 bg-white drop-shadow-md rounded-lg">
           {
             relatedReviews.map((review: ExtendedReview) => {
               return <ReviewCard review={review}/>
             })
           }
         </div> :
-        <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-lg border border-zinc-200 justify-center items-center basis-2/3">
+        <div className="flex px-5 py-10 bg-white dark:bg-zinc-900 rounded-lg drop-shadow-md justify-center items-center basis-2/3">
           <p className="text-zinc-500 text-sm">No reviews</p>
         </div>
       }

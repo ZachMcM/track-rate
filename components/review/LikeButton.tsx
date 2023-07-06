@@ -76,7 +76,7 @@ export default function LikeButton({ review }: { review: ExtendedReview }) {
       >
         {
           liked ? 
-          <TbHeartFilled className="text-red-500"/> :
+          <TbHeartFilled/> :
           <TbHeart/>
         }
       </button>

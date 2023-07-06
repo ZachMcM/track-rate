@@ -112,225 +112,231 @@ export default function SearchBar({
     <div className="bg-black/70 z-50 inset-0 fixed justify-center flex items-center">
       <div
         ref={modalRef}
-        className="drop-shadow-lg rounded-md bg-white flex flex-col w-full m-3 md:w-2/5 items-center border p-8"
+        className="drop-shadow-md rounded-lg dark:bg-zinc-900 bg-zinc-100 flex flex-col w-full m-3 md:w-3/5 lg:w-1/2 xl:w-2/5 items-center"
       >
-        <button
-          className="p-2 rounded-full hover:bg-zinc-200 duration-300 absolute right-0 top-0 m-2"
-          onClick={closeSearch}
-        >
-          <TbX className="text-xl" />
-        </button>
-        <div className="mt-8 relative items-center drop-shadow-lg bg-zinc-100 border border-zinc-200 rounded-lg py-3 px-5 w-full focus-within:ring-2 ring-sky-200">
-          <input
-            value={input}
-            onFocus={() => setDropdown(true)}
-            onChange={(e) => {
-              setInput(e.target.value);
-              debounceRequest();
-              userDebounceRequest()
-            }}
-            className="transparent placeholder:text-zinc-500 bg-transparent w-full border-none outline-none"
-            placeholder="Search trackrate..."
-          />
-          {dropdown && (
-            <div className="absolute left-0 top-14 bg-white border w-full border-zinc-200 drop-shadow-lg rounded-lg">
-              <div className="flex items-center py-3 px-5 space-x-7 border-b border-zinc-200">
-                <button
-                  onClick={() => {
-                    setInput("")
-                    setSearchType("music")
-                  }}
-                  className={`font-medium hover:text-sky-400 duration-300 ${
-                    searchType == "music" && "text-sky-400"
-                  }`}
-                >
-                  Music
-                </button>
-                <button
-                  onClick={() => {
-                    setInput("")
-                    setSearchType("users")
-                  }}
-                  className={`font-medium hover:text-sky-400 duration-300 ${
-                    searchType == "users" && "text-sky-400"
-                  }`}
-                >
-                  Users
-                </button>
-              </div>
-              <div
-                className={`h-64 w-full ${
-                  searchType == "music" ? "flex" : "hidden"
-                } overflow-y-auto`}
-              >
-                {musicResults &&
-                  musicResults.albums.length != 0 &&
-                  musicResults.tracks.length != 0 &&
-                  musicResults.artists.length != 0 && (
-                    <div className="flex flex-col space-y-4 py-4 w-full">
-                      <div className="flex flex-col w-full">
-                        <p className="font-semibold text-lg px-5">Albums</p>
-                        <div className="flex flex-col w-full">
-                          {musicResults.albums.map((album: SimplifiedAlbum) => {
-                            return (
-                              <Link
-                                key={uid()}
-                                className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
-                                href={`/album/${album.id}`}
-                                onClick={closeSearch}
-                              >
-                                <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
-                                  {album.images && album.images[0]?.url ? (
-                                    <Image
-                                      src={album.images[0].url}
-                                      fill
-                                      alt={album.name}
-                                      className="rounded-md bg-zinc-100"
-                                    />
-                                  ) : (
-                                    <div className="bg-zinc-200 absolute inset-0"></div>
-                                  )}
-                                </div>
-                                <div className="flex flex-col space-y-1">
-                                  <p className="font-medium text-start">
-                                    {formatName(album.name, 25)}
-                                  </p>
-                                  <p className="text-sm text-zinc-400 text-start">
-                                    {album.artists.map(
-                                      (artist: Artist, i: number) => {
-                                        return (
-                                          <span key={uid()}>
-                                            {formatName(artist.name, 25)}
-                                            {i != album.artists.length - 1 &&
-                                              ","}{" "}
-                                          </span>
-                                        );
-                                      }
-                                    )}
-                                  </p>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-lg px-5">Tracks</p>
-                        <div className="flex flex-col">
-                          {musicResults.tracks.map((track: Track) => {
-                            return (
-                              <Link
-                                href={`/track/${track.id}`}
-                                key={uid()}
-                                onClick={closeSearch}
-                                className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
-                              >
-                                <div className="h-16 w-16 relative rounded-md drop-shadow-lg">
-                                  {track.album.images &&
-                                  track.album.images[0]?.url ? (
-                                    <Image
-                                      src={track.album.images[0].url}
-                                      fill
-                                      alt={track.name}
-                                      className="rounded-md bg-zinc-100"
-                                    />
-                                  ) : (
-                                    <div className="bg-zinc-200 absolute inset-0"></div>
-                                  )}
-                                </div>
-                                <div className="flex flex-col space-y-1">
-                                  <p className="font-medium text-start">
-                                    {formatName(track.name, 25)}
-                                  </p>
-                                  <p className="text-sm text-start text-zinc-400">
-                                    {track.artists.map(
-                                      (artist: Artist, i: number) => {
-                                        return (
-                                          <span key={uid()}>
-                                            {" "}
-                                            {formatName(artist.name, 25)}
-                                            {i != track.artists.length - 1 &&
-                                              ","}{" "}
-                                          </span>
-                                        );
-                                      }
-                                    )}
-                                  </p>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-lg px-5">Artists</p>
-                        <div className="flex flex-col">
-                          {musicResults.artists.map((artist: Artist) => {
-                            return (
-                              <Link
-                                onClick={closeSearch}
-                                href={`/artist/${artist.id}`}
-                                key={uid()}
-                                className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md"
-                              >
-                                <div className="h-16 w-16 relative rounded-full drop-shadow-lg">
-                                  {artist.images && artist.images[0]?.url ? (
-                                    <Image
-                                      src={artist.images[0].url}
-                                      fill
-                                      alt={artist.name}
-                                      className="bg-zinc-100 rounded-full"
-                                    />
-                                  ) : (
-                                    <div className="bg-zinc-100 absolute inset-0 flex justify-center items-center rounded-full">
-                                      <TbUser className="text-3xl text-zinc-400" />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="flex flex-col space-y-1">
-                                  <p className="font-medium text-start">
-                                    {formatName(artist.name, 25)}
-                                  </p>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-              </div>
-              <div
-                className={`h-64 w-full ${
-                  searchType == "users" ? "flex" : "hidden"
-                } overflow-y-auto`}
-              >
-                {
-                  userResults && 
-                  <div className="flex flex-col space-y-4 py-4 w-full">
-                    {
-                      userResults.map((user: User) => {
-                        return (
-                          <Link href={`/user/${user.id}`} className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-200 duration-300 rounded-md">
-                            <div className="relative h-10 w-10 drop-shadow-lg rounded-full">
-                              <Image
-                                src={user.image || ""}
-                                fill
-                                alt="avatar"
-                                className="rounded-full drop-shadow-lg"
-                              />
-                            </div>
-                            <p className="font-medium">{user.name}</p>
-                          </Link>
-                        )
-                      })
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-          )}
+        <div className="p-3 flex items-center text-center dark:bg-zinc-900 dark:border-b dark:border-zinc-800 bg-white drop-shadow-md rounded-t-lg border-b border-zinc-200 w-full">
+          <p className="font-medium text-lg basis-full">Search</p>
+          <button
+            className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300"
+            onClick={closeSearch}
+          > 
+            <TbX className="text-xl"/>
+          </button>
         </div>
+        <div className="w-full p-8">
+          <div className="relative items-center drop-shadow-md bg-white dark:bg-zinc-950 border dark:border-zinc-800 border-zinc-200 rounded-lg py-3 px-5 w-full focus-within:ring-1 ring-zinc-500 dark:ring-zinc-800">
+            <input
+              value={input}
+              onFocus={() => setDropdown(true)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                debounceRequest();
+                userDebounceRequest()
+              }}
+              className="transparent placeholder:text-zinc-500 bg-transparent w-full border-none outline-none"
+              placeholder="Search trackrate..."
+            />
+            {dropdown && (
+              <div className="absolute left-0 top-14 text-zinc-500 drop-shadow-md bg-white dark:bg-zinc-900 border w-full border-zinc-200 dark:border-zinc-800 rounded-lg">
+                <div className="flex items-center py-3 px-5 space-x-7 dark:border-zinc-800 border-b border-zinc-200">
+                  <button
+                    onClick={() => {
+                      setInput("")
+                      setSearchType("music")
+                    }}
+                    className={`font-medium hover:text-zinc-950 dark:hover:text-white duration-300 ${
+                      searchType == "music" && "text-zinc-950 dark:text-white"
+                    }`}
+                  >
+                    Music
+                  </button>
+                  <button
+                    onClick={() => {
+                      setInput("")
+                      setSearchType("users")
+                    }}
+                    className={`font-medium hover:text-zinc-950 dark:hover:text-white duration-300 ${
+                      searchType == "users" && "text-zinc-950 dark:text-white"
+                    }`}
+                  >
+                    Users
+                  </button>
+                </div>
+                <div
+                  className={`h-64 w-full ${
+                    searchType == "music" ? "flex" : "hidden"
+                  } overflow-y-auto`}
+                >
+                  {musicResults &&
+                    musicResults.albums.length != 0 &&
+                    musicResults.tracks.length != 0 &&
+                    musicResults.artists.length != 0 && (
+                      <div className="flex flex-col space-y-4 py-4 w-full">
+                        <div className="flex flex-col w-full">
+                          <p className="font-semibold text-lg px-5">Albums</p>
+                          <div className="flex flex-col w-full">
+                            {musicResults.albums.map((album: SimplifiedAlbum) => {
+                              return (
+                                <Link
+                                  key={uid()}
+                                  className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
+                                  href={`/album/${album.id}`}
+                                  onClick={closeSearch}
+                                >
+                                  <div className="h-16 w-16 relative rounded-lg drop-shadow-md">
+                                    {album.images && album.images[0]?.url ? (
+                                      <Image
+                                        src={album.images[0].url}
+                                        fill
+                                        alt={album.name}
+                                        className="rounded-lg"
+                                      />
+                                    ) : (
+                                      <div className="bg-zinc-100 dark:bg-zinc-800 absolute inset-0"></div>
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col space-y-1">
+                                    <p className="font-medium text-start">
+                                      {formatName(album.name, 25)}
+                                    </p>
+                                    <p className="text-sm text-zinc-400 text-start">
+                                      {album.artists.map(
+                                        (artist: Artist, i: number) => {
+                                          return (
+                                            <span key={uid()}>
+                                              {formatName(artist.name, 25)}
+                                              {i != album.artists.length - 1 &&
+                                                ","}{" "}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-lg px-5">Tracks</p>
+                          <div className="flex flex-col">
+                            {musicResults.tracks.map((track: Track) => {
+                              return (
+                                <Link
+                                  href={`/track/${track.id}`}
+                                  key={uid()}
+                                  onClick={closeSearch}
+                                  className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
+                                >
+                                  <div className="h-16 w-16 relative rounded-lg drop-shadow-md">
+                                    {track.album.images &&
+                                    track.album.images[0]?.url ? (
+                                      <Image
+                                        src={track.album.images[0].url}
+                                        fill
+                                        alt={track.name}
+                                        className="rounded-lg"
+                                      />
+                                    ) : (
+                                      <div className="bg-zinc-100 dark:bg-zinc-800 absolute inset-0"></div>
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col space-y-1">
+                                    <p className="font-medium text-start">
+                                      {formatName(track.name, 25)}
+                                    </p>
+                                    <p className="text-sm text-start text-zinc-400">
+                                      {track.artists.map(
+                                        (artist: Artist, i: number) => {
+                                          return (
+                                            <span key={uid()}>
+                                              {" "}
+                                              {formatName(artist.name, 25)}
+                                              {i != track.artists.length - 1 &&
+                                                ","}{" "}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-lg px-5">Artists</p>
+                          <div className="flex flex-col">
+                            {musicResults.artists.map((artist: Artist) => {
+                              return (
+                                <Link
+                                  onClick={closeSearch}
+                                  href={`/artist/${artist.id}`}
+                                  key={uid()}
+                                  className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg"
+                                >
+                                  <div className="h-16 w-16 relative rounded-full drop-shadow-md">
+                                    {artist.images && artist.images[0]?.url ? (
+                                      <Image
+                                        src={artist.images[0].url}
+                                        fill
+                                        alt={artist.name}
+                                        className="rounded-full"
+                                      />
+                                    ) : (
+                                      <div className="bg-zinc-100 dark:bg-zinc-800 absolute inset-0 flex justify-center items-center rounded-full">
+                                        <TbUser className="text-3xl text-zinc-400" />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col space-y-1">
+                                    <p className="font-medium text-start">
+                                      {formatName(artist.name, 25)}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                </div>
+                <div
+                  className={`h-64 w-full ${
+                    searchType == "users" ? "flex" : "hidden"
+                  } overflow-y-auto`}
+                >
+                  {
+                    userResults && 
+                    <div className="flex flex-col space-y-4 py-4 w-full">
+                      {
+                        userResults.map((user: User) => {
+                          return (
+                            <Link href={`/user/${user.id}`} className="flex space-x-4 items-center py-2 px-3 mx-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300 rounded-lg">
+                              <div className="relative h-10 w-10 drop-shadow-md rounded-full">
+                                <Image
+                                  src={user.image || ""}
+                                  fill
+                                  alt="avatar"
+                                  className="rounded-full drop-shadow-md"
+                                />
+                              </div>
+                              <p className="font-medium">{user.name}</p>
+                            </Link>
+                          )
+                        })
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
     </div>
   );

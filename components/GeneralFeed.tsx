@@ -1,4 +1,4 @@
-import ReviewFeed from "./ReviewFeed"
+import ReviewFeed from "./review/ReviewFeed"
 import prisma from "@/prisma/client"
 
 export default async function GeneralFeed() {

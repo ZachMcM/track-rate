@@ -34,7 +34,7 @@ export default function ShareButton({ className, link, type }: { className: stri
           <p>Share this {type}</p>
         </div>
       </button>    
-      <Toast setToast={setToast} toast={toast}>Copied to clipboard</Toast>
+      { toast && <Toast setToast={setToast}>Copied to clipboard</Toast> }
     </>
 
   )

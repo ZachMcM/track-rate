@@ -3,7 +3,7 @@
 import { getUserReviews } from "@/app/apiMethods"
 import { useQuery } from "@tanstack/react-query"
 import { formatName } from "@/app/apiMethods";
-import RatingDisplay from "@/components/RatingDisplay";
+import RatingDisplay from "@/components/review/RatingDisplay";
 import Image from "next/image";
 import Link from "next/link";
 import { ExtendedReview } from "@/app/types";
@@ -23,13 +23,13 @@ export default function Activity({ params }: { params: {id: string }}) {
         <p className="font-medium text-lg">Activity</p>
         {
           user.reviews.length != 0 ?
-          <div className="flex flex-col space-y-4 drop-shadow-lg border border-zinc-200 rounded-lg bg-white p-4">
+          <div className="flex flex-col space-y-4 drop-shadow-md dark:bg-zinc-900 rounded-lg bg-white p-4">
             {
               user.reviews.map((review: ExtendedReview) => {
                 return (
-                  <div className="relative flex justify-between p-2 rounded-lg items-center hover:bg-zinc-100 duration-300">
+                  <div className="relative flex justify-between p-2 rounded-lg items-center hover:bg-zinc-100 dark:hover:bg-zinc-800 duration-300">
                     <div className="flex space-x-5 items-center">
-                      <div className="h-16 w-16 flex text-zinc-500 border border-zinc-200 text-sm justify-center items-center aspect-square bg-zinc-100 rounded-lg">
+                      <div className="h-16 w-16 flex text-zinc-500 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm justify-center items-center aspect-square bg-zinc-100 rounded-lg">
                         <div  className="flex flex-col items-center">
                           <p>{month[(new Date(review.createdAt)).getMonth()]}</p>
                           <p>{(new Date(review.createdAt)).getDate()}</p>
@@ -38,25 +38,25 @@ export default function Activity({ params }: { params: {id: string }}) {
                       <div className="flex space-x-3 items-center">
                         <Link 
                           href={review.type == "artist" ? `/artist/${review.artistIds[0]}` : `/album/${review.albumId}` || ""} 
-                          className={`z-10 hover:ring-4 ring-sky-200 duration-300 relative h-16 w-16 ${review.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+                          className={`z-10 hover:opacity-80 duration-300 relative h-14 w-14 ${review.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-md`}
                         >
                           <Image
                             src={review.type == "artist" ? review.artistImages[0] : review.albumImage || ""}
                             fill
                             alt={(review.type == "arist" ? review.artistNames[0] : review.type == "album" ? review.albumName : review.trackName) || ""}
-                            className={`${review.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-lg`}
+                            className={`${review.type == "artist" ? "rounded-full" : "rounded-lg"} drop-shadow-md`}
                           />
                         </Link>
                         <div className="flex flex-col">
                           <Link 
                             href={review.type == "artist" ? `/artist/${review.artistIds[0]}` : review.type == "album" ? `/album/${review.albumId}` : `/track/${review.trackId}`} 
-                            className="z-10 font-medium hover:text-sky-400 duration-300"
+                            className="z-10 font-medium hover:opacity-70 duration-300"
                           >
                             {(review.type == "artist" ? formatName(review.artistNames[0], 25) : review.type == "album" ? formatName(review.albumName || "", 25) : formatName(review.trackName || "", 25))}
                           </Link>
                           {
                             review.type != "artist" &&
-                            <p className="text-sm text-zinc-500">
+                            <p className="text-sm text-sky-400">
                               {
                                 review.artistNames.map((name: string, i: number) => {
                                   return (
@@ -76,7 +76,7 @@ export default function Activity({ params }: { params: {id: string }}) {
               })
             }
           </div> :
-          <div className="flex px-5 py-10 bg-white rounded-md justify-center items-center drop-shadow-lg">
+          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-md dark:bg-zinc-900 justify-center items-center basis-2/3">
             <p className="text-zinc-500 text-sm">No activity</p>
           </div>
         }

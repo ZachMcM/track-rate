@@ -1,7 +1,7 @@
 import { formatName } from "@/app/apiMethods";
 import { getAccessToken } from "@/app/serverMethods";
 import { Artist, Track } from "@/app/types";
-import MusicReviewButton from "@/components/MusicReviewButton";
+import MusicReviewButton from "@/components/music/MusicReviewButton";
 import MusicStats from "@/components/music/MusicStats";
 import ShareButton from "@/components/ShareButton";
 import Image from "next/image";
@@ -32,13 +32,13 @@ export default async function Track({ params }: { params: { id: string } }) {
       <div className="flex flex-col space-y-10 md:flex-row md:space-y-0 md:justify-between items-center">
         <div className="flex items-center space-x-6 md:space-x-8">
           <div 
-            className="shrink-0 relative h-28 w-28 md:h-60 md:w-60 drop-shadow-lg"
+            className="shrink-0 relative h-28 w-28 md:h-60 md:w-60 drop-shadow-md"
           >
             <Image
               src={track.album.images && track.album.images[0].url}
               fill
               alt={track.album.name}
-              className="rounded-lg drop-shadow-lg"
+              className="rounded-lg drop-shadow-md"
             />
           </div>
           <div className="flex flex-col md:space-y-1">
@@ -48,7 +48,7 @@ export default async function Track({ params }: { params: { id: string } }) {
               <p className="hidden md:block">{track.name}</p>
               <p className="md:hidden">{formatName(track.name, 25)}</p>
             </div>   
-            <p className="md:text-xl text-zinc-500">{formatName(track.album.name, 40)}</p>       
+            <Link href={`/album/${track.album.id}`} className="md:text-xl text-zinc-500">{formatName(track.album.name, 40)}</Link>       
             <div className="flex text-sky-400 flex-wrap text-sm md:text-base gap-2 z-10">
               {
                 track.artists.map((artist: Artist, i: number) => {
@@ -90,18 +90,18 @@ export default async function Track({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-          <div className="bg-white w-full flex flex-col font-medium items-center shadow-lg border border-zinc-200 rounded-lg basis-1/3">
-            <a href={track.external_urls.spotify} className="hover:bg-zinc-100 duration-300 flex items-center space-x-2 py-2.5 px-5 border-b border-zinc-200 w-full justify-center">
-              <BsSpotify className="text-lg text-green-400"/>
+          <div className="bg-white dark:bg-zinc-900 w-full flex flex-col font-medium items-center shadow-md rounded-lg basis-1/3">
+            <a href={track.external_urls.spotify} className="hover:bg-zinc-200 rounded-t-lg duration-300 flex items-center space-x-2 py-2.5 px-5 border-b dark:border-zinc-800 dark:hover:bg-zinc-800 border-zinc-200 w-full justify-center">
+              <BsSpotify className="text-lg"/>
               <p>Listen on Spotify</p>
             </a>
             <ShareButton 
-              className="flex items-center space-x-2 py-2.5 px-5 border-b border-zinc-200 w-full justify-center hover:bg-zinc-100 duration-300" 
+              className="flex items-center space-x-2 py-2.5 px-5 dark:border-zinc-800 dark:hover:bg-zinc-800 border-b border-zinc-200 w-full justify-center hover:bg-zinc-200 duration-300" 
               link={`/track/${track.id}`}
               type="track"
             />
             <MusicReviewButton 
-              className="flex rounded-b-lg hover:bg-zinc-100 duration-300 items-center space-x-2 py-2.5 px-5 w-full justify-center"
+              className="flex rounded-b-lg hover:bg-zinc-200 dark:border-zinc-800 dark:hover:bg-zinc-800 duration-300 items-center space-x-2 py-2.5 px-5 w-full justify-center"
               type="track"
               data={{
                 trackId: track.id,

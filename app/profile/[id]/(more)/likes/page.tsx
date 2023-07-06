@@ -22,7 +22,7 @@ export default function Likes({ params }: { params: { id: string } }) {
         <p className="font-medium text-lg">Likes</p>  
         {
           user.likes.length != 0 ?
-          <div className="flex flex-col bg-white drop-shadow-lg border-zinc-200 border rounded-lg">
+          <div className="flex flex-col rounded-lg drop-shadow-md dark:bg-zinc-900 bg-white">
             {
               user.likes
               .map((like: ExtendedLike) => {
@@ -32,7 +32,7 @@ export default function Likes({ params }: { params: { id: string } }) {
               })
             }
           </div> : 
-          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-lg border border-zinc-200 justify-center items-center">
+          <div className="flex px-5 py-10 bg-white rounded-lg drop-shadow-md dark:bg-zinc-900 justify-center items-center basis-2/3">
             <p className="text-zinc-500 text-sm">No likes</p>
           </div>
         }
