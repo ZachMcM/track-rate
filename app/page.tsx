@@ -32,10 +32,10 @@ export default async function Home() {
         <div className="flex flex-col-reverse md:flex-row md:space-y-0 md:space-x-8 items-start">
           {
             session ?
-            <Suspense fallback={<LoadingSpinner/>}>
+            <Suspense fallback={<div className="w-full basis-2/3"><LoadingSpinner/></div>}>
               <CustomFeed/>
             </Suspense> :
-            <Suspense fallback={<LoadingSpinner/>}>
+            <Suspense fallback={<div className="w-full basis-2/3"><LoadingSpinner/></div>}>
               <GeneralFeed/>
             </Suspense>
           }
