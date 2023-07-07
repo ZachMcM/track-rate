@@ -5,6 +5,8 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import CustomFeed from "@/components/CustomFeed";
 import ReviewClientButton from "@/components/review/ReviewClientButton";
 import Link from "next/link";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -30,8 +32,12 @@ export default async function Home() {
         <div className="flex flex-col-reverse md:flex-row md:space-y-0 md:space-x-8 items-start">
           {
             session ?
-            <CustomFeed/> :
-            <GeneralFeed/>
+            <Suspense fallback={<LoadingSpinner/>}>
+              <CustomFeed/>
+            </Suspense> :
+            <Suspense fallback={<LoadingSpinner/>}>
+              <GeneralFeed/>
+            </Suspense>
           }
           <div className="drop-shadow-md  mb-8 mt-0 rounded-lg dark:bg-zinc-900 bg-white w-full basis-1/3">
             <div className="p-5 flex space-x-2 items-center border-b dark:border-zinc-700 border-zinc-200">
