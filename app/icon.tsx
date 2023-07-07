@@ -12,6 +12,6 @@ export const contentType = "image/png"
 
 export default function Icon() {
   return new ImageResponse(
-    <TbPlayerTrackNextFilled className="text-2xl"/>
+    <TbPlayerTrackNextFilled className="text-2xl dark:text-white text-zinc-950"/>
   )
 }
