@@ -45,15 +45,15 @@ export default function ProfileDashboard({ id }: { id: string }) {
           <div className="flex">
             <div className="flex flex-col text-center border-r dark:border-zinc-800 border-zinc-200 px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.reviews.length)}</p>
-              <Link href={`/profile/${user.id}`} className="text-sm md:text-base text-zinc-500 hover:text-zinc-950 duration-300">Review{user.reviews.length != 1 && "s"}</Link>
+              <Link href={`/profile/${user.id}`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Review{user.reviews.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col text-center border-r dark:border-zinc-800 border-zinc-200 px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.followers.length)}</p>
-              <Link href={`/profile/${user.id}/followers`} className="text-sm md:text-base text-zinc-500 hover:text-zinc-950 duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
+              <Link href={`/profile/${user.id}/followers`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Follower{user.followers && user.followers.length != 1 && "s"}</Link>
             </div>
             <div className="flex flex-col text-center px-6">
               <p className="font-bold text-lg md:text-2xl">{formatCompactNumber(user.follows.length)}</p>
-              <Link href={`/profile/${user.id}/following`} className="text-sm md:text-base text-zinc-500 hover:text-zinc-950 duration-300">Following</Link>
+              <Link href={`/profile/${user.id}/following`} className="text-sm md:text-base text-zinc-500 hover:text-sky-400 duration-300">Following</Link>
             </div>
           </div>
           {
