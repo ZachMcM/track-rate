@@ -18,7 +18,7 @@ export default function Navbar() {
         {/* Todo */}
         <div className="flex space-x-2 md:space-x-5 items-center">
           <Link href="/" className="flex font-bold items-center space-x-2 hover:opacity-80 duration-300">
-            <div className="bg-sky-400 w-full rounded-full p-2">
+            <div className="bg-sky-400 w-full rounded-full p-2 text-white">
               <TbPlayerTrackNextFilled className="text-lg"/>
             </div>
             <p className="hidden md:block">trackrate</p>
