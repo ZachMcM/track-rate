@@ -6,6 +6,9 @@ import { ReviewFormProviderType } from "@/app/types"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+
 export default function ReviewClientButton() {
   const router = useRouter()
 
@@ -23,7 +26,7 @@ export default function ReviewClientButton() {
         }
       }}
     >
-      <p>Create A Review</p>
+      <p>{session ? "Create A Review" : "Sign In"}</p>
     </button>
   )
 }

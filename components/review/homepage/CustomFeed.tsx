@@ -3,7 +3,7 @@ import prisma from "@/prisma/client"
 import { User } from "@prisma/client"
 import { getServerSession } from "next-auth/next"
 import { notFound } from "next/navigation"
-import ReviewFeed from "./review/ReviewFeed"
+import ReviewFeed from "../ReviewFeed"
 
 export default async function CustomFeed() {
   const session = await getServerSession(authOptions)
@@ -49,7 +49,7 @@ export default async function CustomFeed() {
       },
       likes: true
     },
-    take: 2,
+    take: 5,
   })
 
   if (customInitReviews.length < 2) {
@@ -73,7 +73,7 @@ export default async function CustomFeed() {
         },
         likes: true
       },
-      take: 2
+      take: 5
     })
     return <ReviewFeed initialReviews={initialReviews}/>
   } else {

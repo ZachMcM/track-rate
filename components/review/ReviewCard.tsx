@@ -11,7 +11,7 @@ import LikeButton from "./LikeButton";
 
 export default function ReviewCard({ review }: { review: ExtendedReview }) {
   return (
-    <div className="relative hover:bg-zinc-100 first:rounded-t-lg dark:hover:bg-zinc-800 duration-300 h-full flex flex-col p-8 w-full space-y-5 border-b last:border-none dark:border-zinc-700 border-zinc-200">
+    <div className="relative hover:bg-zinc-100 first:rounded-t-lg last:rounded-b-lg dark:hover:bg-zinc-800 duration-300 h-full flex flex-col p-8 w-full space-y-5 border-b last:border-none dark:border-zinc-700 border-zinc-200">
       <div className="flex items-center space-x-5">
         <Link 
           className={`z-10 shrink-0 relative h-24 w-24 drop-shadow-md  ${review.type == "artist" ? "rounded-full" : "rounded-lg"} hover:opacity-80 duration-300`}

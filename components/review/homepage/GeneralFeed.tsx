@@ -1,4 +1,4 @@
-import ReviewFeed from "./review/ReviewFeed"
+import ReviewFeed from "../ReviewFeed"
 import prisma from "@/prisma/client"
 
 export default async function GeneralFeed() {
@@ -22,7 +22,7 @@ export default async function GeneralFeed() {
       },
       likes: true
     },
-    take: 2
+    take: 5
   })
 
   return <ReviewFeed initialReviews={initialReviews}/>

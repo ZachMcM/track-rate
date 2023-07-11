@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
           comments: true,
           likes: true
         },
-        take: 3,
-        skip: (parseInt(cursor) - 1) * 3
+        take: 5,
+        skip: (parseInt(cursor) - 1) * 5
       })
 
       if (customReviews.length < 3) {
@@ -93,8 +93,8 @@ export async function GET(request: NextRequest) {
           comments: true,
           likes: true
         },
-        take: 3,
-        skip: (parseInt(cursor) - 1) * 3
+        take: 5,
+        skip: (parseInt(cursor) - 1) * 5
       })
       return NextResponse.json(reviews)
     }
