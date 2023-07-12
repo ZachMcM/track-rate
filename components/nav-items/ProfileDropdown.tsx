@@ -20,7 +20,10 @@ export default function ProfileDropdown({
   setDropdown: Dispatch<SetStateAction<boolean>>;
 }) {
   const dropdownRef = useDetectClickOutside({
-    onTriggered: () => setDropdown(false),
+    onTriggered: async () => {
+      setDropdown(false)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    },
   });
 
   const { setDarkMode, darkMode } = useContext(DarkModeContext) as DarkModeProviderType

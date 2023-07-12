@@ -11,7 +11,7 @@ export default function Home() {
       <div className="flex flex-col space-y-5">
         <h1 className="text-3xl font-semibold">Your Feed</h1>
         <div className="flex flex-col-reverse md:flex-row md:space-y-0 md:space-x-8 items-start">
-          <Suspense fallback={<LoadingSpinner/>}>
+          <Suspense fallback={<div className="w-full basis-2/3"><LoadingSpinner/></div>}>
             <Feed/>
           </Suspense>
           <div className="drop-shadow-md  mb-8 mt-0 rounded-lg dark:bg-zinc-900 bg-white w-full basis-1/3">

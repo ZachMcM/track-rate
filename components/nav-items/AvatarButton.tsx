@@ -19,7 +19,10 @@ export default function AvatarButton({ user }: { user: {
     <div className="relative">
     { dropdown && <ProfileDropdown userId={user.id} name={user.name || ""} email={user.email || ""} setDropdown={setDropdown}/>}
       <button 
-        onClick={() => setDropdown(true)}
+        onClick={async () => {
+          setDropdown(true)
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+        }}
         className="flex items-center space-x-2 hover:opacity-80 rounded-full duration-300"
       >
         <div className="relative w-10 h-10 aspect-square drop-shadow-md">
