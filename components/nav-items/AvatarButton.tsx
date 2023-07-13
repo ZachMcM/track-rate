@@ -3,7 +3,6 @@
 import { useState } from "react"
 import ProfileDropdown from "./ProfileDropdown"
 import Image from "next/image"
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export default function AvatarButton({ user }: { user: {
   name?: string | null | undefined;
