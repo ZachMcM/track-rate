@@ -25,7 +25,8 @@ export async function PATCH(request: NextRequest) {
       if (like) {
         const deletedLike = await prisma.like.delete({
           where: {
-            userId_reviewId: data
+            userId_reviewId: data,
+            userId: session.user.id
           }
         })
         return NextResponse.json(deletedLike)

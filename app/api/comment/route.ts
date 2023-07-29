@@ -2,6 +2,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
+import { Session } from "next-auth";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -33,14 +34,15 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions) as Session
   const { searchParams } = new URL(request.url)
   const id = searchParams.get("id")
 
   if (session.user && id) {
     const comment = await prisma.reviewComment.findUnique({
       where: {
-        id: id
+        id: id,
+        userId: session.user.id
       }
     })
     if (comment?.userId == session.user.id) {

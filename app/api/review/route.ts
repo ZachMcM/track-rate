@@ -3,6 +3,7 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
 import { NewReviewParams } from "@/app/types";
+import { Session } from "next-auth";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -61,10 +62,14 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id  = searchParams.get("id")
+  const session = await getServerSession(authOptions) as Session
+
+  if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
 
   if (id) {
     const deletedReview = await prisma.review.delete({
       where: {
+        userId: session.user.id,
         id: id
       }
     })
@@ -77,10 +82,14 @@ export async function DELETE(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get("id")
+  const session = await getServerSession(authOptions) as Session
+
+  if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
+
   if (id) {
     const review = await prisma.review.findUnique(({
       where: {
-        id: id
+        id: id,
       },
       include: {
         user: true,

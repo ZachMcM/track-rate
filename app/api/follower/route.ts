@@ -18,29 +18,38 @@ export async function PATCH(request: NextRequest) {
     })  
 
     if (existingFollow == null) {
-      const newFollower = await prisma.user.update({
-        where: {
-          id: userId
-        },
-        data: { 
-          followers: { connect: { id: session.user.id } } 
-        }
-      })
-      revalidateTag(userId)
-      revalidateTag(session.user.id)
-      return NextResponse.json(newFollower)
+      if (userId == session.user.id) {
+        const newFollower = await prisma.user.update({
+          where: {
+            id: userId
+          },
+          data: { 
+            followers: { connect: { id: session.user.id } } 
+          }
+        })
+        revalidateTag(userId)
+        revalidateTag(session.user.id)
+        return NextResponse.json(newFollower)
+      } else {
+        return NextResponse.json({ error: "unauthorized request", status: 401 })
+      }
+
     } else {
-      const unFollower = await prisma.user.update({
-        where: {
-          id: userId
-        },
-        data: {
-          followers: { disconnect: { id: session.user.id } }
-        }
-      }) 
-      revalidateTag(userId)
-      revalidateTag(session.user.id)
-      return NextResponse.json(unFollower)
+      if (userId == session.user.id) {
+        const unFollower = await prisma.user.update({
+          where: {
+            id: userId
+          },
+          data: {
+            followers: { disconnect: { id: session.user.id } }
+          }
+        }) 
+        revalidateTag(userId)
+        revalidateTag(session.user.id)
+        return NextResponse.json(unFollower)
+      } else {
+        return NextResponse.json({ error: "unauthorized request", status: 401 })
+      }
     }
   } else {
     return NextResponse.json({error: "Invalid Request" }, { status: 400 })
